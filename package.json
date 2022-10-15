@@ -6,8 +6,9 @@
   "scripts": {
     "start:dev": "nodemon ./src/index.ts",
     "start:prod": "",
-    "test": "npm run unitTests",
-    "unitTests": "jest unit"
+    "test": "npm run unitTests  && npm run integrationTests",
+    "unitTests": "jest unit",
+    "integrationTests": "jest int"
   },
   "keywords": [],
   "author": "Tomasz Rydzewski",
@@ -20,6 +21,7 @@
     "knex": "2.3.0",
     "koa": "2.13.4",
     "nodemon": "2.0.20",
+    "pg": "8.8.0",
     "ts-node": "10.9.1",
     "typescript": "4.8.4",
     "uuid": "9.0.0"
@@ -35,7 +37,13 @@
       "js"
     ],
     "transform": {
-      "^.+\\.(ts|tsx)$": ["ts-jest", { "tsconfig": "tsconfig.json", "diagnostics": true }]
+      "^.+\\.(ts|tsx)$": [
+        "ts-jest",
+        {
+          "tsconfig": "tsconfig.json",
+          "diagnostics": true
+        }
+      ]
     },
     "testMatch": [
       "**/tests/**/*.+(unit.ts|int.ts|comp.ts)"

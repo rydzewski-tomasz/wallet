@@ -1,6 +1,7 @@
 import { UuidGenerator } from '../../src/core/uuidGenerator';
 import { AddCategory } from '../../src/category/addCategory';
 import { Category } from '../../src/category/category';
+import { CategoryRepository } from '../../src/category/categoryRepository';
 
 describe('AddCategory unit test', () => {
   let categoryRepository: CategoryRepository;

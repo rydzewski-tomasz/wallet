@@ -1,3 +1,5 @@
 /.idea
 .wallet-backend.iml
 /wallet-backend.iml
+/build/
+/data/

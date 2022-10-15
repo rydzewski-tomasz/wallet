@@ -1,11 +1,7 @@
 import Koa from 'koa';
+import { appConfig, AppConfig } from './core/config/appConfig';
 
-const config = {
-  host: 'localhost',
-  port: 3000
-};
-
-function startApp() {
+function startApp(config: AppConfig) {
   const { host, port } = config;
   const app = new Koa();
 
@@ -14,4 +10,4 @@ function startApp() {
   console.log(`Listening on ${host}:${port}`);
 }
 
-startApp();
+startApp(appConfig);
