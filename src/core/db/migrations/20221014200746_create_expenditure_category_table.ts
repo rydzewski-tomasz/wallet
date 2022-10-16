@@ -1,7 +1,7 @@
 import { Knex } from "knex";
 
 export async function up(knex: Knex): Promise<void> {
-  return knex.schema.createTable('category', tableBuilder => {
+  return knex.schema.createTable('expenditure_category', tableBuilder => {
     tableBuilder.string('uuid', 16).primary();
     tableBuilder.string('name');
   });

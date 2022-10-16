@@ -2,13 +2,11 @@ import { DbConfig } from './dbConfig';
 
 
 export interface AppConfig {
-  host: string;
   port: number;
   db: DbConfig;
 }
 
 export const appConfig: AppConfig = {
-  host: 'localhost',
   port: 3000,
   db: {
     client: 'pg',

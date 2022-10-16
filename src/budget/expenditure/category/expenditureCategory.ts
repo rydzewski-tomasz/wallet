@@ -1,5 +1,5 @@
 
-export class Category {
+export class ExpenditureCategory {
   constructor(
     private uuid: string,
     private name: string

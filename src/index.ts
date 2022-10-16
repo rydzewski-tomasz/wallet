@@ -1,13 +1,13 @@
-import Koa from 'koa';
-import { appConfig, AppConfig } from './core/config/appConfig';
+import { appConfig } from './core/config/appConfig';
+import { DbConnection } from './core/db/dbConnection';
+import { AppParams, startApp } from './app';
 
-function startApp(config: AppConfig) {
-  const { host, port } = config;
-  const app = new Koa();
-
-  app.listen(port, host);
-
-  console.log(`Listening on ${host}:${port}`);
+function createAppParams(): AppParams {
+  return {
+    config: appConfig,
+    dbConnection: new DbConnection(appConfig.db)
+  };
 }
 
-startApp(appConfig);
+const appParams = createAppParams();
+startApp(appParams);

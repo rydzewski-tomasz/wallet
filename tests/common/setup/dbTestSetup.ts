@@ -1,7 +1,7 @@
-import { DbConnection } from '../../src/core/db/dbConnection';
+import { DbConnection } from '../../../src/core/db/dbConnection';
 import knex, { Knex } from 'knex';
-import { testDbConfig } from '../common/config/testConfig';
-import random from '../common/util/random';
+import { testDbConfig } from '../config/testConfig';
+import random from '../util/random';
 
 
 export class DbTestSetup {

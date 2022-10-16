@@ -1,4 +1,5 @@
 import { DbConfig } from '../../../src/core/config/dbConfig';
+import { AppConfig } from '../../../src/core/config/appConfig';
 
 export const testDbConfig: DbConfig = {
   client: 'pg',
@@ -13,3 +14,8 @@ export const testDbConfig: DbConfig = {
     directory: './src/core/db/migrations'
   }
 };
+
+export const testConfig: AppConfig = {
+  port: 0,
+  db: testDbConfig
+}

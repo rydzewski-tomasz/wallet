@@ -1,4 +1,4 @@
-import { DbTestSetup } from '../../integration/dbTestSetup';
+import { DbTestSetup } from './dbTestSetup';
 
 export function initDbEnv() {
   const dbTestSetup = new DbTestSetup();
