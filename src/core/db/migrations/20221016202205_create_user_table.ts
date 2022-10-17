@@ -1,13 +1,18 @@
 import { Knex } from "knex";
 
 export async function up(knex: Knex): Promise<void> {
-  return knex.schema.createTable('expenditure_category', tableBuilder => {
+  await knex.raw(`CREATE TYPE user_status AS ENUM ('VERIFIED', 'DELETED', 'SUSPENDED')`);
+
+  return knex.schema.createTable('user', tableBuilder => {
     tableBuilder.string('uuid', 16).primary();
     tableBuilder.string('name').notNullable();
+    tableBuilder.string('password', 255).notNullable();
+    tableBuilder.specificType('status', 'user_status').notNullable();
     tableBuilder.timestamp('created', { useTz: false, precision: 0 }).defaultTo(knex.fn.now()).notNullable();
     tableBuilder.timestamp('updated', { useTz: false, precision: 0 }).notNullable();
   });
 }
+
 
 export async function down(knex: Knex): Promise<void> {
 }

@@ -4,6 +4,10 @@ import { Server } from 'net';
 import Koa from 'koa';
 import { setupRoutes } from './core/http/setupRoutes';
 import { errorMiddleware } from './core/http/errorMiddleware';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+
+dayjs.extend(utc);
 
 export interface AppParams {
   config: AppConfig;

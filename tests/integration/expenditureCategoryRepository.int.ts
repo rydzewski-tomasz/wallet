@@ -1,8 +1,16 @@
-import { EXPENDITURE_CATEGORY_TABLE_NAME, ExpenditureCategoryRepository, ExpenditureCategoryRepositoryImpl } from '../../src/budget/expenditure/category/expenditureCategoryRepository';
+import {
+  EXPENDITURE_CATEGORY_TABLE_NAME,
+  ExpenditureCategoryRepository,
+  ExpenditureCategoryRepositoryImpl
+} from '../../src/budget/expenditure/category/expenditureCategoryRepository';
 import { ExpenditureCategory } from '../../src/budget/expenditure/category/expenditureCategory';
-import { DbTestSetup } from '../common/setup/dbTestSetup';
 import { DbConnection } from '../../src/core/db/dbConnection';
 import { initDbEnv } from '../common/setup/initDbEnv';
+import clock from '../../src/core/clock';
+import dayjs from 'dayjs';
+import utc from 'dayjs/plugin/utc';
+
+dayjs.extend(utc);
 
 describe('addExpenditureCategoryRepository integration test', () => {
   const { createConnection, closeConnection } = initDbEnv();
@@ -16,6 +24,7 @@ describe('addExpenditureCategoryRepository integration test', () => {
 
   afterEach(async () => {
     await dbConnection.db(EXPENDITURE_CATEGORY_TABLE_NAME).del();
+    jest.clearAllMocks();
   });
 
   afterAll(async () => {
@@ -24,6 +33,8 @@ describe('addExpenditureCategoryRepository integration test', () => {
 
   it('GIVEN valid not existing expenditure category WHEN save THEN insert new category into db', async () => {
     // GIVEN
+    const created = dayjs.utc('2022-01-10 10:00:00');
+    jest.spyOn(clock, 'now').mockReturnValue(created);
     const category = new ExpenditureCategory('testUuid', 'testName');
 
     // WHEN
@@ -31,20 +42,26 @@ describe('addExpenditureCategoryRepository integration test', () => {
 
     // THEN
     const onDb = await dbConnection.db(EXPENDITURE_CATEGORY_TABLE_NAME).where('uuid', 'testUuid').first();
-    expect(onDb).toStrictEqual({ uuid: 'testUuid', name: 'testName' });
+    expect({ ...onDb, created: clock.fromDb(onDb.created), updated: clock.fromDb(onDb.updated) })
+      .toStrictEqual({ uuid: 'testUuid', name: 'testName', created, updated: created });
   });
 
   it('GIVEN valid existing expenditure category WHEN save THEN update existing category on db', async () => {
     // GIVEN
+    const created = dayjs.utc('2022-01-10 10:00:00');
+    const updated = dayjs.utc('2022-01-20 10:00:00');
     const existingCategory = new ExpenditureCategory('testUuid', 'oldName');
+    jest.spyOn(clock, 'now').mockReturnValue(created);
     await expenditureCategoryRepository.save(existingCategory);
     existingCategory.update({ name: 'updatedName' });
+    jest.spyOn(clock, 'now').mockReturnValue(updated);
 
     // WHEN
     await expenditureCategoryRepository.save(existingCategory);
 
     // THEN
     const onDb = await dbConnection.db(EXPENDITURE_CATEGORY_TABLE_NAME).where('uuid', 'testUuid').first();
-    expect(onDb).toStrictEqual({ uuid: 'testUuid', name: 'updatedName' });
+    expect({ ...onDb, created: clock.fromDb(onDb.created), updated: clock.fromDb(onDb.updated) })
+      .toStrictEqual({ uuid: 'testUuid', name: 'updatedName', created, updated });
   });
 });

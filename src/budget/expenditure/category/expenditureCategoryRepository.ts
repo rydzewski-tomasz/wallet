@@ -1,6 +1,7 @@
 import { DbConnection } from '../../../core/db/dbConnection';
 import { ExpenditureCategory } from './expenditureCategory';
 import { Knex } from 'knex';
+import dbTimeLog from '../../../core/db/dbTimeLog';
 
 export const EXPENDITURE_CATEGORY_TABLE_NAME = 'expenditure_category';
 
@@ -19,9 +20,9 @@ export class ExpenditureCategoryRepositoryImpl implements ExpenditureCategoryRep
 
   async save(input: ExpenditureCategory): Promise<ExpenditureCategory> {
     await this.db(EXPENDITURE_CATEGORY_TABLE_NAME)
-      .insert(input.toSnapshot())
+      .insert({ ...input.toSnapshot(), ...dbTimeLog.insertTimeLog() })
       .onConflict('uuid')
-      .merge();
+      .merge({ ...input.toSnapshot(), ...dbTimeLog.updateTimeLog() });
     return input;
   }
 }
