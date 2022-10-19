@@ -1,7 +1,7 @@
 import { Knex } from "knex";
 
 export async function up(knex: Knex): Promise<void> {
-  await knex.raw(`CREATE TYPE user_status AS ENUM ('VERIFIED', 'DELETED', 'SUSPENDED')`);
+  await knex.raw(`CREATE TYPE user_status AS ENUM ('New', 'Active', 'Deleted')`);
 
   return knex.schema.createTable('user', tableBuilder => {
     tableBuilder.string('uuid', 16).primary();
@@ -13,7 +13,4 @@ export async function up(knex: Knex): Promise<void> {
   });
 }
 
-
-export async function down(knex: Knex): Promise<void> {
-}
-
+export async function down(knex: Knex): Promise<void> { }

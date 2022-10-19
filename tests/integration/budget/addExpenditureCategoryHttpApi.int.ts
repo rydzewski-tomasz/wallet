@@ -1,6 +1,6 @@
-import { initHttpEnv } from '../common/setup/initHttpEnv';
-import { Request } from '../common/setup/request';
-import { expectResponse } from '../common/util/expectUtil';
+import { initHttpEnv } from '../../common/setup/initHttpEnv';
+import { Request } from '../../common/setup/request';
+import { expectResponse } from '../../common/util/expectUtil';
 
 describe('addExpenditureCategoryHttpApi integration test', () => {
   const { startServer, stopServer } = initHttpEnv();

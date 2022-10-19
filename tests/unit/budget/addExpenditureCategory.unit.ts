@@ -1,7 +1,7 @@
-import { UuidGenerator } from '../../src/core/uuidGenerator';
-import { AddExpenditureCategory } from '../../src/budget/expenditure/category/addExpenditureCategory';
-import { ExpenditureCategory } from '../../src/budget/expenditure/category/expenditureCategory';
-import { ExpenditureCategoryRepository } from '../../src/budget/expenditure/category/expenditureCategoryRepository';
+import { UuidGenerator } from '../../../src/core/uuidGenerator';
+import { AddExpenditureCategory } from '../../../src/budget/expenditure/category/addExpenditureCategory';
+import { ExpenditureCategory } from '../../../src/budget/expenditure/category/expenditureCategory';
+import { ExpenditureCategoryRepository } from '../../../src/budget/expenditure/category/expenditureCategoryRepository';
 
 describe('AddExpenditureCategory unit test', () => {
   let expenditureCategoryRepository: ExpenditureCategoryRepository;

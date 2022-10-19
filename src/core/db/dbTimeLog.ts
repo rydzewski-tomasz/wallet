@@ -1,7 +1,7 @@
 import clock from '../clock';
 
 export default {
-  insertTimeLog: () => {
+  createTimeLog: () => {
     const now = clock.toDb(clock.now());
     return { created: now, updated: now };
   },

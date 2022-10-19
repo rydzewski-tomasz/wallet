@@ -5,21 +5,20 @@ export enum UserStatus {
   Deleted = 'Deleted'
 }
 
+interface UserProps {
+  uuid: string;
+  name: string;
+  password: string;
+  status: UserStatus
+}
+
 export class User {
   constructor(
-    private uuid: string,
-    private name: string,
-    private password: string,
-    private status: UserStatus
+    private userProps: UserProps
   ) { }
 
-  toSnapshot() {
-    return {
-      uuid: this.uuid,
-      name: this.name,
-      password: this.password,
-      status: this.status
-    };
+  toSnapshot(): UserProps {
+    return this.userProps;
   }
 }
 

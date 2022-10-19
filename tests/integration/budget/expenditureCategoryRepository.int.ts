@@ -2,11 +2,11 @@ import {
   EXPENDITURE_CATEGORY_TABLE_NAME,
   ExpenditureCategoryRepository,
   ExpenditureCategoryRepositoryImpl
-} from '../../src/budget/expenditure/category/expenditureCategoryRepository';
-import { ExpenditureCategory } from '../../src/budget/expenditure/category/expenditureCategory';
-import { DbConnection } from '../../src/core/db/dbConnection';
-import { initDbEnv } from '../common/setup/initDbEnv';
-import clock from '../../src/core/clock';
+} from '../../../src/budget/expenditure/category/expenditureCategoryRepository';
+import { ExpenditureCategory } from '../../../src/budget/expenditure/category/expenditureCategory';
+import { DbConnection } from '../../../src/core/db/dbConnection';
+import { initDbEnv } from '../../common/setup/initDbEnv';
+import clock from '../../../src/core/clock';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 

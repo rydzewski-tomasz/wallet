@@ -20,7 +20,7 @@ export class ExpenditureCategoryRepositoryImpl implements ExpenditureCategoryRep
 
   async save(input: ExpenditureCategory): Promise<ExpenditureCategory> {
     await this.db(EXPENDITURE_CATEGORY_TABLE_NAME)
-      .insert({ ...input.toSnapshot(), ...dbTimeLog.insertTimeLog() })
+      .insert({ ...input.toSnapshot(), ...dbTimeLog.createTimeLog() })
       .onConflict('uuid')
       .merge({ ...input.toSnapshot(), ...dbTimeLog.updateTimeLog() });
     return input;
