@@ -79,13 +79,14 @@ describe('userRepository integration test', () => {
     // GIVEN
     const user = new User({ uuid: 'testUuid', name: 'test name', password: 'aaaa-aaaa', status: UserStatus.Active });
     await userRepository.save(user);
-    const updated = new User({ uuid: 'testUuid', name: 'test name', password: 'bbbb-bbbb', status: UserStatus.Deleted });
+    user.remove();
 
     // WHEN
-    await userRepository.save(updated);
+    await userRepository.save(user);
 
     // THEN
     const onDb = await userRepository.findByUuid('testUuid');
-    expect(onDb).toStrictEqual(updated);
+    const expected = new User({ uuid: 'testUuid', name: 'test name', password: 'aaaa-aaaa', status: UserStatus.Deleted });
+    expect(onDb).toStrictEqual(expected);
   });
 });

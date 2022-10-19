@@ -9,7 +9,7 @@ export class AddExpenditureCategory {
   ) { }
 
   async add(categoryName: string): Promise<ExpenditureCategory> {
-    const category = new ExpenditureCategory(this.uuidGenerator.generate(), categoryName);
+    const category = new ExpenditureCategory({ uuid: this.uuidGenerator.generate(), name: categoryName });
     await this.categoryRepository.save(category);
     return category;
   }

@@ -1,18 +1,19 @@
 
+interface ExpenditureCategoryProps {
+  uuid: string;
+  name: string;
+}
+
 export class ExpenditureCategory {
   constructor(
-    private uuid: string,
-    private name: string
+    private props: ExpenditureCategoryProps
   ) { }
 
   update(input: { name: string }) {
-    this.name = input.name;
+    this.props.name = input.name;
   }
 
-  toSnapshot() {
-    return {
-      uuid: this.uuid,
-      name: this.name
-    }
+  toSnapshot(): ExpenditureCategoryProps {
+    return this.props;
   }
 }

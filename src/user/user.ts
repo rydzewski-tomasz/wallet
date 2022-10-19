@@ -14,11 +14,15 @@ interface UserProps {
 
 export class User {
   constructor(
-    private userProps: UserProps
+    private props: UserProps
   ) { }
 
+  remove() {
+    this.props.status = UserStatus.Deleted;
+  }
+
   toSnapshot(): UserProps {
-    return this.userProps;
+    return this.props;
   }
 }
 

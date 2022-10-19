@@ -22,7 +22,7 @@ describe('AddExpenditureCategory unit test', () => {
     await addExpenditureCategory.add('ExpenditureCategory Name');
 
     // THEN
-    const expected: ExpenditureCategory = new ExpenditureCategory(uuid, 'ExpenditureCategory Name');
+    const expected: ExpenditureCategory = new ExpenditureCategory({ uuid, name: 'ExpenditureCategory Name' });
     expect(expenditureCategoryRepository.save).toBeCalledWith(expected);
   });
 
@@ -33,7 +33,7 @@ describe('AddExpenditureCategory unit test', () => {
     const result = await addExpenditureCategory.add('ExpenditureCategory Name');
 
     // THEN
-    const expected: ExpenditureCategory = new ExpenditureCategory(uuid, 'ExpenditureCategory Name');
+    const expected: ExpenditureCategory = new ExpenditureCategory({ uuid, name: 'ExpenditureCategory Name' });
     expect(result).toStrictEqual(expected);
   });
 });
