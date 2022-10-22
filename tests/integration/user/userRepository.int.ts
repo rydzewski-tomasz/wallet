@@ -37,7 +37,7 @@ describe('userRepository integration test', () => {
     // GIVEN
     const userOnDb = {
       uuid: 'testUuid',
-      name: 'test name',
+      login: 'test_login',
       password: 'xxxxyyyyzzzz',
       status: UserStatus.Active,
       created: '2022-01-01 10:00:00',
@@ -51,8 +51,8 @@ describe('userRepository integration test', () => {
     // THEN
     const expected = new User({
       uuid: 'testUuid',
-      name: 'test name',
-      password: 'xxxxyyyyzzzz',
+      login: 'test_login',
+      passwordHash: 'xxxxyyyyzzzz',
       status: UserStatus.Active
     });
     expect(result).toStrictEqual(expected);
@@ -62,8 +62,8 @@ describe('userRepository integration test', () => {
     // GIVEN
     const user = new User({
       uuid: 'testUuid',
-      name: 'test name',
-      password: 'aaaaaaaa',
+      login: 'test_login',
+      passwordHash: 'aaaaaaaa',
       status: UserStatus.Active
     });
     
@@ -77,7 +77,7 @@ describe('userRepository integration test', () => {
 
   it('GIVEN valid existing user WHEN save THEN update user on db', async () => {
     // GIVEN
-    const user = new User({ uuid: 'testUuid', name: 'test name', password: 'aaaa-aaaa', status: UserStatus.Active });
+    const user = new User({ uuid: 'testUuid', login: 'test_name', passwordHash: 'aaaa-aaaa', status: UserStatus.Active });
     await userRepository.save(user);
     user.remove();
 
@@ -86,7 +86,7 @@ describe('userRepository integration test', () => {
 
     // THEN
     const onDb = await userRepository.findByUuid('testUuid');
-    const expected = new User({ uuid: 'testUuid', name: 'test name', password: 'aaaa-aaaa', status: UserStatus.Deleted });
+    const expected = new User({ uuid: 'testUuid', login: 'test_name', passwordHash: 'aaaa-aaaa', status: UserStatus.Deleted });
     expect(onDb).toStrictEqual(expected);
   });
 });

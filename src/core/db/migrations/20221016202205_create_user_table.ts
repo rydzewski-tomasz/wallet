@@ -5,7 +5,7 @@ export async function up(knex: Knex): Promise<void> {
 
   return knex.schema.createTable('user', tableBuilder => {
     tableBuilder.string('uuid', 16).primary();
-    tableBuilder.string('name').notNullable();
+    tableBuilder.string('login').notNullable();
     tableBuilder.string('password', 255).notNullable();
     tableBuilder.specificType('status', 'user_status').notNullable();
     tableBuilder.timestamp('created', { useTz: false, precision: 0 }).defaultTo(knex.fn.now()).notNullable();

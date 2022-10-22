@@ -19,10 +19,11 @@ export class ExpenditureCategoryRepositoryImpl implements ExpenditureCategoryRep
   }
 
   async save(input: ExpenditureCategory): Promise<ExpenditureCategory> {
+    const { uuid, name } = input.toSnapshot();
     await this.db(EXPENDITURE_CATEGORY_TABLE_NAME)
-      .insert({ ...input.toSnapshot(), ...dbTimeLog.createTimeLog() })
+      .insert({ ...dbTimeLog.createTimeLog(), uuid, name })
       .onConflict('uuid')
-      .merge({ ...input.toSnapshot(), ...dbTimeLog.updateTimeLog() });
+      .merge({ ...dbTimeLog.updateTimeLog(), name });
     return input;
   }
 }

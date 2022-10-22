@@ -23,17 +23,19 @@ export class UserRepositoryImpl implements UserRepository {
     const result = await this.db(USER_TABLE_NAME).where('uuid', uuid).first();
     return result ? new User({
       uuid: result.uuid,
-      name: result.name,
-      password: result.password,
+      login: result.login,
+      passwordHash: result.password,
       status: result.status
     }) : null;
   }
 
   async save(input: User): Promise<User> {
+    const { uuid, login, passwordHash: password, status } = input.toSnapshot();
+
     await this.db(USER_TABLE_NAME)
-      .insert({ ...input.toSnapshot(), ...dbTimeLog.createTimeLog() })
+      .insert({ ...dbTimeLog.createTimeLog(), uuid, login, status, password })
       .onConflict('uuid')
-      .merge({ ...input.toSnapshot(), ...dbTimeLog.updateTimeLog() });
+      .merge({ ...dbTimeLog.updateTimeLog(), login, status, password });
     return input;
   }
 }
