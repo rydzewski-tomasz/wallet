@@ -1,16 +1,12 @@
 import { User, UserStatus } from '../../../src/user/user';
 import bcrypt from 'bcryptjs';
+import { userBuilder } from '../../common/builder/userBuilder';
 
 describe('User unit test', () => {
 
   it('GIVEN valid user WHEN remove THEN change user status to Deleted', async () => {
     // GIVEN
-    const user = new User({
-      uuid: 'testUuid',
-      login: 'testLogin',
-      passwordHash: 'aaaa-bbbb-cccc-dddd',
-      status: UserStatus.Active
-    });
+    const user = userBuilder().withStatus(UserStatus.Active).valueOf();
 
     // WHEN
     user.remove();
@@ -24,7 +20,7 @@ describe('User unit test', () => {
     // GIVEN
     const login = 'userLogin';
     const password = 'test';
-    const user = new User({ uuid: 'testUuid', login: '', passwordHash: '', status: UserStatus.New });
+    const user = userBuilder().withStatus(UserStatus.New).valueOf();
 
     // WHEN
     await user.signup({ login, password });
@@ -44,7 +40,7 @@ describe('User unit test', () => {
     // GIVEN
     const login = 'userLogin';
     const password = 'test';
-    const user = new User({ uuid: 'testUuid', login: '', passwordHash: '', status: UserStatus.Unverified });
+    const user = userBuilder().withStatus(UserStatus.Unverified).valueOf();
 
     // WHEN
     const signup = async () => user.signup({ login, password });

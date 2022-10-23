@@ -33,6 +33,10 @@ export class User extends Entity<UserProps> {
     this.props.passwordHash = await bcrypt.hash(password, SALT_ROUNDS);
   }
 
+  async signIn({ login, password }: { login: string, password: string }) {
+
+  }
+
   remove() {
     this.props.status = UserStatus.Deleted;
   }
