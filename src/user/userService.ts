@@ -7,13 +7,17 @@ export enum SignupErrorType {
   LoginAlreadyExists = 'LoginAlreadyExists'
 }
 
-export class UserService {
+export interface UserService {
+  signup: (input: { login: string, password: string }) => Promise<Result<User, SignupErrorType>>;
+}
+
+export class UserServiceImpl implements UserService {
   constructor(
     private userRepository: UserRepository,
     private userFactory: UserFactory
   ) { }
   
-  async signup({ login, password }: { login: string, password: string }): Promise<Result<User, SignupErrorType.LoginAlreadyExists>> {
+  async signup({ login, password }: { login: string, password: string }): Promise<Result<User, SignupErrorType>> {
     if (await this.userRepository.findByLogin(login)) {
       return createErrorResult(SignupErrorType.LoginAlreadyExists);
     }

@@ -1,4 +1,4 @@
-import { SignupErrorType, UserService } from '../../../src/user/userService';
+import { SignupErrorType, UserService, UserServiceImpl } from '../../../src/user/userService';
 import { createUserFactoryMock, createUserRepositoryMock } from '../../common/mock/mocks';
 import { UserRepository } from '../../../src/user/userRepository';
 import { User, UserStatus } from '../../../src/user/user';
@@ -15,7 +15,7 @@ describe('UserService unit test', () => {
   beforeEach(() => {
     userRepository = createUserRepositoryMock();
     userFactory = createUserFactoryMock();
-    userService = new UserService(userRepository, userFactory);
+    userService = new UserServiceImpl(userRepository, userFactory);
     user = userBuilder().withStatus(UserStatus.New).valueOf();
 
     jest.spyOn(userFactory, 'create').mockReturnValue(user);

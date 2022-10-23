@@ -2,6 +2,7 @@ import { ExpenditureCategoryRepository } from '../../../src/budget/expenditure/c
 import { UserRepository } from '../../../src/user/userRepository';
 import { UuidGenerator } from '../../../src/core/uuidGenerator';
 import { UserFactory } from '../../../src/user/userFactory';
+import { UserService } from '../../../src/user/userService';
 
 export function createUserFactoryMock(): UserFactory {
   return { create: jest.fn() };
@@ -17,4 +18,10 @@ export function createUserRepositoryMock(): UserRepository {
 
 export function createUuidGeneratorMock(): UuidGenerator {
   return { generate: jest.fn() };
+}
+
+export function createUserServiceMock(): UserService {
+  return {
+    signup: jest.fn()
+  };
 }

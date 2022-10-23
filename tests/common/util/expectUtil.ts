@@ -3,7 +3,6 @@ import { Response } from 'superagent'
 import { Entity, WithUuid } from '../../../src/core/entity';
 import { Result } from '../../../src/core/result';
 import { expect } from 'expect';
-import { Err } from 'joi';
 
 export function expectResponse(res: Response): {
   toBeSuccess: (expStatus: SuccessHttpStatus, data?: any) => void
@@ -11,24 +10,22 @@ export function expectResponse(res: Response): {
 } {
   return {
     toBeSuccess: (expStatus: SuccessHttpStatus, data?: any) => {
-      if (res.status != expStatus) {
-        console.log(`Expected success status ${expStatus} but got ${res.status} with body: ${JSON.stringify(res.body)}`);
-      }
-
-      expect(res.status).toEqual(expStatus);
-      if (data === undefined) {
-        expect(res.body).toStrictEqual({ });
-      } else {
-        expect(res.body).toStrictEqual({ data });
-      }
+      expect({
+        status: res.status,
+        body: res.body
+      }).toStrictEqual({
+        status: expStatus,
+        body: data ? { data } : {}
+      });
     },
     toBeError: (expStatus: ErrorHttpStatus, type: string) => {
-      if (res.status != expStatus) {
-        console.log(`Expected error status ${expStatus} but got ${res.status} with body: ${JSON.stringify(res.body)}`);
-      }
-
-      expect(res.status).toEqual(expStatus);
-      expect(res.body).toStrictEqual({ type });
+      expect({
+        status: res.status,
+        body: res.body
+      }).toStrictEqual({
+        status: expStatus,
+        body: { type }
+      });
     }
   }
 }
