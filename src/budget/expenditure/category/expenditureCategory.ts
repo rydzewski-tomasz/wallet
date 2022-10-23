@@ -5,9 +5,9 @@ interface ExpenditureCategoryProps {
   name: string;
 }
 
-export class ExpenditureCategory extends Entity {
+export class ExpenditureCategory extends Entity<ExpenditureCategoryProps> {
   constructor(
-    private props: ExpenditureCategoryProps
+    props: ExpenditureCategoryProps
   ) {
     super(props);
   }

@@ -1,6 +1,6 @@
-import { Entity } from '../../../src/core/entity';
+import { Entity, WithUuid } from '../../../src/core/entity';
 
-class TestEntity extends Entity {
+class TestEntity extends Entity<WithUuid> {
   constructor(input: { uuid: string }) {
     super(input);
   }

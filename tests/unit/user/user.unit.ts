@@ -39,4 +39,18 @@ describe('User unit test', () => {
       isValidPassword: true
     });
   });
+
+  it('GIVEN user without New status WHEN signup THEN throw error', async () => {
+    // GIVEN
+    const login = 'userLogin';
+    const password = 'test';
+    const user = new User({ uuid: 'testUuid', login: '', passwordHash: '', status: UserStatus.Unverified });
+
+    // WHEN
+    const signup = async () => user.signup({ login, password });
+
+    // THEN
+    await expect(signup).rejects.toThrow('InvalidStatus');
+  });
+
 });

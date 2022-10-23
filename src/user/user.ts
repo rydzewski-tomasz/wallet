@@ -10,31 +10,31 @@ export enum UserStatus {
   Deleted = 'Deleted'
 }
 
-interface UserProps {
+export interface UserProps {
   uuid: string;
   login: string;
   passwordHash: string;
   status: UserStatus
 }
 
-export class User extends Entity {
+export class User extends Entity<UserProps> {
   constructor(
-    private props: UserProps
+    props: UserProps
   ) {
     super(props);
   }
 
   async signup({ login, password }: { login: string, password: string }) {
+    if (this.props.status !== UserStatus.New) {
+      throw new Error('InvalidStatus');
+    }
+
     this.props.login = login;
     this.props.passwordHash = await bcrypt.hash(password, SALT_ROUNDS);
   }
 
   remove() {
     this.props.status = UserStatus.Deleted;
-  }
-
-  toSnapshot(): UserProps {
-    return this.props;
   }
 }
 

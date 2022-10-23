@@ -2,6 +2,8 @@ import { initDbEnv } from '../../common/setup/initDbEnv';
 import { DbConnection } from '../../../src/core/db/dbConnection';
 import { USER_TABLE_NAME, UserRepository, UserRepositoryImpl } from '../../../src/user/userRepository';
 import { User, UserStatus } from '../../../src/user/user';
+import { userBuilder } from '../../common/builder/userBuilder';
+import { expectEntity } from '../../common/util/expectUtil';
 
 describe('userRepository integration test', () => {
   const { createConnection, closeConnection } = initDbEnv();
@@ -88,5 +90,29 @@ describe('userRepository integration test', () => {
     const onDb = await userRepository.findByUuid('testUuid');
     const expected = new User({ uuid: 'testUuid', login: 'test_name', passwordHash: 'aaaa-aaaa', status: UserStatus.Deleted });
     expect(onDb).toStrictEqual(expected);
+  });
+
+  it('GIVEN not existing user login WHEN findByLogin THEN return null', async () => {
+    // GIVEN
+    const login = 'nonExisting';
+
+    // WHEN
+    const result = await userRepository.findByLogin(login);
+
+    // THEN
+    expect(result).toBeNull();
+  });
+
+  it('GIVEN existing user login WHEN findByLogin THEN return user', async () => {
+    // GIVEN
+    const login = 'existing';
+    const user = userBuilder().withLogin(login).valueOf();
+    await userRepository.save(user);
+
+    // WHEN
+    const result = await userRepository.findByLogin(login);
+
+    // THEN
+    expectEntity(result).toStrictEqual(result);
   });
 });

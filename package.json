@@ -6,6 +6,7 @@
   "scripts": {
     "start:dev": "nodemon ./src/index.ts",
     "start:prod": "",
+    "testCoverage": "jest --collectCoverage",
     "test": "npm run unitTests  && npm run integrationTests",
     "unitTests": "jest unit",
     "integrationTests": "jest int"
