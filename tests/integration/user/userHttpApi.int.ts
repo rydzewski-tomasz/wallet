@@ -1,27 +1,22 @@
-import Koa from 'koa';
 import { createUserRouter } from '../../../src/user/userRouter';
-import { Server } from 'net';
 import { Request } from '../../common/setup/request';
 import { expectResponse } from '../../common/util/expectUtil';
-import { errorMiddleware, HttpDefaultError } from '../../../src/core/http/errorMiddleware';
+import { HttpDefaultError } from '../../../src/core/http/errorMiddleware';
 import { SignupErrorType, UserService } from '../../../src/user/userService';
-import { createUserServiceMock } from '../../common/mock/mocks';
 import { createErrorResult, createSuccessResult } from '../../../src/core/result';
 import { userBuilder } from '../../common/builder/userBuilder';
+import { initHttpEnv } from '../../common/setup/initHttpEnv';
+import { createUserServiceMock } from '../../common/mock/mocks';
 
 describe('userHttpApi integration test', () => {
-  let server: Server;
+  const { startServer, stopServer } = initHttpEnv();
+
   let request: Request;
   let userService: UserService;
 
   beforeAll(() => {
-    const app = new Koa();
     userService = createUserServiceMock()
-    const userRouter = createUserRouter(userService);
-    app.use(errorMiddleware)
-    app.use(userRouter.middleware());
-    server = app.listen(0);
-    request = new Request(server);
+    request = startServer(() => createUserRouter(userService));
   });
 
   beforeEach(() => {
@@ -29,7 +24,7 @@ describe('userHttpApi integration test', () => {
   });
 
   afterAll(() => {
-    server.close();
+    stopServer();
   });
 
   it('GIVEN invalid request body WHEN signup THEN return 400 status', async () => {

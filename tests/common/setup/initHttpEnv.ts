@@ -1,21 +1,21 @@
-import { testConfig } from '../config/testConfig';
-import { DbConnection } from '../../../src/core/db/dbConnection';
-import { Server } from 'net';
 import { Request } from './request';
-import { AppParams, startApp } from '../../../src/app';
+import Koa from 'koa';
+import { Router } from 'koa-joi-router';
+import { errorMiddleware } from '../../../src/core/http/errorMiddleware';
+import { Server } from 'net';
 
 export function initHttpEnv() {
-  const appParams: AppParams = {
-    config: testConfig,
-    dbConnection: {} as DbConnection
-  };
-  let appServer: Server;
+  const app = new Koa()
+  let server: Server;
 
   return {
-    startServer: () => {
-      appServer = startApp(appParams);
-      return new Request(appServer);
+    startServer: (createRouter: () => Router) => {
+      const router = createRouter();
+      app.use(errorMiddleware)
+      app.use(router.middleware());
+      server = app.listen(0);
+      return new Request(server);
     },
-    stopServer: async () => appServer.close()
+    stopServer: () => server.close()
   };
 }

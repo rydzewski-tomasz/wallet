@@ -1,13 +1,20 @@
-import { initHttpEnv } from '../../common/setup/initHttpEnv';
 import { Request } from '../../common/setup/request';
 import { expectResponse } from '../../common/util/expectUtil';
+import { createExpenditureCategoryRouter } from '../../../src/budget/expenditure/category/expenditureCategoryRouter';
+import { jest } from '@jest/globals';
+import { initHttpEnv } from '../../common/setup/initHttpEnv';
 
 describe('addExpenditureCategoryHttpApi integration test', () => {
   const { startServer, stopServer } = initHttpEnv();
+
   let request: Request;
 
   beforeAll(() => {
-    request = startServer();
+    request = startServer(() => createExpenditureCategoryRouter());
+  });
+
+  beforeEach(() => {
+    jest.clearAllMocks();
   });
 
   afterAll(() => {

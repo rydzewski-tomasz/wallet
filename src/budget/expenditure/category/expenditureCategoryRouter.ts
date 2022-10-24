@@ -1,20 +1,24 @@
-import Router, { Spec } from 'koa-joi-router';
+import createRouter, { Spec, Router } from 'koa-joi-router';
 import Joi from 'joi';
 
-const router = Router();
+export function createExpenditureCategoryRouter(): Router {
+  const router = createRouter();
 
-router.route(<Spec> {
-  handler: ctx => {
+  router.route(<Spec> {
+    handler: ctx => {
 
-  },
-  path: '/budget/expenditure/category',
-  method: 'post',
-  validate: {
-    body: {
-      name: Joi.string().required()
     },
-    type: 'json'
-  }
-});
+    path: '/budget/expenditure/category',
+    method: 'post',
+    validate: {
+      body: {
+        name: Joi.string().required()
+      },
+      type: 'json'
+    }
+  });
 
-export default router;
+  return router;
+}
+
+
