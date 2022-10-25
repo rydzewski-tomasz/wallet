@@ -6,7 +6,7 @@ export type ErrorHttpStatus = 400 | 401 | 404 | 503;
 function createSuccessResponse(ctx: Context) {
   return (status: SuccessHttpStatus | number, data?: Record<string, any>) => {
     ctx.response.status = status;
-    ctx.response.body = { data };
+    ctx.response.body = data;
   };
 }
 

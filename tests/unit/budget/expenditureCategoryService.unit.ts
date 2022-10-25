@@ -1,5 +1,5 @@
 import { UuidGenerator } from '../../../src/core/uuidGenerator';
-import { ExpenditureCategoryService } from '../../../src/budget/expenditure/category/expenditureCategoryService';
+import { ExpenditureCategoryService, ExpenditureCategoryServiceImpl } from '../../../src/budget/expenditure/category/expenditureCategoryService';
 import { ExpenditureCategory } from '../../../src/budget/expenditure/category/expenditureCategory';
 import { ExpenditureCategoryRepository } from '../../../src/budget/expenditure/category/expenditureCategoryRepository';
 
@@ -12,7 +12,7 @@ describe('ExpenditureCategoryService unit test', () => {
     uuid = 'testUuid';
     const uuidGenerator: UuidGenerator = { generate: () => uuid };
     expenditureCategoryRepository = { save: jest.fn() };
-    addExpenditureCategory = new ExpenditureCategoryService(expenditureCategoryRepository, uuidGenerator)
+    addExpenditureCategory = new ExpenditureCategoryServiceImpl(expenditureCategoryRepository, uuidGenerator)
   });
 
   it('GIVEN valid input WHEN addExpenditureCategory THEN save new category on db', async () => {

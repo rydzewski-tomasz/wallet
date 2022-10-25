@@ -2,7 +2,11 @@ import { UuidGenerator } from '../../../core/uuidGenerator';
 import { ExpenditureCategory } from './expenditureCategory';
 import { ExpenditureCategoryRepository } from './expenditureCategoryRepository';
 
-export class ExpenditureCategoryService {
+export interface ExpenditureCategoryService {
+  add: (categoryName: string) => Promise<ExpenditureCategory>;
+}
+
+export class ExpenditureCategoryServiceImpl implements ExpenditureCategoryService {
   constructor(
     private categoryRepository: ExpenditureCategoryRepository,
     private uuidGenerator: UuidGenerator

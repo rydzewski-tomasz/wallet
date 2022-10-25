@@ -65,7 +65,7 @@ describe('userRepository integration test', () => {
     const user = new User({
       uuid: 'testUuid',
       login: 'test_login',
-      passwordHash: 'aaaaaaaa',
+      passwordHash: '$2a$10$Pjwx7nJKXjPrbikNIqXEXOZ9ngz/bQtvvC7rE.3GGvZEyjD8I.XLy',
       status: UserStatus.Active
     });
     

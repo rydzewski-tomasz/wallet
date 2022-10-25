@@ -11,6 +11,10 @@ export interface UserRepository {
   save: (input: User) => Promise<User>;
 }
 
+export function createUserRepository({ dbConnection }: { dbConnection: DbConnection }): UserRepository {
+  return new UserRepositoryImpl(dbConnection);
+}
+
 export class UserRepositoryImpl implements UserRepository {
   private db: Knex;
 

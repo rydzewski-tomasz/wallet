@@ -14,15 +14,15 @@ export interface AppParams {
   dbConnection: DbConnection;
 }
 
-export function startApp({ config, dbConnection }: AppParams): Server {
-  const { port } = config;
+export function startApp(appParams: AppParams): Server {
+  const { port } = appParams.config;
   const app = new Koa();
-  app.context.dbConnection = dbConnection;
 
   app.use(errorMiddleware);
-  setupRoutes(app);
 
-  const server = app.listen(port,)
+  setupRoutes(app, appParams);
+
+  const server = app.listen(port);
 
   console.log(`Listening on port:${port}`);
 

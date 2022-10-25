@@ -15,7 +15,7 @@ export function expectResponse(res: Response): {
         body: res.body
       }).toStrictEqual({
         status: expStatus,
-        body: data ? { data } : {}
+        body: data || {}
       });
     },
     toBeError: (expStatus: ErrorHttpStatus, type: string) => {

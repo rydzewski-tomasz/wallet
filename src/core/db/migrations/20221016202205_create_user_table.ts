@@ -4,7 +4,7 @@ export async function up(knex: Knex): Promise<void> {
   await knex.raw(`CREATE TYPE user_status AS ENUM ('New', 'Active', 'Deleted')`);
 
   return knex.schema.createTable('user', tableBuilder => {
-    tableBuilder.string('uuid', 16).primary();
+    tableBuilder.string('uuid', 36).primary();
     tableBuilder.string('login').unique().notNullable();
     tableBuilder.string('password', 255).notNullable();
     tableBuilder.specificType('status', 'user_status').notNullable();
