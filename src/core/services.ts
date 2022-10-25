@@ -50,4 +50,3 @@ function createRepositories(dbConnection: DbConnection): Repositories {
     expenditureCategoryRepository: new ExpenditureCategoryRepositoryImpl(dbConnection)
   };
 }
-

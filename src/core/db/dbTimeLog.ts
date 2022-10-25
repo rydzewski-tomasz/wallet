@@ -9,5 +9,4 @@ export default {
     const now = clock.toDb(clock.now());
     return { updated: now };
   }
-}
-
+};

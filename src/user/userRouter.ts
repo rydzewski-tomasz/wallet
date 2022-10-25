@@ -4,12 +4,10 @@ import { SignupErrorType, UserService } from './userService';
 import httpResponse from '../core/http/httpResponse';
 import { Context } from 'koa';
 
-export function createUserRouter(
-  userService: UserService
-): Router {
+export function createUserRouter(userService: UserService): Router {
   const router = createRouter();
 
-  router.route(<Spec> {
+  router.route(<Spec>{
     method: 'post',
     path: '/user/signup',
     handler: async (ctx: Context) => {

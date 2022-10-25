@@ -1,4 +1,3 @@
-
 export interface DbConfig {
   client: 'pg';
   connection: {
@@ -7,7 +6,7 @@ export interface DbConfig {
     database: string;
     user: string;
     password: string;
-  }
+  };
   migrations: {
     directory: string;
   };

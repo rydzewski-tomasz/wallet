@@ -18,9 +18,7 @@ export function createUserRepository({ dbConnection }: { dbConnection: DbConnect
 export class UserRepositoryImpl implements UserRepository {
   private db: Knex;
 
-  constructor(
-    { db }: DbConnection
-  ) {
+  constructor({ db }: DbConnection) {
     this.db = db;
   }
 

@@ -1,0 +1,9 @@
+**/*.md
+.idea
+.package.json
+.package-lock.json
+.prettierignore
+.gitignore
+.eslintrc.json
+tsconfig.json
+node_modules

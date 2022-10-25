@@ -8,5 +8,5 @@ export default {
     const dateTextWithoutTimezone = dayjs(input).format('YYYY-MM-DD HH:mm:ss');
     return dayjs.utc(dateTextWithoutTimezone);
   },
-  toDb: (input: Dayjs) => input.format(defaultFormat),
-}
+  toDb: (input: Dayjs) => input.format(defaultFormat)
+};

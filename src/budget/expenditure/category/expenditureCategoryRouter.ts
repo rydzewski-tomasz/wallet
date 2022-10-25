@@ -4,10 +4,8 @@ import Joi from 'joi';
 export function createExpenditureCategoryRouter(): Router {
   const router = createRouter();
 
-  router.route(<Spec> {
-    handler: ctx => {
-
-    },
+  router.route(<Spec>{
+    handler: ctx => {},
     path: '/budget/expenditure/category',
     method: 'post',
     validate: {
@@ -20,5 +18,3 @@ export function createExpenditureCategoryRouter(): Router {
 
   return router;
 }
-
-

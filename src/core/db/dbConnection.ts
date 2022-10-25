@@ -4,9 +4,7 @@ import { DbConfig } from '../config/dbConfig';
 export class DbConnection {
   private readonly _db: Knex;
 
-  constructor(
-    private dbConfig: DbConfig
-  ) {
+  constructor(private dbConfig: DbConfig) {
     this._db = knex(this.dbConfig);
   }
 
@@ -15,7 +13,6 @@ export class DbConnection {
   }
 
   async close(): Promise<void> {
-    await this._db.destroy()
+    await this._db.destroy();
   }
-
 }

@@ -1,6 +1,5 @@
 import { DbConfig } from './dbConfig';
 
-
 export interface AppConfig {
   port: number;
   db: DbConfig;

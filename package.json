@@ -7,9 +7,12 @@
     "start:dev": "nodemon ./src/index.ts",
     "start:prod": "",
     "testCoverage": "jest --collectCoverage",
+    "lint": "npx prettier --check src/ && npx prettier --check test/",
+    "lintFix": "npx prettier --write src/ && npx prettier --write test/",
     "test": "npm run unitTests  && npm run integrationTests",
     "unitTests": "jest unit",
-    "integrationTests": "jest int"
+    "integrationTests": "jest int",
+    "prepare": "husky install"
   },
   "keywords": [],
   "author": "Tomasz Rydzewski",
@@ -35,7 +38,9 @@
   },
   "devDependencies": {
     "@types/jest": "29.1.2",
+    "husky": "8.0.1",
     "jest": "29.1.2",
+    "prettier": "2.7.1",
     "ts-jest": "29.0.3"
   },
   "jest": {
@@ -53,7 +58,7 @@
       ]
     },
     "testMatch": [
-      "**/tests/**/*.+(unit.ts|int.ts|comp.ts)"
+      "**/test/**/*.+(unit.ts|int.ts|comp.ts)"
     ],
     "testTimeout": 30000,
     "collectCoverageFrom": [

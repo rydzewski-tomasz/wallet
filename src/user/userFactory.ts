@@ -6,9 +6,7 @@ export interface UserFactory {
 }
 
 export class UserFactoryImpl {
-  constructor(
-    private uuidGenerator: UuidGenerator
-  ) { }
+  constructor(private uuidGenerator: UuidGenerator) {}
 
   create(): User {
     const uuid = this.uuidGenerator.generate();

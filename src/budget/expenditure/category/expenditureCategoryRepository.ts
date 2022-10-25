@@ -12,9 +12,7 @@ export interface ExpenditureCategoryRepository {
 export class ExpenditureCategoryRepositoryImpl implements ExpenditureCategoryRepository {
   private db: Knex;
 
-  constructor(
-    { db }: DbConnection
-  ) {
+  constructor({ db }: DbConnection) {
     this.db = db;
   }
 
