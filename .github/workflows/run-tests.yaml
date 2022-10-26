@@ -11,5 +11,8 @@ jobs:
       - name: checkout repo
         uses: actions/checkout@v2
 
+      - name: docker build
+        run: docker compose -f docker-compose.test.yml build
+
       - name: run tests
-        run: docker-compose -f docker-compose.test.yml --profile startTests up --exit-code-from wallet_test
+        run: docker compose -f docker-compose.test.yml --profile startTests up --exit-code-from wallet_test

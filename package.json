@@ -14,8 +14,7 @@
     "testsOnDocker": "TEST_ENV=docker npm run test",
     "unitTests": "jest unit",
     "integrationTests": "jest int",
-    "componentTests": "jest comp",
-    "prepare": "husky install"
+    "componentTests": "jest comp"
   },
   "keywords": [],
   "author": "Tomasz Rydzewski",
