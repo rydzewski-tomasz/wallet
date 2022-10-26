@@ -11,12 +11,12 @@ export enum HttpDefaultError {
 export async function errorMiddleware(ctx: Context, next: Function) {
   try {
     await next();
-  } catch (e) {
+  } catch (e: any) {
     if (ctx.invalid) {
       handleValidationErrors(ctx);
     } else {
       logger.error(e);
-      const status = e.status ? e.status : 500;
+      const status = e?.status ? e.status : 500;
       httpResponse(ctx).createErrorResponse(status, HttpDefaultError.Unknown);
     }
   }

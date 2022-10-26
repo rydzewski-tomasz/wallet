@@ -1,10 +1,10 @@
 import Koa from 'koa';
 
-function setup(app: Koa) {}
+function setup(_: Koa) {}
 
-function info(msg: string) {}
+function info(_: string) {}
 
-function error(err: any) {}
+function error(_: any) {}
 
 export default {
   setup,

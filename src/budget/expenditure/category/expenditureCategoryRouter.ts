@@ -5,7 +5,7 @@ export function createExpenditureCategoryRouter(): Router {
   const router = createRouter();
 
   router.route(<Spec>{
-    handler: ctx => {},
+    handler: _ => {},
     path: '/budget/expenditure/category',
     method: 'post',
     validate: {

@@ -6,7 +6,7 @@ import random from '../util/random';
 export class DbTestSetup {
   private readonly testDbName: string;
   private connection: Knex;
-  private dbConnection: DbConnection;
+  private dbConnection?: DbConnection;
 
   constructor() {
     this.testDbName = `wallet_db_${random.generateRandomString()}`;
@@ -27,7 +27,7 @@ export class DbTestSetup {
   }
 
   async destroyConnection(): Promise<void> {
-    await this.dbConnection.close();
+    await this.dbConnection?.close();
     await this.connection.raw(`DROP DATABASE ${this.testDbName}`);
     await this.connection.destroy();
   }

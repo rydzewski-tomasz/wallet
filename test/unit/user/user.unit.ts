@@ -1,4 +1,4 @@
-import { User, UserStatus } from '../../../src/user/user';
+import { UserStatus } from '../../../src/user/user';
 import bcrypt from 'bcryptjs';
 import { userBuilder } from '../../common/builder/userBuilder';
 

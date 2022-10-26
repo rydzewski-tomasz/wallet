@@ -6,7 +6,6 @@ import { UserFactory, UserFactoryImpl } from '../user/userFactory';
 import { AppParams } from '../app';
 import { UuidGenerator } from './uuidGenerator';
 import { DbConnection } from './db/dbConnection';
-import Koa from 'koa';
 
 export interface Repositories {
   userRepository: UserRepository;

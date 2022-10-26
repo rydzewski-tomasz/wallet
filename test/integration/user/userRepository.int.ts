@@ -113,6 +113,6 @@ describe('userRepository integration test', () => {
     const result = await userRepository.findByUsername(username);
 
     // THEN
-    expectEntity(result).toStrictEqual(result);
+    expectEntity(result).toStrictEqual(user);
   });
 });

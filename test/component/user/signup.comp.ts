@@ -48,9 +48,9 @@ describe('signup component test', () => {
 
     // THEN
     const { uuid } = response.body;
-    const onDb = (await userRepository.findByUuid(uuid)).toSnapshot();
+    const onDb = (await userRepository.findByUuid(uuid))?.toSnapshot();
     const expected = userBuilder().withUuid(uuid).withStatus(UserStatus.New).withUsername('test').valueOf();
-    expect({ ...onDb, isValidPassword: await bcrypt.compare('pass', onDb.passwordHash) }).toStrictEqual({
+    expect({ ...onDb, isValidPassword: await bcrypt.compare('pass', onDb?.passwordHash || '') }).toStrictEqual({
       ...expected.toSnapshot(),
       passwordHash: expect.any(String),
       isValidPassword: true

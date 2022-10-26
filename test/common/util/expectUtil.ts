@@ -49,7 +49,7 @@ export function expectResultEntity<Value extends Entity<WithUuid>, Error>(
     toBeError: error => {
       expect({
         isSuccess: result.isSuccess,
-        error: result.isSuccess === false ? result.error : undefined
+        error: result.isSuccess ? undefined : result.error
       }).toStrictEqual({
         isSuccess: false,
         error: error
@@ -59,17 +59,17 @@ export function expectResultEntity<Value extends Entity<WithUuid>, Error>(
 }
 
 export function expectEntity<Props extends WithUuid>(
-  actual: Entity<Props>
+  actual: Entity<Props> | undefined | null
 ): {
   toBe: (expected: Entity<Props>) => void;
   toStrictEqual: (expected: Entity<Props>) => void;
 } {
   return {
     toBe: expected => {
-      expect({ uuid: actual.getUuid() }).toStrictEqual({ uuid: expected.getUuid() });
+      expect({ uuid: actual?.getUuid() }).toStrictEqual({ uuid: expected.getUuid() });
     },
     toStrictEqual: expected => {
-      expect(actual.toSnapshot()).toStrictEqual(expected.toSnapshot());
+      expect(actual?.toSnapshot()).toStrictEqual(expected.toSnapshot());
     }
   };
 }
