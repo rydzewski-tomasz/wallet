@@ -12,7 +12,7 @@ describe('User unit test', () => {
 
     // THEN
     const { status } = user.toSnapshot();
-    expect(status).toStrictEqual(UserStatus.New);
+    expect(status).toStrictEqual(UserStatus.Deleted);
   });
 
   it('GIVEN valid user WHEN signup THEN add user login and passwordHash', async () => {
