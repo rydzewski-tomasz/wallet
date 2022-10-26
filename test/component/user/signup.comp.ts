@@ -30,7 +30,7 @@ describe('signup component test', () => {
 
   it('GIVEN valid request WHEN signup THEN return 200 status', async () => {
     // GIVEN
-    const requestBody = { login: 'test', password: 'pass' };
+    const requestBody = { username: 'test', password: 'pass' };
 
     // WHEN
     const response = await request.post('/user/signup', requestBody);
@@ -41,7 +41,7 @@ describe('signup component test', () => {
 
   it('GIVEN valid request WHEN signup THEN save user on db', async () => {
     // GIVEN
-    const requestBody = { login: 'test', password: 'pass' };
+    const requestBody = { username: 'test', password: 'pass' };
 
     // WHEN
     const response = await request.post('/user/signup', requestBody);
@@ -49,7 +49,7 @@ describe('signup component test', () => {
     // THEN
     const { uuid } = response.body;
     const onDb = (await userRepository.findByUuid(uuid)).toSnapshot();
-    const expected = userBuilder().withUuid(uuid).withStatus(UserStatus.New).withLogin('test').valueOf();
+    const expected = userBuilder().withUuid(uuid).withStatus(UserStatus.New).withUsername('test').valueOf();
     expect({ ...onDb, isValidPassword: await bcrypt.compare('pass', onDb.passwordHash) }).toStrictEqual({
       ...expected.toSnapshot(),
       passwordHash: expect.any(String),

@@ -10,6 +10,6 @@ export class UserFactoryImpl {
 
   create(): User {
     const uuid = this.uuidGenerator.generate();
-    return new User({ uuid, login: '', passwordHash: '', status: UserStatus.New });
+    return new User({ uuid, username: '', passwordHash: '', status: UserStatus.New });
   }
 }

@@ -19,7 +19,7 @@ describe('UserService unit test', () => {
     user = userBuilder().withStatus(UserStatus.New).valueOf();
 
     jest.spyOn(userFactory, 'create').mockReturnValue(user);
-    jest.spyOn(userRepository, 'findByLogin').mockResolvedValue(null);
+    jest.spyOn(userRepository, 'findByUsername').mockResolvedValue(null);
   });
 
   afterEach(() => {
@@ -28,11 +28,11 @@ describe('UserService unit test', () => {
 
   it('GIVEN valid login and password WHEN signup THEN return new user with valid props', async () => {
     // GIVEN
-    const login = 'testLogin';
+    const username = 'testLogin';
     const password = 'testPassword';
 
     // WHEN
-    const result = await userService.signup({ login, password });
+    const result = await userService.signup({ username, password });
 
     // THEN
     expectResultEntity(result).toBeSuccess(user);
@@ -40,14 +40,14 @@ describe('UserService unit test', () => {
 
   it('GIVEN existing login WHEN signup THEN return LoginAlreadyExists error', async () => {
     // GIVEN
-    const login = 'testLogin';
+    const username = 'testLogin';
     const password = 'testPassword';
-    jest.spyOn(userRepository, 'findByLogin').mockResolvedValueOnce(userBuilder().valueOf());
+    jest.spyOn(userRepository, 'findByUsername').mockResolvedValueOnce(userBuilder().valueOf());
 
     // WHEN
-    const result = await userService.signup({ login, password });
+    const result = await userService.signup({ username, password });
 
     // THEN
-    expectResultEntity(result).toBeError(SignupErrorType.LoginAlreadyExists);
+    expectResultEntity(result).toBeError(SignupErrorType.UsernameAlreadyExists);
   });
 });

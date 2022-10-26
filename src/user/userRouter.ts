@@ -11,20 +11,20 @@ export function createUserRouter(userService: UserService): Router {
     method: 'post',
     path: '/user/signup',
     handler: async (ctx: Context) => {
-      const { login, password } = ctx.request.body;
-      const result = await userService.signup({ login, password });
+      const { username, password } = ctx.request.body;
+      const result = await userService.signup({ username, password });
 
       if (result.isSuccess) {
         httpResponse(ctx).createSuccessResponse(200, { uuid: result.value.getUuid() });
       } else if (result.isSuccess == false) {
-        if (result.error === SignupErrorType.LoginAlreadyExists) {
-          httpResponse(ctx).createErrorResponse(400, SignupErrorType.LoginAlreadyExists);
+        if (result.error === SignupErrorType.UsernameAlreadyExists) {
+          httpResponse(ctx).createErrorResponse(400, SignupErrorType.UsernameAlreadyExists);
         }
       }
     },
     validate: {
       body: {
-        login: Joi.string().required(),
+        username: Joi.string().required(),
         password: Joi.string().required()
       },
       type: 'json'

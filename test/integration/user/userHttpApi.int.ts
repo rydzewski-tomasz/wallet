@@ -29,7 +29,7 @@ describe('userHttpApi integration test', () => {
 
   it('GIVEN invalid request body WHEN signup THEN return 400 status', async () => {
     // GIVEN
-    const invalidRequestBody = { login: 'test', invalidPassword: 'pass' };
+    const invalidRequestBody = { username: 'test', invalidPassword: 'pass' };
 
     // WHEN
     const response = await request.post('/user/signup', invalidRequestBody);
@@ -40,19 +40,19 @@ describe('userHttpApi integration test', () => {
 
   it('GIVEN LoginAlreadyExists error from service WHEN signup THEN return 400 status', async () => {
     // GIVEN
-    const requestBody = { login: 'test', password: 'pass' };
-    jest.spyOn(userService, 'signup').mockResolvedValueOnce(createErrorResult(SignupErrorType.LoginAlreadyExists));
+    const requestBody = { username: 'test', password: 'pass' };
+    jest.spyOn(userService, 'signup').mockResolvedValueOnce(createErrorResult(SignupErrorType.UsernameAlreadyExists));
 
     // WHEN
     const response = await request.post('/user/signup', requestBody);
 
     // THEN
-    expectResponse(response).toBeError(400, SignupErrorType.LoginAlreadyExists);
+    expectResponse(response).toBeError(400, SignupErrorType.UsernameAlreadyExists);
   });
 
   it('GIVEN success result from service WHEN signup THEN return 200 status', async () => {
     // GIVEN
-    const requestBody = { login: 'test', password: 'pass' };
+    const requestBody = { username: 'test', password: 'pass' };
     const user = userBuilder().withUuid('testUuid').valueOf();
     jest.spyOn(userService, 'signup').mockResolvedValueOnce(createSuccessResult(user));
 

@@ -13,7 +13,7 @@ export function expenditureCategoryRepositoryMock(): ExpenditureCategoryReposito
 }
 
 export function createUserRepositoryMock(): UserRepository {
-  return { save: jest.fn(), findByUuid: jest.fn(), findByLogin: jest.fn() };
+  return { save: jest.fn(), findByUuid: jest.fn(), findByUsername: jest.fn() };
 }
 
 export function createUuidGeneratorMock(): UuidGenerator {

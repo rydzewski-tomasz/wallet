@@ -6,7 +6,7 @@ import dbTimeLog from '../core/db/dbTimeLog';
 export const USER_TABLE_NAME = 'user';
 
 export interface UserRepository {
-  findByLogin: (login: string) => Promise<User | null>;
+  findByUsername: (login: string) => Promise<User | null>;
   findByUuid: (uuid: string) => Promise<User | null>;
   save: (input: User) => Promise<User>;
 }
@@ -22,8 +22,8 @@ export class UserRepositoryImpl implements UserRepository {
     this.db = db;
   }
 
-  async findByLogin(login: string): Promise<User | null> {
-    const result = await this.db(USER_TABLE_NAME).where('login', login).first();
+  async findByUsername(username: string): Promise<User | null> {
+    const result = await this.db(USER_TABLE_NAME).where('username', username).first();
     return result ? UserRepositoryImpl.toUser(result) : null;
   }
 
@@ -33,19 +33,19 @@ export class UserRepositoryImpl implements UserRepository {
   }
 
   async save(input: User): Promise<User> {
-    const { uuid, login, passwordHash: password, status } = input.toSnapshot();
+    const { uuid, username, passwordHash: password, status } = input.toSnapshot();
 
     await this.db(USER_TABLE_NAME)
-      .insert({ ...dbTimeLog.createTimeLog(), uuid, login, status, password })
+      .insert({ ...dbTimeLog.createTimeLog(), uuid, username, status, password })
       .onConflict('uuid')
-      .merge({ ...dbTimeLog.updateTimeLog(), login, status, password });
+      .merge({ ...dbTimeLog.updateTimeLog(), username, status, password });
     return input;
   }
 
   private static toUser(input: any): User {
     return new User({
       uuid: input.uuid,
-      login: input.login,
+      username: input.username,
       passwordHash: input.password,
       status: input.status
     });

@@ -3,7 +3,7 @@ import { User, UserProps, UserStatus } from '../../../src/user/user';
 export function sampleUserProps(): UserProps {
   return {
     uuid: 'testUuid',
-    login: 'testLogin',
+    username: 'testLogin',
     passwordHash: 'aaaabbbbcccc',
     status: UserStatus.Active
   };
@@ -12,7 +12,7 @@ export function sampleUserProps(): UserProps {
 export const userBuilder = (props: UserProps = sampleUserProps()) => {
   return {
     withUuid: (uuid: UserProps['uuid']) => userBuilder({ ...props, uuid }),
-    withLogin: (login: UserProps['login']) => userBuilder({ ...props, login }),
+    withUsername: (username: UserProps['username']) => userBuilder({ ...props, username }),
     withPasswordHash: (passwordHash: UserProps['passwordHash']) => userBuilder({ ...props, passwordHash }),
     withStatus: (status: UserProps['status']) => userBuilder({ ...props, status }),
     toProps: () => props,

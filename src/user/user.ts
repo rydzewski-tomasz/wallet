@@ -12,7 +12,7 @@ export enum UserStatus {
 
 export interface UserProps {
   uuid: string;
-  login: string;
+  username: string;
   passwordHash: string;
   status: UserStatus;
 }
@@ -22,16 +22,14 @@ export class User extends Entity<UserProps> {
     super(props);
   }
 
-  async signup({ login, password }: { login: string; password: string }) {
+  async signup({ username, password }: { username: string; password: string }) {
     if (this.props.status !== UserStatus.New) {
       throw new Error('InvalidStatus');
     }
 
-    this.props.login = login;
+    this.props.username = username;
     this.props.passwordHash = await bcrypt.hash(password, SALT_ROUNDS);
   }
-
-  async signIn({ login, password }: { login: string; password: string }) {}
 
   remove() {
     this.props.status = UserStatus.Deleted;

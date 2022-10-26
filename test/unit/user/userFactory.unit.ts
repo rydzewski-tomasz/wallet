@@ -21,6 +21,6 @@ describe('UserFactory unit test', () => {
 
     // THEN
     const snapshot = user.toSnapshot();
-    expect(snapshot).toStrictEqual({ uuid: 'testUuid', login: '', passwordHash: '', status: UserStatus.New });
+    expect(snapshot).toStrictEqual({ uuid: 'testUuid', username: '', passwordHash: '', status: UserStatus.New });
   });
 });

@@ -17,17 +17,17 @@ describe('User unit test', () => {
 
   it('GIVEN valid user WHEN signup THEN add user login and passwordHash', async () => {
     // GIVEN
-    const login = 'userLogin';
+    const username = 'userLogin';
     const password = 'test';
     const user = userBuilder().withStatus(UserStatus.New).valueOf();
 
     // WHEN
-    await user.signup({ login, password });
+    await user.signup({ username, password });
 
     // THEN
     const snapshot = user.toSnapshot();
     expect({
-      login: snapshot.login,
+      login: snapshot.username,
       isValidPassword: await bcrypt.compare('test', snapshot.passwordHash)
     }).toStrictEqual({
       login: 'userLogin',
@@ -37,12 +37,12 @@ describe('User unit test', () => {
 
   it('GIVEN user without New status WHEN signup THEN throw error', async () => {
     // GIVEN
-    const login = 'userLogin';
+    const username = 'userLogin';
     const password = 'test';
     const user = userBuilder().withStatus(UserStatus.Unverified).valueOf();
 
     // WHEN
-    const signup = async () => user.signup({ login, password });
+    const signup = async () => user.signup({ username, password });
 
     // THEN
     await expect(signup).rejects.toThrow('InvalidStatus');
