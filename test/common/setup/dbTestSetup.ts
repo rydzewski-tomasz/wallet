@@ -1,7 +1,7 @@
 import { DbConnection } from '../../../src/core/db/dbConnection';
 import knex, { Knex } from 'knex';
-import { testDbConfig } from '../config/testConfig';
 import random from '../util/random';
+import testConfig from '../config/testConfig';
 
 export class DbTestSetup {
   private readonly testDbName: string;
@@ -10,11 +10,12 @@ export class DbTestSetup {
 
   constructor() {
     this.testDbName = `wallet_db_${random.generateRandomString()}`;
-    this.connection = knex(testDbConfig);
+    this.connection = knex(testConfig.getDbConfig());
   }
 
   async createConnection(): Promise<DbConnection> {
     try {
+      const testDbConfig = testConfig.getDbConfig();
       await this.connection.raw(`CREATE DATABASE ${this.testDbName}`);
       this.dbConnection = new DbConnection({ ...testDbConfig, connection: { ...testDbConfig.connection, database: this.testDbName } });
       await this.dbConnection.db.migrate.latest();

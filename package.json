@@ -9,9 +9,12 @@
     "testCoverage": "jest --collectCoverage",
     "lint": "npx prettier --check src/ && npx prettier --check test/",
     "lintFix": "npx prettier --write src/ && npx prettier --write test/",
-    "test": "npm run unitTests  && npm run integrationTests",
+    "setupTests": "docker compose -f docker-compose.test.yml up -d",
+    "test": "npm run unitTests  && npm run integrationTests && npm run componentTests",
+    "testsOnDocker": "TEST_ENV=docker npm run test",
     "unitTests": "jest unit",
     "integrationTests": "jest int",
+    "componentTests": "jest comp",
     "prepare": "husky install"
   },
   "keywords": [],

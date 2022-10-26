@@ -1,5 +1,18 @@
 version: '3.9'
 services:
+  wallet_test:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - ./src:/wallet-backend/src
+      - ./test:/wallet-backend/test
+      - ./package.json:/wallet-backend/package.json
+    command: ./wait-for-it.sh wallet_test_db:5432 -- bash -c "npm run lint && npm run testsOnDocker"
+    depends_on:
+      - wallet_test_db
+    profiles: ['startTests']
+
   wallet_test_db:
     image: postgres
     restart: always

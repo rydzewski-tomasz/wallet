@@ -1,7 +1,10 @@
 import { DbConfig } from '../../../src/core/config/dbConfig';
 import { AppConfig } from '../../../src/core/config/appConfig';
 
-export const testDbConfig: DbConfig = {
+const { TEST_ENV } = process.env;
+const DOCKER_ENV_NAME = 'docker';
+
+const localTestDbConfig: DbConfig = {
   client: 'pg',
   connection: {
     host: 'localhost',
@@ -15,7 +18,43 @@ export const testDbConfig: DbConfig = {
   }
 };
 
-export const testConfig: AppConfig = {
+const localTestConfig: AppConfig = {
   port: 0,
-  db: testDbConfig
+  db: localTestDbConfig
+};
+
+const dockerTestDbConfig: DbConfig = {
+  client: 'pg',
+  connection: {
+    host: 'wallet_test_db',
+    port: 5432,
+    database: 'wallet_db',
+    user: 'wallet_user',
+    password: 'wallet_password'
+  },
+  migrations: {
+    directory: './src/core/db/migrations'
+  }
+};
+
+const dockerTestConfig: AppConfig = {
+  port: 0,
+  db: dockerTestDbConfig
+};
+
+function getDbConfig(): DbConfig {
+  return isDockerEnv() ? dockerTestDbConfig : localTestDbConfig;
+}
+
+function getAppConfig(): AppConfig {
+  return isDockerEnv() ? dockerTestConfig : localTestConfig;
+}
+
+function isDockerEnv(): boolean {
+  return TEST_ENV === DOCKER_ENV_NAME;
+}
+
+export default {
+  getDbConfig,
+  getAppConfig
 };

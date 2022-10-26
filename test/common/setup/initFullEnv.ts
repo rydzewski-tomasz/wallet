@@ -1,6 +1,6 @@
 import { startApp } from '../../../src/app';
 import { Request } from './request';
-import { testConfig } from '../config/testConfig';
+import testConfig from '../config/testConfig';
 import { Server } from 'net';
 import { DbTestSetup } from './dbTestSetup';
 
@@ -11,7 +11,7 @@ export function initFullEnv() {
   return {
     startEnv: async () => {
       const dbConnection = await dbTestSetup.createConnection();
-      server = startApp({ config: testConfig, dbConnection });
+      server = startApp({ config: testConfig.getAppConfig(), dbConnection });
       return { request: new Request(server), dbConnection };
     },
     stopEnv: async () => {
