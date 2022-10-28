@@ -1,5 +1,8 @@
 export type Result<Value, Error> = { isSuccess: true; value: Value } | { isSuccess: false; error: Error };
 
+export const OK = 'OK';
+export type OK = 'OK';
+
 export function createSuccessResult<Value, Error = 'string'>(value: Value): Result<Value, Error> {
   return { isSuccess: true, value };
 }

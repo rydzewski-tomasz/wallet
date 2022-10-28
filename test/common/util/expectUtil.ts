@@ -30,6 +30,34 @@ export function expectResponse(res: Response): {
   };
 }
 
+export function expectResult<Value, Error>(
+  result: Result<Value, Error>
+): {
+  toBeSuccess: (value: Value) => void;
+  toBeError: (error: Error) => void;
+} {
+  return {
+    toBeSuccess: value => {
+      expect({
+        isSuccess: result.isSuccess,
+        value: result.isSuccess ? result.value : undefined
+      }).toStrictEqual({
+        isSuccess: true,
+        value: value
+      });
+    },
+    toBeError: error => {
+      expect({
+        isSuccess: result.isSuccess,
+        error: result.isSuccess ? undefined : result.error
+      }).toStrictEqual({
+        isSuccess: false,
+        error: error
+      });
+    }
+  };
+}
+
 export function expectResultEntity<Value extends Entity<WithUuid>, Error>(
   result: Result<Value, Error>
 ): {
