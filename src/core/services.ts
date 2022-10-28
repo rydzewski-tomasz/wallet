@@ -1,8 +1,8 @@
-import { UserRepository, UserRepositoryImpl } from '../user/userRepository';
+import { UserRepository, UserRepositoryImpl } from '../auth/user/userRepository';
 import { ExpenditureCategoryRepository, ExpenditureCategoryRepositoryImpl } from '../budget/expenditure/category/expenditureCategoryRepository';
 import { ExpenditureCategoryService, ExpenditureCategoryServiceImpl } from '../budget/expenditure/category/expenditureCategoryService';
-import { UserService, UserServiceImpl } from '../user/userService';
-import { UserFactory, UserFactoryImpl } from '../user/userFactory';
+import { UserService, UserServiceImpl } from '../auth/user/userService';
+import { UserFactory, UserFactoryImpl } from '../auth/user/userFactory';
 import { AppParams } from '../app';
 import { UuidGenerator } from './uuidGenerator';
 import { DbConnection } from './db/dbConnection';

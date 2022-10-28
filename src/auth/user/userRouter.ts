@@ -1,7 +1,7 @@
 import createRouter, { Router, Spec } from 'koa-joi-router';
 import Joi from 'joi';
 import { SignupErrorType, UserService } from './userService';
-import httpResponse from '../core/http/httpResponse';
+import httpResponse from '../../core/http/httpResponse';
 import { Context } from 'koa';
 
 export function createUserRouter(userService: UserService): Router {

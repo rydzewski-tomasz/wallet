@@ -1,9 +1,9 @@
-import { initDbEnv } from '../../common/setup/initDbEnv';
-import { DbConnection } from '../../../src/core/db/dbConnection';
-import { USER_TABLE_NAME, UserRepository, UserRepositoryImpl } from '../../../src/user/userRepository';
-import { User, UserStatus } from '../../../src/user/user';
-import { userBuilder } from '../../common/builder/userBuilder';
-import { expectEntity } from '../../common/util/expectUtil';
+import { initDbEnv } from '../../../common/setup/initDbEnv';
+import { DbConnection } from '../../../../src/core/db/dbConnection';
+import { USER_TABLE_NAME, UserRepository, UserRepositoryImpl } from '../../../../src/auth/user/userRepository';
+import { User, UserStatus } from '../../../../src/auth/user/user';
+import { userBuilder } from '../../../common/builder/userBuilder';
+import { expectEntity } from '../../../common/util/expectUtil';
 
 describe('userRepository integration test', () => {
   const { createConnection, closeConnection } = initDbEnv();

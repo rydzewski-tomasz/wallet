@@ -1,6 +1,6 @@
 import bcrypt from 'bcryptjs';
-import { Entity } from '../core/entity';
-import { createErrorResult, createSuccessResult, OK, Result } from '../core/result';
+import { Entity } from '../../core/entity';
+import { createErrorResult, createSuccessResult, OK, Result } from '../../core/result';
 
 const SALT_ROUNDS = 10;
 

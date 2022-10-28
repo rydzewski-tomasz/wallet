@@ -1,10 +1,10 @@
-import { SignupErrorType, UserService, UserServiceImpl } from '../../../src/user/userService';
-import { createUserFactoryMock, createUserRepositoryMock } from '../../common/mock/mocks';
-import { UserRepository } from '../../../src/user/userRepository';
-import { User, UserStatus } from '../../../src/user/user';
-import { UserFactory } from '../../../src/user/userFactory';
-import { expectResultEntity } from '../../common/util/expectUtil';
-import { userBuilder } from '../../common/builder/userBuilder';
+import { SignupErrorType, UserService, UserServiceImpl } from '../../../../src/auth/user/userService';
+import { createUserFactoryMock, createUserRepositoryMock } from '../../../common/mock/mocks';
+import { UserRepository } from '../../../../src/auth/user/userRepository';
+import { User, UserStatus } from '../../../../src/auth/user/user';
+import { UserFactory } from '../../../../src/auth/user/userFactory';
+import { expectResultEntity } from '../../../common/util/expectUtil';
+import { userBuilder } from '../../../common/builder/userBuilder';
 
 describe('UserService unit test', () => {
   let userService: UserService;

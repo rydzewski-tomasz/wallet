@@ -1,8 +1,8 @@
-import { UserErrorType, UserStatus } from '../../../src/user/user';
+import { UserErrorType, UserStatus } from '../../../../src/auth/user/user';
 import bcrypt from 'bcryptjs';
-import { userBuilder } from '../../common/builder/userBuilder';
-import { expectResult } from '../../common/util/expectUtil';
-import { OK } from '../../../src/core/result';
+import { userBuilder } from '../../../common/builder/userBuilder';
+import { expectResult } from '../../../common/util/expectUtil';
+import { OK } from '../../../../src/core/result';
 
 describe('User unit test', () => {
   it('GIVEN valid user WHEN remove THEN change user status to Deleted', async () => {

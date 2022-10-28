@@ -1,7 +1,7 @@
 import { UserRepository } from './userRepository';
 import { User } from './user';
 import { UserFactory } from './userFactory';
-import { createErrorResult, createSuccessResult, Result } from '../core/result';
+import { createErrorResult, createSuccessResult, Result } from '../../core/result';
 
 export enum SignupErrorType {
   UsernameAlreadyExists = 'UsernameAlreadyExists'

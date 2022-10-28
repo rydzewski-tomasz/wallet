@@ -1,4 +1,4 @@
-import { User, UserProps, UserStatus } from '../../../src/user/user';
+import { User, UserProps, UserStatus } from '../../../src/auth/user/user';
 
 export function sampleUserProps(): UserProps {
   return {

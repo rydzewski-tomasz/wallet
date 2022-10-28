@@ -1,4 +1,4 @@
-import { UuidGenerator } from '../core/uuidGenerator';
+import { UuidGenerator } from '../../core/uuidGenerator';
 import { User, UserStatus } from './user';
 
 export interface UserFactory {

@@ -1,11 +1,11 @@
-import { initFullEnv } from '../../common/setup/initFullEnv';
-import { Request } from '../../common/setup/request';
-import { expectResponse } from '../../common/util/expectUtil';
-import { createUserRepository, USER_TABLE_NAME, UserRepository } from '../../../src/user/userRepository';
-import { userBuilder } from '../../common/builder/userBuilder';
-import { UserStatus } from '../../../src/user/user';
+import { initFullEnv } from '../../../common/setup/initFullEnv';
+import { Request } from '../../../common/setup/request';
+import { expectResponse } from '../../../common/util/expectUtil';
+import { createUserRepository, USER_TABLE_NAME, UserRepository } from '../../../../src/auth/user/userRepository';
+import { userBuilder } from '../../../common/builder/userBuilder';
+import { UserStatus } from '../../../../src/auth/user/user';
 import bcrypt from 'bcryptjs';
-import { DbConnection } from '../../../src/core/db/dbConnection';
+import { DbConnection } from '../../../../src/core/db/dbConnection';
 
 describe('signup component test', () => {
   const { startEnv, stopEnv } = initFullEnv();

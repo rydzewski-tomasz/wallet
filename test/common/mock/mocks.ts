@@ -1,8 +1,8 @@
 import { ExpenditureCategoryRepository } from '../../../src/budget/expenditure/category/expenditureCategoryRepository';
-import { UserRepository } from '../../../src/user/userRepository';
+import { UserRepository } from '../../../src/auth/user/userRepository';
 import { UuidGenerator } from '../../../src/core/uuidGenerator';
-import { UserFactory } from '../../../src/user/userFactory';
-import { UserService } from '../../../src/user/userService';
+import { UserFactory } from '../../../src/auth/user/userFactory';
+import { UserService } from '../../../src/auth/user/userService';
 
 export function createUserFactoryMock(): UserFactory {
   return { create: jest.fn() };

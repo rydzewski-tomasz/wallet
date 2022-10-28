@@ -1,12 +1,12 @@
-import { createUserRouter } from '../../../src/user/userRouter';
-import { Request } from '../../common/setup/request';
-import { expectResponse } from '../../common/util/expectUtil';
-import { HttpDefaultError } from '../../../src/core/http/errorMiddleware';
-import { SignupErrorType, UserService } from '../../../src/user/userService';
-import { createErrorResult, createSuccessResult } from '../../../src/core/result';
-import { userBuilder } from '../../common/builder/userBuilder';
-import { initHttpEnv } from '../../common/setup/initHttpEnv';
-import { createUserServiceMock } from '../../common/mock/mocks';
+import { createUserRouter } from '../../../../src/auth/user/userRouter';
+import { Request } from '../../../common/setup/request';
+import { expectResponse } from '../../../common/util/expectUtil';
+import { HttpDefaultError } from '../../../../src/core/http/errorMiddleware';
+import { SignupErrorType, UserService } from '../../../../src/auth/user/userService';
+import { createErrorResult, createSuccessResult } from '../../../../src/core/result';
+import { userBuilder } from '../../../common/builder/userBuilder';
+import { initHttpEnv } from '../../../common/setup/initHttpEnv';
+import { createUserServiceMock } from '../../../common/mock/mocks';
 
 describe('userHttpApi integration test', () => {
   const { startServer, stopServer } = initHttpEnv();

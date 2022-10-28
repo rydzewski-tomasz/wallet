@@ -1,7 +1,7 @@
-import { UserStatus } from '../../../src/user/user';
-import { UserFactory, UserFactoryImpl } from '../../../src/user/userFactory';
-import { UuidGenerator } from '../../../src/core/uuidGenerator';
-import { createUuidGeneratorMock } from '../../common/mock/mocks';
+import { UserStatus } from '../../../../src/auth/user/user';
+import { UserFactory, UserFactoryImpl } from '../../../../src/auth/user/userFactory';
+import { UuidGenerator } from '../../../../src/core/uuidGenerator';
+import { createUuidGeneratorMock } from '../../../common/mock/mocks';
 
 describe('UserFactory unit test', () => {
   let uuidGenerator: UuidGenerator;

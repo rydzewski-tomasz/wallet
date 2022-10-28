@@ -1,7 +1,7 @@
 import { User } from './user';
 import { Knex } from 'knex';
-import { DbConnection } from '../core/db/dbConnection';
-import dbTimeLog from '../core/db/dbTimeLog';
+import { DbConnection } from '../../core/db/dbConnection';
+import dbTimeLog from '../../core/db/dbTimeLog';
 
 export const USER_TABLE_NAME = 'user';
 
