@@ -7,7 +7,13 @@ export interface ExpenditureCategoryService {
 }
 
 export class ExpenditureCategoryServiceImpl implements ExpenditureCategoryService {
-  constructor(private categoryRepository: ExpenditureCategoryRepository, private uuidGenerator: UuidGenerator) {}
+  private categoryRepository: ExpenditureCategoryRepository;
+  private uuidGenerator: UuidGenerator;
+
+  constructor({ categoryRepository, uuidGenerator }: { categoryRepository: ExpenditureCategoryRepository; uuidGenerator: UuidGenerator }) {
+    this.categoryRepository = categoryRepository;
+    this.uuidGenerator = uuidGenerator;
+  }
 
   async add(categoryName: string): Promise<ExpenditureCategory> {
     const category = new ExpenditureCategory({

@@ -12,7 +12,7 @@ describe('ExpenditureCategoryService unit test', () => {
     uuid = 'testUuid';
     const uuidGenerator: UuidGenerator = { generate: () => uuid };
     expenditureCategoryRepository = { save: jest.fn() };
-    addExpenditureCategory = new ExpenditureCategoryServiceImpl(expenditureCategoryRepository, uuidGenerator);
+    addExpenditureCategory = new ExpenditureCategoryServiceImpl({ categoryRepository: expenditureCategoryRepository, uuidGenerator });
   });
 
   it('GIVEN valid input WHEN addExpenditureCategory THEN save new category on db', async () => {

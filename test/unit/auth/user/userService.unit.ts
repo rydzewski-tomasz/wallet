@@ -15,7 +15,7 @@ describe('UserService unit test', () => {
   beforeEach(() => {
     userRepository = createUserRepositoryMock();
     userFactory = createUserFactoryMock();
-    userService = new UserServiceImpl(userRepository, userFactory);
+    userService = new UserServiceImpl({ userRepository, userFactory });
     user = userBuilder().withStatus(UserStatus.New).valueOf();
 
     jest.spyOn(userFactory, 'create').mockReturnValue(user);

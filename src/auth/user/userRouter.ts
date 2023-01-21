@@ -16,7 +16,7 @@ export function createUserRouter(userService: UserService): Router {
 
       if (result.isSuccess) {
         httpResponse(ctx).createSuccessResponse(200, { uuid: result.value.getUuid() });
-      } else if (result.isSuccess == false) {
+      } else if (!result.isSuccess) {
         if (result.error === SignupErrorType.UsernameAlreadyExists) {
           httpResponse(ctx).createErrorResponse(400, SignupErrorType.UsernameAlreadyExists);
         }

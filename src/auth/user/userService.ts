@@ -12,7 +12,12 @@ export interface UserService {
 }
 
 export class UserServiceImpl implements UserService {
-  constructor(private userRepository: UserRepository, private userFactory: UserFactory) {}
+  private userRepository: UserRepository;
+  private userFactory: UserFactory;
+  constructor({ userRepository, userFactory }: { userRepository: UserRepository; userFactory: UserFactory }) {
+    this.userRepository = userRepository;
+    this.userFactory = userFactory;
+  }
 
   async signup({ username, password }: { username: string; password: string }): Promise<Result<User, SignupErrorType>> {
     if (await this.userRepository.findByUsername(username)) {

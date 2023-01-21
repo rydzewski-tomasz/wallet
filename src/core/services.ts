@@ -24,12 +24,12 @@ export interface Utils {
 }
 
 export function createServices(appParams: AppParams): Services {
-  const repositories = createRepositories(appParams.dbConnection);
-  const utils = createUtils(appParams);
+  const { userRepository, expenditureCategoryRepository } = createRepositories(appParams.dbConnection);
+  const { userFactory, uuidGenerator } = createUtils(appParams);
 
   return {
-    userService: new UserServiceImpl(repositories.userRepository, utils.userFactory),
-    expenditureCategoryService: new ExpenditureCategoryServiceImpl(repositories.expenditureCategoryRepository, utils.uuidGenerator)
+    userService: new UserServiceImpl({ userRepository, userFactory }),
+    expenditureCategoryService: new ExpenditureCategoryServiceImpl({ categoryRepository: expenditureCategoryRepository, uuidGenerator })
   };
 }
 
