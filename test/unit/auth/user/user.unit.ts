@@ -4,7 +4,7 @@ import { userBuilder } from '../../../common/builder/userBuilder';
 import { expectResult } from '../../../common/util/expectUtil';
 import { OK } from '../../../../src/core/result';
 
-describe('User unit test', () => {
+describe('User unit tests', () => {
   it('GIVEN valid user WHEN remove THEN change user status to Deleted', async () => {
     // GIVEN
     const user = userBuilder().withStatus(UserStatus.Active).valueOf();

@@ -15,7 +15,6 @@ export const userBuilder = (props: UserProps = sampleUserProps()) => {
     withUsername: (username: UserProps['username']) => userBuilder({ ...props, username }),
     withPasswordHash: (passwordHash: UserProps['passwordHash']) => userBuilder({ ...props, passwordHash }),
     withStatus: (status: UserProps['status']) => userBuilder({ ...props, status }),
-    toProps: () => props,
     valueOf: () => new User(props)
   };
 };

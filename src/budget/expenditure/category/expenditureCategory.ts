@@ -1,6 +1,6 @@
 import { Entity } from '../../../core/entity';
 
-interface ExpenditureCategoryProps {
+export interface ExpenditureCategoryProps {
   uuid: string;
   name: string;
 }
@@ -15,6 +15,6 @@ export class ExpenditureCategory extends Entity<ExpenditureCategoryProps> {
   }
 
   toSnapshot(): ExpenditureCategoryProps {
-    return this.props;
+    return { ...this.props };
   }
 }

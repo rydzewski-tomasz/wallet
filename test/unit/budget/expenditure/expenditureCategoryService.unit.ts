@@ -1,7 +1,7 @@
-import { UuidGenerator } from '../../../src/core/uuidGenerator';
-import { ExpenditureCategoryService, ExpenditureCategoryServiceImpl } from '../../../src/budget/expenditure/category/expenditureCategoryService';
-import { ExpenditureCategory } from '../../../src/budget/expenditure/category/expenditureCategory';
-import { ExpenditureCategoryRepository } from '../../../src/budget/expenditure/category/expenditureCategoryRepository';
+import { UuidGenerator } from '../../../../src/core/uuidGenerator';
+import { ExpenditureCategoryService, ExpenditureCategoryServiceImpl } from '../../../../src/budget/expenditure/category/expenditureCategoryService';
+import { ExpenditureCategory } from '../../../../src/budget/expenditure/category/expenditureCategory';
+import { ExpenditureCategoryRepository } from '../../../../src/budget/expenditure/category/expenditureCategoryRepository';
 
 describe('ExpenditureCategoryService unit test', () => {
   let uuid: string;
@@ -15,7 +15,7 @@ describe('ExpenditureCategoryService unit test', () => {
     addExpenditureCategory = new ExpenditureCategoryServiceImpl({ categoryRepository: expenditureCategoryRepository, uuidGenerator });
   });
 
-  it('GIVEN valid input WHEN addExpenditureCategory THEN save new category on db', async () => {
+  it('GIVEN valid input WHEN add THEN save new category on db', async () => {
     // GIVEN
 
     // WHEN
@@ -26,7 +26,7 @@ describe('ExpenditureCategoryService unit test', () => {
     expect(expenditureCategoryRepository.save).toBeCalledWith(expected);
   });
 
-  it('GIVEN valid input WHEN addExpenditureCategory THEN return new category', async () => {
+  it('GIVEN valid input WHEN add THEN return new category', async () => {
     // GIVEN
 
     // WHEN

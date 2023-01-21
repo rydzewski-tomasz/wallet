@@ -89,14 +89,14 @@ export function expectResultEntity<Value extends Entity<WithUuid>, Error>(
 export function expectEntity<Props extends WithUuid>(
   actual: Entity<Props> | undefined | null
 ): {
-  toBe: (expected: Entity<Props>) => void;
-  toStrictEqual: (expected: Entity<Props>) => void;
+  toHaveEqualReference: (expected: Entity<Props>) => void;
+  toHaveEqualValue: (expected: Entity<Props>) => void;
 } {
   return {
-    toBe: expected => {
+    toHaveEqualReference: expected => {
       expect({ uuid: actual?.getUuid() }).toStrictEqual({ uuid: expected.getUuid() });
     },
-    toStrictEqual: expected => {
+    toHaveEqualValue: expected => {
       expect(actual?.toSnapshot()).toStrictEqual(expected.toSnapshot());
     }
   };
