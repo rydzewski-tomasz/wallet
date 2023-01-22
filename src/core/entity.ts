@@ -18,6 +18,6 @@ export abstract class Entity<Props extends WithUuid> {
   }
 
   toSnapshot(): Props {
-    return this.props;
+    return { ...this.props };
   }
 }

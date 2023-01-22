@@ -7,7 +7,7 @@ describe('ExpenditureCategory unit tests', () => {
     const expenditureCategory = expenditureCategoryBuilder().withName('old category name').valueOf();
 
     // WHEN
-    expenditureCategory.update({ name: 'new category name' });
+    expenditureCategory.changeName('new category name');
 
     // THEN
     const expectedExpenditureCategory = expenditureCategoryBuilder(expenditureCategory.toSnapshot()).withName('new category name').valueOf();

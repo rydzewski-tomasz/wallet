@@ -10,11 +10,7 @@ export class ExpenditureCategory extends Entity<ExpenditureCategoryProps> {
     super(props);
   }
 
-  update(input: { name: string }) {
-    this.props.name = input.name;
-  }
-
-  toSnapshot(): ExpenditureCategoryProps {
-    return { ...this.props };
+  changeName(name: string) {
+    this.props.name = name;
   }
 }

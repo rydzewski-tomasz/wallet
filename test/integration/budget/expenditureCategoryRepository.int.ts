@@ -61,7 +61,7 @@ describe('addExpenditureCategoryRepository integration test', () => {
     // GIVEN
     const existingCategory = new ExpenditureCategory({ uuid: 'testUuid', name: 'oldName' });
     await expenditureCategoryRepository.save(existingCategory);
-    existingCategory.update({ name: 'updatedName' });
+    existingCategory.changeName('updatedName');
 
     // WHEN
     await expenditureCategoryRepository.save(existingCategory);
