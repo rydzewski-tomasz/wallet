@@ -1,10 +1,10 @@
-import { ExpenditureCategory } from './expenditureCategory';
-import { Entity } from '../../../core/entity';
+import { ExpenditureSubcategory } from '../subcategories/expenditureSubcategory';
+import { Entity } from '../../../../core/entity';
 
 export interface ExpenditureMainCategoryProps {
   uuid: string;
   name: string;
-  subcategories: ExpenditureCategory[];
+  subcategories: ExpenditureSubcategory[];
 }
 
 export class ExpenditureMainCategory extends Entity<ExpenditureMainCategoryProps> {
@@ -16,15 +16,14 @@ export class ExpenditureMainCategory extends Entity<ExpenditureMainCategoryProps
     this.props.name = name;
   }
 
-  addSubcategory(subcategory: ExpenditureCategory) {
+  addSubcategory(subcategory: ExpenditureSubcategory) {
     const exists = this.props.subcategories.find(singleSubcategory => singleSubcategory.equals(subcategory));
     if (!exists) {
       this.props.subcategories.push(subcategory);
     }
   }
 
-  // @ts-ignore
-  removeSubcategory(subcategory: ExpenditureCategory) {
+  removeSubcategory(subcategory: ExpenditureSubcategory) {
     this.props.subcategories = this.props.subcategories.filter(singleSubcategory => !singleSubcategory.equals(subcategory));
   }
 }

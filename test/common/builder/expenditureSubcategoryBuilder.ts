@@ -1,26 +1,26 @@
-import { ExpenditureCategory, ExpenditureCategoryProps } from '../../../src/budget/expenditure/category/expenditureCategory';
-import { ExpenditureMainCategory, ExpenditureMainCategoryProps } from '../../../src/budget/expenditure/category/expenditureMainCategory';
+import { ExpenditureSubcategory, ExpenditureCategoryProps } from '../../../src/budget/expenditure/category/subcategories/expenditureSubcategory';
+import { ExpenditureMainCategory, ExpenditureMainCategoryProps } from '../../../src/budget/expenditure/category/main/expenditureMainCategory';
 
 export function sampleExpenditureCategoryProps(): ExpenditureCategoryProps {
   return {
     name: 'test expenditure category',
-    uuid: 'testExpenditureCategoryUuid'
+    uuid: 'subcategoryUuid'
   };
 }
 
-export const expenditureCategoryBuilder = (props: ExpenditureCategoryProps = sampleExpenditureCategoryProps()) => {
+export const expenditureSubcategoryBuilder = (props: ExpenditureCategoryProps = sampleExpenditureCategoryProps()) => {
   return {
-    withUuid: (uuid: ExpenditureCategoryProps['uuid']) => expenditureCategoryBuilder({ ...props, uuid }),
-    withName: (name: ExpenditureCategoryProps['name']) => expenditureCategoryBuilder({ ...props, name }),
-    valueOf: () => new ExpenditureCategory(props)
+    withUuid: (uuid: ExpenditureCategoryProps['uuid']) => expenditureSubcategoryBuilder({ ...props, uuid }),
+    withName: (name: ExpenditureCategoryProps['name']) => expenditureSubcategoryBuilder({ ...props, name }),
+    valueOf: () => new ExpenditureSubcategory(props)
   };
 };
 
 export function sampleExpenditureMainCategoryProps(): ExpenditureMainCategoryProps {
   return {
     name: 'test expenditure category',
-    uuid: 'testExpenditureCategoryUuid',
-    subcategories: [expenditureCategoryBuilder().valueOf()]
+    uuid: 'mainCategoryUuid',
+    subcategories: [expenditureSubcategoryBuilder().valueOf()]
   };
 }
 

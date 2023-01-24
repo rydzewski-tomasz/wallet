@@ -1,12 +1,13 @@
 import { DbConnection } from '../../../core/db/dbConnection';
-import { ExpenditureCategory } from './expenditureCategory';
 import { Knex } from 'knex';
 import dbTimeLog from '../../../core/db/dbTimeLog';
+import { ExpenditureMainCategory } from './main/expenditureMainCategory';
 
-export const EXPENDITURE_CATEGORY_TABLE_NAME = 'expenditure_category';
+export const EXPENDITURE_MAIN_CATEGORY_TABLE_NAME = 'expenditure_main_category';
+export const EXPENDITURE_SUBCATEGORY_TABLE_NAME = 'expenditure_subcategory';
 
 export interface ExpenditureCategoryRepository {
-  save: (input: ExpenditureCategory) => Promise<ExpenditureCategory>;
+  save: (input: ExpenditureMainCategory) => Promise<ExpenditureMainCategory>;
 }
 
 export class ExpenditureCategoryRepositoryImpl implements ExpenditureCategoryRepository {
@@ -16,12 +17,20 @@ export class ExpenditureCategoryRepositoryImpl implements ExpenditureCategoryRep
     this.db = db;
   }
 
-  async save(input: ExpenditureCategory): Promise<ExpenditureCategory> {
-    const { uuid, name } = input.toSnapshot();
-    await this.db(EXPENDITURE_CATEGORY_TABLE_NAME)
-      .insert({ ...dbTimeLog.createTimeLog(), uuid, name })
-      .onConflict('uuid')
-      .merge({ ...dbTimeLog.updateTimeLog(), name });
+  async save(input: ExpenditureMainCategory): Promise<ExpenditureMainCategory> {
+    const { uuid: mainUuid, name, subcategories } = input.toSnapshot();
+    await this.db.transaction(async trx => {
+      await trx(EXPENDITURE_MAIN_CATEGORY_TABLE_NAME)
+        .insert({ ...dbTimeLog.createTimeLog(), uuid: mainUuid, name })
+        .onConflict('uuid')
+        .merge({ ...dbTimeLog.updateTimeLog(), name });
+
+      await trx(EXPENDITURE_SUBCATEGORY_TABLE_NAME).where('main_category_uuid', mainUuid).del();
+
+      const subcategoriesToDb = subcategories.map(el => el.toSnapshot()).map(({ name, uuid }) => ({ ...dbTimeLog.createTimeLog(), name, uuid, main_category_uuid: mainUuid }));
+      await trx(EXPENDITURE_SUBCATEGORY_TABLE_NAME).insert(subcategoriesToDb);
+    });
+
     return input;
   }
 }

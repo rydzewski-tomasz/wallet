@@ -1,11 +1,11 @@
-import { Entity } from '../../../core/entity';
+import { Entity } from '../../../../core/entity';
 
 export interface ExpenditureCategoryProps {
   uuid: string;
   name: string;
 }
 
-export class ExpenditureCategory extends Entity<ExpenditureCategoryProps> {
+export class ExpenditureSubcategory extends Entity<ExpenditureCategoryProps> {
   constructor(props: ExpenditureCategoryProps) {
     super(props);
   }

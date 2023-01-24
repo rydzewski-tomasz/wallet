@@ -1,7 +1,7 @@
 import { UuidGenerator } from '../../../../src/core/uuidGenerator';
 import { ExpenditureCategoryService, ExpenditureCategoryServiceImpl } from '../../../../src/budget/expenditure/category/expenditureCategoryService';
-import { ExpenditureCategory } from '../../../../src/budget/expenditure/category/expenditureCategory';
 import { ExpenditureCategoryRepository } from '../../../../src/budget/expenditure/category/expenditureCategoryRepository';
+import { expenditureMainCategoryBuilder } from '../../../common/builder/expenditureSubcategoryBuilder';
 
 describe('ExpenditureCategoryService unit test', () => {
   let uuid: string;
@@ -19,10 +19,10 @@ describe('ExpenditureCategoryService unit test', () => {
     // GIVEN
 
     // WHEN
-    await addExpenditureCategory.add('ExpenditureCategory Name');
+    await addExpenditureCategory.addMainCategory('ExpenditureMainCategory Name');
 
     // THEN
-    const expected: ExpenditureCategory = new ExpenditureCategory({ uuid, name: 'ExpenditureCategory Name' });
+    const expected = expenditureMainCategoryBuilder().withUuid(uuid).withName('ExpenditureMainCategory Name').withSubcategories([]).valueOf();
     expect(expenditureCategoryRepository.save).toBeCalledWith(expected);
   });
 
@@ -30,10 +30,10 @@ describe('ExpenditureCategoryService unit test', () => {
     // GIVEN
 
     // WHEN
-    const result = await addExpenditureCategory.add('ExpenditureCategory Name');
+    const result = await addExpenditureCategory.addMainCategory('ExpenditureMainCategory Name');
 
     // THEN
-    const expected: ExpenditureCategory = new ExpenditureCategory({ uuid, name: 'ExpenditureCategory Name' });
+    const expected = expenditureMainCategoryBuilder().withUuid(uuid).withName('ExpenditureMainCategory Name').withSubcategories([]).valueOf();
     expect(result).toStrictEqual(expected);
   });
 });
