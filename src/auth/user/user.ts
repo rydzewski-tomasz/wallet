@@ -11,11 +11,19 @@ export enum UserStatus {
   Deleted = 'Deleted'
 }
 
+export enum UserType {
+  Admin = 'Admin',
+  User = 'User'
+}
+
 export interface UserProps {
   uuid: string;
   username: string;
   passwordHash: string;
   status: UserStatus;
+  type: UserType;
+  refreshToken?: string;
+  accessToken?: string;
 }
 
 export enum UserErrorType {
@@ -35,6 +43,8 @@ export class User extends Entity<UserProps> {
 
     this.props.username = username;
     this.props.passwordHash = await bcrypt.hash(password, SALT_ROUNDS);
+    this.props.status = UserStatus.Unverified;
+    this.props.type = UserType.User;
   }
 
   async login({ password }: { password: string }): Promise<Result<OK, UserErrorType.InvalidPassword>> {

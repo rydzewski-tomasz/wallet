@@ -2,6 +2,8 @@ import { UserStatus } from '../../../../src/auth/user/user';
 import { UserFactory, UserFactoryImpl } from '../../../../src/auth/user/userFactory';
 import { UuidGenerator } from '../../../../src/core/uuidGenerator';
 import { createUuidGeneratorMock } from '../../../common/mock/mocks';
+import { expectEntity } from '../../../common/util/expectUtil';
+import { userBuilder } from '../../../common/builder/userBuilder';
 
 describe('UserFactory unit test', () => {
   let uuidGenerator: UuidGenerator;
@@ -20,7 +22,7 @@ describe('UserFactory unit test', () => {
     const user = userFactory.create();
 
     // THEN
-    const snapshot = user.toSnapshot();
-    expect(snapshot).toStrictEqual({ uuid: 'testUuid', username: '', passwordHash: '', status: UserStatus.New });
+    const expected = userBuilder().withUuid('testUuid').withUsername('').withPasswordHash('').withStatus(UserStatus.New).valueOf();
+    expectEntity(user).toHaveEqualValue(expected);
   });
 });

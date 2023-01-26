@@ -33,12 +33,12 @@ export class UserRepositoryImpl implements UserRepository {
   }
 
   async save(input: User): Promise<User> {
-    const { uuid, username, passwordHash: password, status } = input.toSnapshot();
+    const { uuid, username, passwordHash: password, status, type } = input.toSnapshot();
 
     await this.db(USER_TABLE_NAME)
-      .insert({ ...dbTimeLog.createTimeLog(), uuid, username, status, password })
+      .insert({ ...dbTimeLog.createTimeLog(), uuid, username, status, password, type })
       .onConflict('uuid')
-      .merge({ ...dbTimeLog.updateTimeLog(), username, status, password });
+      .merge({ ...dbTimeLog.updateTimeLog(), username, status, password, type });
     return input;
   }
 
@@ -47,7 +47,8 @@ export class UserRepositoryImpl implements UserRepository {
       uuid: input.uuid,
       username: input.username,
       passwordHash: input.password,
-      status: input.status
+      status: input.status,
+      type: input.type
     });
   }
 }

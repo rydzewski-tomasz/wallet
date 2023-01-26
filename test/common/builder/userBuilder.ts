@@ -1,11 +1,12 @@
-import { User, UserProps, UserStatus } from '../../../src/auth/user/user';
+import { User, UserProps, UserStatus, UserType } from '../../../src/auth/user/user';
 
 export function sampleUserProps(): UserProps {
   return {
     uuid: 'testUuid',
     username: 'testLogin',
     passwordHash: 'aaaabbbbcccc',
-    status: UserStatus.Active
+    status: UserStatus.Active,
+    type: UserType.User
   };
 }
 

@@ -1,5 +1,5 @@
 import { UuidGenerator } from '../../core/uuidGenerator';
-import { User, UserStatus } from './user';
+import { User, UserStatus, UserType } from './user';
 
 export interface UserFactory {
   create: () => User;
@@ -10,6 +10,6 @@ export class UserFactoryImpl {
 
   create(): User {
     const uuid = this.uuidGenerator.generate();
-    return new User({ uuid, username: '', passwordHash: '', status: UserStatus.New });
+    return new User({ uuid, username: '', passwordHash: '', status: UserStatus.New, type: UserType.User });
   }
 }
