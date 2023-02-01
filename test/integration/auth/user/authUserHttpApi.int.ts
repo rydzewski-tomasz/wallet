@@ -1,22 +1,22 @@
-import { createUserRouter } from '../../../../src/auth/user/userRouter';
+import { createUserRouter } from '../../../../src/auth/user/authUserRouter';
 import { Request } from '../../../common/setup/request';
 import { expectResponse } from '../../../common/util/expectUtil';
 import { HttpDefaultError } from '../../../../src/core/http/errorMiddleware';
-import { SignupErrorType, UserService } from '../../../../src/auth/user/userService';
+import { SignupErrorType, AuthUserService } from '../../../../src/auth/user/authUserService';
 import { createErrorResult, createSuccessResult } from '../../../../src/core/result';
-import { userBuilder } from '../../../common/builder/userBuilder';
+import { authUserBuilder } from '../../../common/builder/authUserBuilder';
 import { initHttpEnv } from '../../../common/setup/initHttpEnv';
-import { createUserServiceMock } from '../../../common/mock/mocks';
+import { createAuthUserServiceMock } from '../../../common/mock/mocks';
 
 describe('userHttpApi integration test', () => {
   const { startServer, stopServer } = initHttpEnv();
 
   let request: Request;
-  let userService: UserService;
+  let authUserService: AuthUserService;
 
   beforeAll(() => {
-    userService = createUserServiceMock();
-    request = startServer(() => createUserRouter(userService));
+    authUserService = createAuthUserServiceMock();
+    request = startServer(() => createUserRouter(authUserService));
   });
 
   beforeEach(() => {
@@ -41,7 +41,7 @@ describe('userHttpApi integration test', () => {
   it('GIVEN LoginAlreadyExists error from service WHEN signup THEN return 400 status', async () => {
     // GIVEN
     const requestBody = { username: 'test', password: 'pass' };
-    jest.spyOn(userService, 'signup').mockResolvedValueOnce(createErrorResult(SignupErrorType.UsernameAlreadyExists));
+    jest.spyOn(authUserService, 'signup').mockResolvedValueOnce(createErrorResult(SignupErrorType.UsernameAlreadyExists));
 
     // WHEN
     const response = await request.post('/user/signup', requestBody);
@@ -53,8 +53,8 @@ describe('userHttpApi integration test', () => {
   it('GIVEN success result from service WHEN signup THEN return 200 status', async () => {
     // GIVEN
     const requestBody = { username: 'test', password: 'pass' };
-    const user = userBuilder().withUuid('testUuid').valueOf();
-    jest.spyOn(userService, 'signup').mockResolvedValueOnce(createSuccessResult(user));
+    const user = authUserBuilder().withUuid('testUuid').valueOf();
+    jest.spyOn(authUserService, 'signup').mockResolvedValueOnce(createSuccessResult(user));
 
     // WHEN
     const response = await request.post('/user/signup', requestBody);

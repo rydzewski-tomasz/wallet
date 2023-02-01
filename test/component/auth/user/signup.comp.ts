@@ -1,16 +1,16 @@
 import { initFullEnv } from '../../../common/setup/initFullEnv';
 import { Request } from '../../../common/setup/request';
 import { expectResponse } from '../../../common/util/expectUtil';
-import { createUserRepository, USER_TABLE_NAME, UserRepository } from '../../../../src/auth/user/userRepository';
-import { userBuilder } from '../../../common/builder/userBuilder';
-import { UserStatus } from '../../../../src/auth/user/user';
+import { createUserRepository, USER_TABLE_NAME, AuthUserRepository } from '../../../../src/auth/user/authUserRepository';
+import { authUserBuilder } from '../../../common/builder/authUserBuilder';
+import { UserStatus } from '../../../../src/auth/user/authUser';
 import bcrypt from 'bcryptjs';
 import { DbConnection } from '../../../../src/core/db/dbConnection';
 
 describe('signup component test', () => {
   const { startEnv, stopEnv } = initFullEnv();
   let request: Request;
-  let userRepository: UserRepository;
+  let userRepository: AuthUserRepository;
   let dbConnection: DbConnection;
 
   beforeAll(async () => {
@@ -49,7 +49,7 @@ describe('signup component test', () => {
     // THEN
     const { uuid } = response.body;
     const onDb = (await userRepository.findByUuid(uuid))?.toSnapshot();
-    const expected = userBuilder().withUuid(uuid).withStatus(UserStatus.Unverified).withUsername('test').valueOf();
+    const expected = authUserBuilder().withUuid(uuid).withStatus(UserStatus.Unverified).withUsername('test').valueOf();
     expect({ ...onDb, isValidPassword: await bcrypt.compare('pass', onDb?.passwordHash || '') }).toStrictEqual({
       ...expected.toSnapshot(),
       passwordHash: expect.any(String),

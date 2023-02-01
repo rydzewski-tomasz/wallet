@@ -1,38 +1,38 @@
-import { User } from './user';
+import { AuthUser } from './authUser';
 import { Knex } from 'knex';
 import { DbConnection } from '../../core/db/dbConnection';
 import dbTimeLog from '../../core/db/dbTimeLog';
 
 export const USER_TABLE_NAME = 'user';
 
-export interface UserRepository {
-  findByUsername: (login: string) => Promise<User | null>;
-  findByUuid: (uuid: string) => Promise<User | null>;
-  save: (input: User) => Promise<User>;
+export interface AuthUserRepository {
+  findByUsername: (login: string) => Promise<AuthUser | null>;
+  findByUuid: (uuid: string) => Promise<AuthUser | null>;
+  save: (input: AuthUser) => Promise<AuthUser>;
 }
 
-export function createUserRepository({ dbConnection }: { dbConnection: DbConnection }): UserRepository {
+export function createUserRepository({ dbConnection }: { dbConnection: DbConnection }): AuthUserRepository {
   return new UserRepositoryImpl(dbConnection);
 }
 
-export class UserRepositoryImpl implements UserRepository {
+export class UserRepositoryImpl implements AuthUserRepository {
   private db: Knex;
 
   constructor({ db }: DbConnection) {
     this.db = db;
   }
 
-  async findByUsername(username: string): Promise<User | null> {
+  async findByUsername(username: string): Promise<AuthUser | null> {
     const result = await this.db(USER_TABLE_NAME).where('username', username).first();
     return result ? UserRepositoryImpl.toUser(result) : null;
   }
 
-  async findByUuid(uuid: string): Promise<User | null> {
+  async findByUuid(uuid: string): Promise<AuthUser | null> {
     const result = await this.db(USER_TABLE_NAME).where('uuid', uuid).first();
     return result ? UserRepositoryImpl.toUser(result) : null;
   }
 
-  async save(input: User): Promise<User> {
+  async save(input: AuthUser): Promise<AuthUser> {
     const { uuid, username, passwordHash: password, status, type } = input.toSnapshot();
 
     await this.db(USER_TABLE_NAME)
@@ -42,8 +42,8 @@ export class UserRepositoryImpl implements UserRepository {
     return input;
   }
 
-  private static toUser(input: any): User {
-    return new User({
+  private static toUser(input: any): AuthUser {
+    return new AuthUser({
       uuid: input.uuid,
       username: input.username,
       passwordHash: input.password,

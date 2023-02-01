@@ -1,8 +1,7 @@
 import bcrypt from 'bcryptjs';
 import { Entity } from '../../core/entity';
 import { createErrorResult, createSuccessResult, OK, Result } from '../../core/result';
-
-const SALT_ROUNDS = 10;
+import { UserAccessToken, UserRefreshToken } from './authToken';
 
 export enum UserStatus {
   New = 'New',
@@ -16,44 +15,50 @@ export enum UserType {
   User = 'User'
 }
 
-export interface UserProps {
+export interface AuthUserProps {
   uuid: string;
   username: string;
   passwordHash: string;
   status: UserStatus;
   type: UserType;
-  refreshToken?: string;
-  accessToken?: string;
+  refreshToken?: UserRefreshToken;
+  accessToken?: UserAccessToken;
 }
 
-export enum UserErrorType {
+export enum AuthUserErrorType {
   InvalidPassword = 'InvalidPassword',
   InvalidStatus = 'InvalidStatus'
 }
 
-export class User extends Entity<UserProps> {
-  constructor(props: UserProps) {
+export class AuthUser extends Entity<AuthUserProps> {
+  constructor(props: AuthUserProps) {
     super(props);
   }
 
-  async signup({ username, password }: { username: string; password: string }) {
+  async signup({ username, password, generateHash }: { username: string; password: string; generateHash: (input: string) => Promise<string> }) {
     if (this.props.status !== UserStatus.New) {
-      throw new Error(UserErrorType.InvalidStatus);
+      throw new Error(AuthUserErrorType.InvalidStatus);
     }
 
     this.props.username = username;
-    this.props.passwordHash = await bcrypt.hash(password, SALT_ROUNDS);
+    this.props.passwordHash = await generateHash(password);
     this.props.status = UserStatus.Unverified;
     this.props.type = UserType.User;
   }
 
-  async login({ password }: { password: string }): Promise<Result<OK, UserErrorType.InvalidPassword>> {
+  async login({ password }: { password: string }): Promise<Result<OK, AuthUserErrorType.InvalidPassword>> {
     if (this.props.status !== UserStatus.Active) {
-      throw new Error(UserErrorType.InvalidStatus);
+      throw new Error(AuthUserErrorType.InvalidStatus);
     }
 
     const isValidPassword = await bcrypt.compare(password, this.props.passwordHash);
-    return isValidPassword ? createSuccessResult(OK) : createErrorResult(UserErrorType.InvalidPassword);
+
+    if (isValidPassword) {
+      //this.props.accessToken = ;
+      return createSuccessResult(OK);
+    } else {
+      return createErrorResult(AuthUserErrorType.InvalidPassword);
+    }
   }
 
   remove() {

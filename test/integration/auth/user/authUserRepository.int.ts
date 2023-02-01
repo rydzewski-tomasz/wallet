@@ -1,14 +1,14 @@
 import { initDbEnv } from '../../../common/setup/initDbEnv';
 import { DbConnection } from '../../../../src/core/db/dbConnection';
-import { USER_TABLE_NAME, UserRepository, UserRepositoryImpl } from '../../../../src/auth/user/userRepository';
-import { UserStatus, UserType } from '../../../../src/auth/user/user';
-import { userBuilder } from '../../../common/builder/userBuilder';
+import { USER_TABLE_NAME, AuthUserRepository, UserRepositoryImpl } from '../../../../src/auth/user/authUserRepository';
+import { UserStatus, UserType } from '../../../../src/auth/user/authUser';
+import { authUserBuilder } from '../../../common/builder/authUserBuilder';
 import { expectEntity } from '../../../common/util/expectUtil';
 
 describe('userRepository integration test', () => {
   const { createConnection, closeConnection } = initDbEnv();
   let dbConnection: DbConnection;
-  let userRepository: UserRepository;
+  let userRepository: AuthUserRepository;
 
   beforeAll(async () => {
     dbConnection = await createConnection();
@@ -52,13 +52,13 @@ describe('userRepository integration test', () => {
     const result = await userRepository.findByUuid('testUuid');
 
     // THEN
-    const expected = userBuilder().withUuid('testUuid').withUsername('test_login').withPasswordHash('xxxxyyyyzzzz').withStatus(UserStatus.Active).valueOf();
+    const expected = authUserBuilder().withUuid('testUuid').withUsername('test_login').withPasswordHash('xxxxyyyyzzzz').withStatus(UserStatus.Active).valueOf();
     expect(result).toStrictEqual(expected);
   });
 
   it('GIVEN valid not existing user WHEN save THEN insert new user into db', async () => {
     // GIVEN
-    const user = userBuilder()
+    const user = authUserBuilder()
       .withUuid('testUuid')
       .withUsername('test_login')
       .withPasswordHash('$2a$10$Pjwx7nJKXjPrbikNIqXEXOZ9ngz/bQtvvC7rE.3GGvZEyjD8I.XLy')
@@ -75,7 +75,7 @@ describe('userRepository integration test', () => {
 
   it('GIVEN valid existing user WHEN save THEN update user on db', async () => {
     // GIVEN
-    const user = userBuilder().withUuid('testUuid').withUsername('test_name').withPasswordHash('aaaa-aaaa').withStatus(UserStatus.Active).valueOf();
+    const user = authUserBuilder().withUuid('testUuid').withUsername('test_name').withPasswordHash('aaaa-aaaa').withStatus(UserStatus.Active).valueOf();
     await userRepository.save(user);
     user.remove();
 
@@ -84,7 +84,7 @@ describe('userRepository integration test', () => {
 
     // THEN
     const onDb = await userRepository.findByUuid('testUuid');
-    const expected = userBuilder().withUuid('testUuid').withUsername('test_name').withPasswordHash('aaaa-aaaa').withStatus(UserStatus.Deleted).valueOf();
+    const expected = authUserBuilder().withUuid('testUuid').withUsername('test_name').withPasswordHash('aaaa-aaaa').withStatus(UserStatus.Deleted).valueOf();
     expect(onDb).toStrictEqual(expected);
   });
 
@@ -102,7 +102,7 @@ describe('userRepository integration test', () => {
   it('GIVEN existing user login WHEN findByLogin THEN return user', async () => {
     // GIVEN
     const username = 'existing';
-    const user = userBuilder().withUsername(username).valueOf();
+    const user = authUserBuilder().withUsername(username).valueOf();
     await userRepository.save(user);
 
     // WHEN

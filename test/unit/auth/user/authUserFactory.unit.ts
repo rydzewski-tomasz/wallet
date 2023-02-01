@@ -1,13 +1,13 @@
-import { UserStatus } from '../../../../src/auth/user/user';
-import { UserFactory, UserFactoryImpl } from '../../../../src/auth/user/userFactory';
+import { UserStatus } from '../../../../src/auth/user/authUser';
+import { AuthUserFactory, UserFactoryImpl } from '../../../../src/auth/user/authUserFactory';
 import { UuidGenerator } from '../../../../src/core/uuidGenerator';
 import { createUuidGeneratorMock } from '../../../common/mock/mocks';
 import { expectEntity } from '../../../common/util/expectUtil';
-import { userBuilder } from '../../../common/builder/userBuilder';
+import { authUserBuilder } from '../../../common/builder/authUserBuilder';
 
-describe('UserFactory unit test', () => {
+describe('AuthUserFactory unit test', () => {
   let uuidGenerator: UuidGenerator;
-  let userFactory: UserFactory;
+  let userFactory: AuthUserFactory;
 
   beforeEach(() => {
     uuidGenerator = createUuidGeneratorMock();
@@ -22,7 +22,7 @@ describe('UserFactory unit test', () => {
     const user = userFactory.create();
 
     // THEN
-    const expected = userBuilder().withUuid('testUuid').withUsername('').withPasswordHash('').withStatus(UserStatus.New).valueOf();
+    const expected = authUserBuilder().withUuid('testUuid').withUsername('').withPasswordHash('').withStatus(UserStatus.New).valueOf();
     expectEntity(user).toHaveEqualValue(expected);
   });
 });
