@@ -1,7 +1,6 @@
-import bcrypt from 'bcryptjs';
 import { Entity } from '../../core/entity';
 import { createErrorResult, createSuccessResult, OK, Result } from '../../core/result';
-import { UserAccessToken, UserRefreshToken } from './authToken';
+import { AccessToken, UserRefreshToken } from './authToken';
 
 export enum UserStatus {
   New = 'New',
@@ -22,7 +21,7 @@ export interface AuthUserProps {
   status: UserStatus;
   type: UserType;
   refreshToken?: UserRefreshToken;
-  accessToken?: UserAccessToken;
+  accessToken?: AccessToken;
 }
 
 export enum AuthUserErrorType {
@@ -46,15 +45,23 @@ export class AuthUser extends Entity<AuthUserProps> {
     this.props.type = UserType.User;
   }
 
-  async login({ password }: { password: string }): Promise<Result<OK, AuthUserErrorType.InvalidPassword>> {
+  async login({
+    password,
+    createAccessToken,
+    checkHash
+  }: {
+    password: string;
+    createAccessToken: (input: Record<string, string>) => Promise<AccessToken>;
+    checkHash: (password: string, hash: string) => Promise<boolean>;
+  }): Promise<Result<OK, AuthUserErrorType.InvalidPassword>> {
     if (this.props.status !== UserStatus.Active) {
       throw new Error(AuthUserErrorType.InvalidStatus);
     }
 
-    const isValidPassword = await bcrypt.compare(password, this.props.passwordHash);
+    const isValidPassword = await checkHash(password, this.props.passwordHash);
 
     if (isValidPassword) {
-      //this.props.accessToken = ;
+      this.props.accessToken = await createAccessToken({ uuid: this.props.uuid, type: this.props.type });
       return createSuccessResult(OK);
     } else {
       return createErrorResult(AuthUserErrorType.InvalidPassword);

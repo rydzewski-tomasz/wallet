@@ -5,7 +5,7 @@ export interface UserAccessTokenProps {
   token: string;
 }
 
-export class UserAccessToken extends ValueObject<UserAccessTokenProps> {
+export class AccessToken extends ValueObject<UserAccessTokenProps> {
   constructor(props: UserAccessTokenProps) {
     super(props);
   }
@@ -15,13 +15,13 @@ export class UserAccessToken extends ValueObject<UserAccessTokenProps> {
   }
 }
 
-export interface UserRefreshTokenProps {
+export interface RefreshTokenProps {
   uuid: string;
   token: string;
 }
 
-export class UserRefreshToken extends Entity<UserRefreshTokenProps> {
-  constructor(props: UserRefreshTokenProps) {
+export class UserRefreshToken extends Entity<RefreshTokenProps> {
+  constructor(props: RefreshTokenProps) {
     super(props);
   }
 }

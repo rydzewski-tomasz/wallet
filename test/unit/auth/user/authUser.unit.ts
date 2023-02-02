@@ -2,6 +2,7 @@ import { AuthUserErrorType, UserStatus } from '../../../../src/auth/user/authUse
 import { authUserBuilder } from '../../../common/builder/authUserBuilder';
 import { expectEntity, expectResult } from '../../../common/util/expectUtil';
 import { OK } from '../../../../src/core/result';
+import { AccessToken } from '../../../../src/auth/user/authToken';
 
 describe('AuthUser unit tests', () => {
   it('GIVEN valid user WHEN remove THEN change user status to Deleted', async () => {
@@ -46,11 +47,10 @@ describe('AuthUser unit tests', () => {
   it('GIVEN user without Active status WHEN login THEN throw InvalidStatus error', async () => {
     // GIVEN
     const password = 'test';
-    const passwordHash = '$2a$10$Q1EbhfbnsV3uQIH25WHWQ.4EYBP6E.ZONROrN5J7PZpObwrSg/83O';
-    const user = authUserBuilder().withPasswordHash(passwordHash).withStatus(UserStatus.Unverified).valueOf();
+    const user = authUserBuilder().withStatus(UserStatus.Unverified).valueOf();
 
     // WHEN
-    const login = async () => user.login({ password });
+    const login = async () => user.login({ password, checkHash: async () => true, createAccessToken: async () => new AccessToken({ token: 'testToken' }) });
 
     // THEN
     await expect(login).rejects.toThrow(AuthUserErrorType.InvalidStatus);
@@ -59,11 +59,10 @@ describe('AuthUser unit tests', () => {
   it('GIVEN invalid password WHEN login THEN return InvalidPassword result', async () => {
     // GIVEN
     const password = 'invalid';
-    const passwordHash = '$2a$10$Q1EbhfbnsV3uQIH25WHWQ.4EYBP6E.ZONROrN5J7PZpObwrSg/83O';
-    const user = authUserBuilder().withPasswordHash(passwordHash).withStatus(UserStatus.Active).valueOf();
+    const user = authUserBuilder().withStatus(UserStatus.Active).valueOf();
 
     // WHEN
-    const result = await user.login({ password });
+    const result = await user.login({ password, checkHash: async () => false, createAccessToken: async () => new AccessToken({ token: 'testToken' }) });
 
     // THEN
     expectResult(result).toBeError(AuthUserErrorType.InvalidPassword);
@@ -72,11 +71,10 @@ describe('AuthUser unit tests', () => {
   it('GIVEN valid password WHEN login THEN return success result', async () => {
     // GIVEN
     const password = 'test';
-    const passwordHash = '$2a$10$Q1EbhfbnsV3uQIH25WHWQ.4EYBP6E.ZONROrN5J7PZpObwrSg/83O';
-    const user = authUserBuilder().withPasswordHash(passwordHash).withStatus(UserStatus.Active).valueOf();
+    const user = authUserBuilder().withStatus(UserStatus.Active).valueOf();
 
     // WHEN
-    const result = await user.login({ password });
+    const result = await user.login({ password, checkHash: async () => true, createAccessToken: async () => new AccessToken({ token: 'testToken' }) });
 
     // THEN
     expectResult(result).toBeSuccess(OK);
