@@ -8,8 +8,14 @@ export enum SignupErrorType {
   UsernameAlreadyExists = 'UsernameAlreadyExists'
 }
 
+export enum LoginErrorType {
+  UserNotFound = 'UserNotFound',
+  InvalidPassword = 'InvalidPassword'
+}
+
 export interface AuthUserService {
   signup: (input: { username: string; password: string }) => Promise<Result<AuthUser, SignupErrorType>>;
+  login: (input: { username: string; password: string }) => Promise<Result<AuthUser, LoginErrorType>>;
 }
 
 export class UserServiceImpl implements AuthUserService {
@@ -33,4 +39,7 @@ export class UserServiceImpl implements AuthUserService {
     await this.userRepository.save(user);
     return createSuccessResult(user);
   }
+
+  // @ts-ignore
+  async login({}: { username: string; password: string }): Promise<Result<AuthUser, LoginErrorType>> {}
 }

@@ -27,6 +27,7 @@ export function createHashServiceMock(): HashService {
 
 export function createAuthUserServiceMock(): AuthUserService {
   return {
-    signup: jest.fn()
+    signup: jest.fn(),
+    login: jest.fn()
   };
 }

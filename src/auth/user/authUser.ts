@@ -1,6 +1,6 @@
 import { Entity } from '../../core/entity';
 import { createErrorResult, createSuccessResult, OK, Result } from '../../core/result';
-import { AccessToken, UserRefreshToken } from './authToken';
+import { AccessToken, RefreshToken } from './authToken';
 
 export enum UserStatus {
   New = 'New',
@@ -20,7 +20,7 @@ export interface AuthUserProps {
   passwordHash: string;
   status: UserStatus;
   type: UserType;
-  refreshToken?: UserRefreshToken;
+  refreshToken?: RefreshToken;
   accessToken?: AccessToken;
 }
 

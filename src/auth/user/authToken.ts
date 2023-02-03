@@ -1,16 +1,20 @@
 import { Entity } from '../../core/entity';
 import { ValueObject } from '../../core/valueObject';
 
-export interface UserAccessTokenProps {
+export interface AccessTokenProps {
   token: string;
 }
 
-export class AccessToken extends ValueObject<UserAccessTokenProps> {
-  constructor(props: UserAccessTokenProps) {
+export class AccessToken extends ValueObject<AccessTokenProps> {
+  get token() {
+    return this.props.token;
+  }
+
+  constructor(props: AccessTokenProps) {
     super(props);
   }
 
-  equals(valueObject?: ValueObject<UserAccessTokenProps>): boolean {
+  equals(valueObject?: ValueObject<AccessTokenProps>): boolean {
     return this.props.token === valueObject?.props.token;
   }
 }
@@ -20,8 +24,13 @@ export interface RefreshTokenProps {
   token: string;
 }
 
-export class UserRefreshToken extends Entity<RefreshTokenProps> {
+export class RefreshToken extends Entity<RefreshTokenProps> {
   constructor(props: RefreshTokenProps) {
     super(props);
   }
+}
+
+export interface AuthTokens {
+  accessToken: AccessToken;
+  refreshToken: RefreshToken;
 }

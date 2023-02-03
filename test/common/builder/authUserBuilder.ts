@@ -14,6 +14,7 @@ export const authUserBuilder = (props: AuthUserProps = sampleUserProps()) => {
   return {
     withUuid: (uuid: AuthUserProps['uuid']) => authUserBuilder({ ...props, uuid }),
     withUsername: (username: AuthUserProps['username']) => authUserBuilder({ ...props, username }),
+    withAccessToken: (accessToken: AuthUserProps['accessToken']) => authUserBuilder({ ...props, accessToken }),
     withPasswordHash: (passwordHash: AuthUserProps['passwordHash']) => authUserBuilder({ ...props, passwordHash }),
     withStatus: (status: AuthUserProps['status']) => authUserBuilder({ ...props, status }),
     valueOf: () => new AuthUser(props)
