@@ -3,11 +3,16 @@ import { ValueObject } from '../../core/valueObject';
 
 export interface AccessTokenProps {
   token: string;
+  payload: Record<string, string>;
 }
 
 export class AccessToken extends ValueObject<AccessTokenProps> {
   get token() {
     return this.props.token;
+  }
+
+  get payload() {
+    return this.props.payload;
   }
 
   constructor(props: AccessTokenProps) {

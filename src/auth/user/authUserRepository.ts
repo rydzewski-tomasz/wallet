@@ -1,7 +1,8 @@
-import { AuthUser } from './authUser';
+import { AuthUser, AuthUserProps } from './authUser';
 import { Knex } from 'knex';
 import { DbConnection } from '../../core/db/dbConnection';
 import dbTimeLog from '../../core/db/dbTimeLog';
+import { AuthUserFactory } from './authUserFactory';
 
 export const USER_TABLE_NAME = 'user';
 
@@ -11,25 +12,27 @@ export interface AuthUserRepository {
   save: (input: AuthUser) => Promise<AuthUser>;
 }
 
-export function createUserRepository({ dbConnection }: { dbConnection: DbConnection }): AuthUserRepository {
-  return new UserRepositoryImpl(dbConnection);
+export function createUserRepository({ dbConnection, userFactory }: { dbConnection: DbConnection; userFactory: AuthUserFactory }): AuthUserRepository {
+  return new UserRepositoryImpl({ dbConnection, userFactory });
 }
 
 export class UserRepositoryImpl implements AuthUserRepository {
+  private readonly userFactory: AuthUserFactory;
   private db: Knex;
 
-  constructor({ db }: DbConnection) {
-    this.db = db;
+  constructor({ dbConnection, userFactory }: { dbConnection: DbConnection; userFactory: AuthUserFactory }) {
+    this.db = dbConnection.db;
+    this.userFactory = userFactory;
   }
 
   async findByUsername(username: string): Promise<AuthUser | null> {
     const result = await this.db(USER_TABLE_NAME).where('username', username).first();
-    return result ? UserRepositoryImpl.toUser(result) : null;
+    return result ? this.toUser(result) : null;
   }
 
   async findByUuid(uuid: string): Promise<AuthUser | null> {
     const result = await this.db(USER_TABLE_NAME).where('uuid', uuid).first();
-    return result ? UserRepositoryImpl.toUser(result) : null;
+    return result ? this.toUser(result) : null;
   }
 
   async save(input: AuthUser): Promise<AuthUser> {
@@ -42,13 +45,14 @@ export class UserRepositoryImpl implements AuthUserRepository {
     return input;
   }
 
-  private static toUser(input: any): AuthUser {
-    return new AuthUser({
+  private toUser(input: any): AuthUser {
+    const props: AuthUserProps = {
       uuid: input.uuid,
       username: input.username,
       passwordHash: input.password,
       status: input.status,
       type: input.type
-    });
+    };
+    return this.userFactory.create({ props });
   }
 }

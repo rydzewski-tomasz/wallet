@@ -21,10 +21,13 @@ describe('AuthUser unit tests', () => {
     // GIVEN
     const username = 'userLogin';
     const password = 'test';
-    const user = authUserBuilder().withStatus(UserStatus.New).valueOf();
+    const user = authUserBuilder()
+      .withStatus(UserStatus.New)
+      .useGenerateHash(async () => 'testHash')
+      .valueOf();
 
     // WHEN
-    await user.signup({ username, password, generateHash: async () => 'testHash' });
+    await user.signup({ username, password });
 
     // THEN
     const expected = authUserBuilder().withUsername(username).withStatus(UserStatus.Unverified).withPasswordHash('testHash').valueOf();
@@ -38,7 +41,7 @@ describe('AuthUser unit tests', () => {
     const user = authUserBuilder().withStatus(UserStatus.Unverified).valueOf();
 
     // WHEN
-    const signup = async () => user.signup({ username, password, generateHash: async () => 'test' });
+    const signup = async () => user.signup({ username, password });
 
     // THEN
     await expect(signup).rejects.toThrow(AuthUserErrorType.InvalidStatus);
@@ -50,7 +53,7 @@ describe('AuthUser unit tests', () => {
     const user = authUserBuilder().withStatus(UserStatus.Unverified).valueOf();
 
     // WHEN
-    const login = async () => user.login({ password, checkHash: async () => true, createAccessToken: async () => new AccessToken({ token: 'testToken' }) });
+    const login = async () => user.login({ password });
 
     // THEN
     await expect(login).rejects.toThrow(AuthUserErrorType.InvalidStatus);
@@ -62,7 +65,7 @@ describe('AuthUser unit tests', () => {
     const user = authUserBuilder().withStatus(UserStatus.Active).valueOf();
 
     // WHEN
-    const result = await user.login({ password, checkHash: async () => false, createAccessToken: async () => new AccessToken({ token: 'testToken' }) });
+    const result = await user.login({ password });
 
     // THEN
     expectResult(result).toBeError(AuthUserErrorType.InvalidPassword);
@@ -71,10 +74,17 @@ describe('AuthUser unit tests', () => {
   it('GIVEN valid password WHEN login THEN return success result', async () => {
     // GIVEN
     const password = 'test';
-    const user = authUserBuilder().withStatus(UserStatus.Active).valueOf();
+    const user = authUserBuilder()
+      .useCheckHash(async () => true)
+      // @ts-ignore
+      .useCreateAccessToken(async () => {
+        return {} as AccessToken;
+      })
+      .withStatus(UserStatus.Active)
+      .valueOf();
 
     // WHEN
-    const result = await user.login({ password, checkHash: async () => true, createAccessToken: async () => new AccessToken({ token: 'testToken' }) });
+    const result = await user.login({ password });
 
     // THEN
     expectResult(result).toBeSuccess(OK);

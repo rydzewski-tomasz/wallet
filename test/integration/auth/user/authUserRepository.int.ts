@@ -4,6 +4,8 @@ import { USER_TABLE_NAME, AuthUserRepository, UserRepositoryImpl } from '../../.
 import { UserStatus, UserType } from '../../../../src/auth/user/authUser';
 import { authUserBuilder } from '../../../common/builder/authUserBuilder';
 import { expectEntity } from '../../../common/util/expectUtil';
+import { AuthUserFactory, AuthUserFactoryImpl } from '../../../../src/auth/user/authUserFactory';
+import { createAccessTokenFactoryMock, createHashServiceMock, createUuidGeneratorMock } from '../../../common/mock/mocks';
 
 describe('userRepository integration test', () => {
   const { createConnection, closeConnection } = initDbEnv();
@@ -11,8 +13,13 @@ describe('userRepository integration test', () => {
   let userRepository: AuthUserRepository;
 
   beforeAll(async () => {
+    const userFactory: AuthUserFactory = new AuthUserFactoryImpl({
+      uuidGenerator: createUuidGeneratorMock(),
+      hashService: createHashServiceMock(),
+      accessTokenFactory: createAccessTokenFactoryMock()
+    });
     dbConnection = await createConnection();
-    userRepository = new UserRepositoryImpl(dbConnection);
+    userRepository = new UserRepositoryImpl({ dbConnection, userFactory });
   });
 
   afterEach(async () => {
@@ -53,7 +60,7 @@ describe('userRepository integration test', () => {
 
     // THEN
     const expected = authUserBuilder().withUuid('testUuid').withUsername('test_login').withPasswordHash('xxxxyyyyzzzz').withStatus(UserStatus.Active).valueOf();
-    expect(result).toStrictEqual(expected);
+    expectEntity(result).toHaveEqualValue(expected);
   });
 
   it('GIVEN valid not existing user WHEN save THEN insert new user into db', async () => {
@@ -70,7 +77,7 @@ describe('userRepository integration test', () => {
 
     // THEN
     const onDb = await userRepository.findByUuid('testUuid');
-    expect(onDb).toStrictEqual(user);
+    expectEntity(onDb).toHaveEqualValue(user);
   });
 
   it('GIVEN valid existing user WHEN save THEN update user on db', async () => {
@@ -85,7 +92,7 @@ describe('userRepository integration test', () => {
     // THEN
     const onDb = await userRepository.findByUuid('testUuid');
     const expected = authUserBuilder().withUuid('testUuid').withUsername('test_name').withPasswordHash('aaaa-aaaa').withStatus(UserStatus.Deleted).valueOf();
-    expect(onDb).toStrictEqual(expected);
+    expectEntity(onDb).toHaveEqualValue(expected);
   });
 
   it('GIVEN not existing user login WHEN findByLogin THEN return null', async () => {

@@ -2,6 +2,7 @@ import { AccessToken, AccessTokenProps } from '../../../src/auth/user/authToken'
 
 export function sampleAccessTokenProps(): AccessTokenProps {
   return {
+    payload: { test: 'test' },
     token: 'testAccessToken'
   };
 }
