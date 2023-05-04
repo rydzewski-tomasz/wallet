@@ -5,6 +5,10 @@ import { AuthUserRepository, createUserRepository, USER_TABLE_NAME } from '../..
 import { expectResponse } from '../../../common/util/expectUtil';
 import { authUserBuilder } from '../../../common/builder/authUserBuilder';
 import { UserStatus } from '../../../../src/auth/user/authUser';
+import { AuthUserFactoryImpl } from '../../../../src/auth/user/authUserFactory';
+import { UuidGenerator } from '../../../../src/core/uuidGenerator';
+import { HashServiceImpl } from '../../../../src/auth/user/hashService';
+import { AccessTokenFactoryImpl } from '../../../../src/auth/user/accessTokenFactory';
 
 describe('login component test', () => {
   const { startEnv, stopEnv } = initFullEnv();
@@ -16,7 +20,12 @@ describe('login component test', () => {
     const { request: innRequest, dbConnection: dbConnectionInn } = await startEnv();
     request = innRequest;
     dbConnection = dbConnectionInn;
-    userRepository = createUserRepository({ dbConnection });
+    const userFactory = new AuthUserFactoryImpl({
+      uuidGenerator: new UuidGenerator(),
+      hashService: new HashServiceImpl(),
+      accessTokenFactory: new AccessTokenFactoryImpl()
+    });
+    userRepository = createUserRepository({ dbConnection, userFactory });
   });
 
   afterEach(async () => {
@@ -27,13 +36,13 @@ describe('login component test', () => {
     await stopEnv();
   });
 
-  it.skip('GIVEN valid request WHEN login THEN return 200 status', async () => {
+  it('GIVEN valid request WHEN login THEN return 200 status', async () => {
     // GIVEN
     const requestBody = { username: 'test', password: 'testPassword' };
     const user = authUserBuilder()
       .withUuid('testUuid')
       .withStatus(UserStatus.Active)
-      .withUsername('testUsername')
+      .withUsername('test')
       .withPasswordHash('$2a$10$Hu/UkfhRr1P7pgVwRwAAc.snob8zlcr3lK7.258Q6Oi/5JZVdcFpS')
       .valueOf();
     await userRepository.save(user);
