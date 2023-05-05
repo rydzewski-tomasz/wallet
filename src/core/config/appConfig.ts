@@ -3,10 +3,18 @@ import { DbConfig } from './dbConfig';
 export interface AppConfig {
   port: number;
   db: DbConfig;
+  accessToken: {
+    secret: string;
+    expiresInSec: number;
+  };
 }
 
 export const appConfig: AppConfig = {
   port: 3000,
+  accessToken: {
+    secret: 'test',
+    expiresInSec: 15 * 60
+  },
   db: {
     client: 'pg',
     connection: {

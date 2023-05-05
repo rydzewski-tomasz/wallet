@@ -38,10 +38,10 @@ export function createServices(appParams: AppParams): Services {
   };
 }
 
-function createUtils({ dbConnection }: AppParams): Utils {
+function createUtils({ dbConnection, config }: AppParams): Utils {
   const uuidGenerator = new UuidGenerator();
   const hashService = new HashServiceImpl();
-  const accessTokenFactory = new AccessTokenFactoryImpl();
+  const accessTokenFactory = new AccessTokenFactoryImpl({ config });
   const userFactory = new AuthUserFactoryImpl({ uuidGenerator, hashService, accessTokenFactory });
 
   return {

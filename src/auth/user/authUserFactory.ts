@@ -10,9 +10,9 @@ export interface AuthUserFactory {
 }
 
 export class AuthUserFactoryImpl implements AuthUserFactory {
-  private uuidGenerator: UuidGenerator;
-  private hashService: HashService;
-  private accessTokenFactory: AccessTokenFactory;
+  private readonly uuidGenerator: UuidGenerator;
+  private readonly hashService: HashService;
+  private readonly accessTokenFactory: AccessTokenFactory;
 
   constructor({ uuidGenerator, accessTokenFactory, hashService }: { uuidGenerator: UuidGenerator; hashService: HashService; accessTokenFactory: AccessTokenFactory }) {
     this.uuidGenerator = uuidGenerator;
@@ -33,9 +33,9 @@ export class AuthUserFactoryImpl implements AuthUserFactory {
 
   createActions(): AuthUserActions {
     return {
-      checkHash: this.hashService.checkHash,
-      generateHash: this.hashService.generateHash,
-      createAccessToken: this.accessTokenFactory.create
+      checkHash: this.hashService.checkHash.bind(this),
+      generateHash: this.hashService.generateHash.bind(this.hashService),
+      createAccessToken: this.accessTokenFactory.create.bind(this.accessTokenFactory)
     };
   }
 }

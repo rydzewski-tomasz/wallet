@@ -3,11 +3,12 @@ import { AuthUserFactoryImpl } from '../../../src/auth/user/authUserFactory';
 import { UuidGenerator } from '../../../src/core/uuidGenerator';
 import { HashServiceImpl } from '../../../src/auth/user/hashService';
 import { AccessTokenFactoryImpl } from '../../../src/auth/user/accessTokenFactory';
+import testConfig from '../config/testConfig';
 
 const authUserFactory = new AuthUserFactoryImpl({
   uuidGenerator: new UuidGenerator(),
   hashService: new HashServiceImpl(),
-  accessTokenFactory: new AccessTokenFactoryImpl()
+  accessTokenFactory: new AccessTokenFactoryImpl({ config: testConfig.getAppConfig() })
 });
 
 export function sampleUserProps(): AuthUserProps {

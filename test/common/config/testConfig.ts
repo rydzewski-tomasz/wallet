@@ -20,6 +20,10 @@ const localTestDbConfig: DbConfig = {
 
 const localTestConfig: AppConfig = {
   port: 0,
+  accessToken: {
+    secret: 'test',
+    expiresInSec: 15 * 60
+  },
   db: localTestDbConfig
 };
 
@@ -39,6 +43,10 @@ const dockerTestDbConfig: DbConfig = {
 
 const dockerTestConfig: AppConfig = {
   port: 0,
+  accessToken: {
+    secret: 'test',
+    expiresInSec: 15 * 60
+  },
   db: dockerTestDbConfig
 };
 
