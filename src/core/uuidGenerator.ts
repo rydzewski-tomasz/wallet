@@ -1,7 +1,7 @@
 import * as uuid from 'uuid';
 
-export class UuidGenerator {
+export const uuidGenerator = {
   generate(): string {
     return uuid.v4();
   }
-}
+};

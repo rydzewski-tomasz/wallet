@@ -1,7 +1,7 @@
-import { UuidGenerator } from '../../core/uuidGenerator';
 import { AuthUser, AuthUserActions, AuthUserProps, UserStatus, UserType } from './authUser';
 import { HashService } from './hashService';
 import { AccessTokenFactory } from './accessTokenFactory';
+import { uuidGenerator } from '../../core/uuidGenerator';
 
 export interface AuthUserFactory {
   create: (input?: { props?: AuthUserProps; actions?: AuthUserActions }) => AuthUser;
@@ -10,12 +10,10 @@ export interface AuthUserFactory {
 }
 
 export class AuthUserFactoryImpl implements AuthUserFactory {
-  private readonly uuidGenerator: UuidGenerator;
   private readonly hashService: HashService;
   private readonly accessTokenFactory: AccessTokenFactory;
 
-  constructor({ uuidGenerator, accessTokenFactory, hashService }: { uuidGenerator: UuidGenerator; hashService: HashService; accessTokenFactory: AccessTokenFactory }) {
-    this.uuidGenerator = uuidGenerator;
+  constructor({ accessTokenFactory, hashService }: { hashService: HashService; accessTokenFactory: AccessTokenFactory }) {
     this.hashService = hashService;
     this.accessTokenFactory = accessTokenFactory;
   }
@@ -27,7 +25,7 @@ export class AuthUserFactoryImpl implements AuthUserFactory {
   }
 
   createProps(): AuthUserProps {
-    const uuid = this.uuidGenerator.generate();
+    const uuid = uuidGenerator.generate();
     return { uuid, username: '', passwordHash: '', status: UserStatus.New, type: UserType.User };
   }
 

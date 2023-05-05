@@ -4,7 +4,6 @@ import { ExpenditureCategoryService, ExpenditureCategoryServiceImpl } from '../b
 import { AuthUserService, UserServiceImpl } from '../auth/user/authUserService';
 import { AuthUserFactory, AuthUserFactoryImpl } from '../auth/user/authUserFactory';
 import { AppParams } from '../app';
-import { UuidGenerator } from './uuidGenerator';
 import { DbConnection } from './db/dbConnection';
 import { HashService, HashServiceImpl } from '../auth/user/hashService';
 import { AccessTokenFactoryImpl } from '../auth/user/accessTokenFactory';
@@ -22,31 +21,28 @@ export interface Services {
 
 export interface Utils {
   userFactory: AuthUserFactory;
-  uuidGenerator: UuidGenerator;
   dbConnection: DbConnection;
 }
 
 export function createServices(appParams: AppParams): Services {
-  const { userFactory, uuidGenerator } = createUtils(appParams);
+  const { userFactory } = createUtils(appParams);
   const { userRepository, expenditureCategoryRepository } = createRepositories({ dbConnection: appParams.dbConnection, userFactory });
   const hashService = new HashServiceImpl();
 
   return {
     hashService,
     userService: new UserServiceImpl({ userRepository, userFactory }),
-    expenditureCategoryService: new ExpenditureCategoryServiceImpl({ categoryRepository: expenditureCategoryRepository, uuidGenerator })
+    expenditureCategoryService: new ExpenditureCategoryServiceImpl({ categoryRepository: expenditureCategoryRepository })
   };
 }
 
 function createUtils({ dbConnection, config }: AppParams): Utils {
-  const uuidGenerator = new UuidGenerator();
   const hashService = new HashServiceImpl();
   const accessTokenFactory = new AccessTokenFactoryImpl({ config });
-  const userFactory = new AuthUserFactoryImpl({ uuidGenerator, hashService, accessTokenFactory });
+  const userFactory = new AuthUserFactoryImpl({ hashService, accessTokenFactory });
 
   return {
     userFactory,
-    uuidGenerator,
     dbConnection
   };
 }

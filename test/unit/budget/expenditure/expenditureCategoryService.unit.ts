@@ -1,7 +1,7 @@
-import { UuidGenerator } from '../../../../src/core/uuidGenerator';
 import { ExpenditureCategoryService, ExpenditureCategoryServiceImpl } from '../../../../src/budget/expenditure/category/expenditureCategoryService';
 import { ExpenditureCategoryRepository } from '../../../../src/budget/expenditure/category/expenditureCategoryRepository';
 import { expenditureMainCategoryBuilder } from '../../../common/builder/expenditureSubcategoryBuilder';
+import { uuidGenerator } from '../../../../src/core/uuidGenerator';
 
 describe('ExpenditureCategoryService unit test', () => {
   let uuid: string;
@@ -10,9 +10,13 @@ describe('ExpenditureCategoryService unit test', () => {
 
   beforeEach(() => {
     uuid = 'testUuid';
-    const uuidGenerator: UuidGenerator = { generate: () => uuid };
+    jest.spyOn(uuidGenerator, 'generate').mockReturnValue(uuid);
     expenditureCategoryRepository = { save: jest.fn() };
-    addExpenditureCategory = new ExpenditureCategoryServiceImpl({ categoryRepository: expenditureCategoryRepository, uuidGenerator });
+    addExpenditureCategory = new ExpenditureCategoryServiceImpl({ categoryRepository: expenditureCategoryRepository });
+  });
+
+  afterEach(() => {
+    jest.clearAllMocks();
   });
 
   it('GIVEN valid input WHEN add THEN save new category on db', async () => {

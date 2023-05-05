@@ -1,24 +1,22 @@
 import { UserStatus } from '../../../../src/auth/user/authUser';
 import { AuthUserFactory, AuthUserFactoryImpl } from '../../../../src/auth/user/authUserFactory';
-import { UuidGenerator } from '../../../../src/core/uuidGenerator';
-import { createAccessTokenFactoryMock, createHashServiceMock, createUuidGeneratorMock } from '../../../common/mock/mocks';
+import { createAccessTokenFactoryMock, createHashServiceMock } from '../../../common/mock/mocks';
 import { expectEntity } from '../../../common/util/expectUtil';
 import { authUserBuilder } from '../../../common/builder/authUserBuilder';
 import { HashService } from '../../../../src/auth/user/hashService';
 import { AccessTokenFactory } from '../../../../src/auth/user/accessTokenFactory';
+import { uuidGenerator } from '../../../../src/core/uuidGenerator';
 
 describe('AuthUserFactory unit test', () => {
-  let uuidGenerator: UuidGenerator;
   let userFactory: AuthUserFactory;
   let hashService: HashService;
   let accessTokenFactory: AccessTokenFactory;
 
   beforeEach(() => {
-    uuidGenerator = createUuidGeneratorMock();
     hashService = createHashServiceMock();
     accessTokenFactory = createAccessTokenFactoryMock();
 
-    userFactory = new AuthUserFactoryImpl({ uuidGenerator, hashService, accessTokenFactory });
+    userFactory = new AuthUserFactoryImpl({ hashService, accessTokenFactory });
   });
 
   it('GIVEN uuid WHEN newUser THEN return user with uuid', async () => {
