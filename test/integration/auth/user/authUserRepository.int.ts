@@ -5,7 +5,7 @@ import { UserStatus, UserType } from '../../../../src/auth/user/authUser';
 import { authUserBuilder } from '../../../common/builder/authUserBuilder';
 import { expectEntity } from '../../../common/util/expectUtil';
 import { AuthUserFactory, AuthUserFactoryImpl } from '../../../../src/auth/user/authUserFactory';
-import { createAccessTokenFactoryMock, createHashServiceMock } from '../../../common/mock/mocks';
+import { createAccessTokenFactoryMock } from '../../../common/mock/mocks';
 
 describe('userRepository integration test', () => {
   const { createConnection, closeConnection } = initDbEnv();
@@ -14,7 +14,6 @@ describe('userRepository integration test', () => {
 
   beforeAll(async () => {
     const userFactory: AuthUserFactory = new AuthUserFactoryImpl({
-      hashService: createHashServiceMock(),
       accessTokenFactory: createAccessTokenFactoryMock()
     });
     dbConnection = await createConnection();

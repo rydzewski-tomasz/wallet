@@ -1,13 +1,13 @@
 import { initFullEnv } from '../../../common/setup/initFullEnv';
 import { Request } from '../../../common/setup/request';
 import { expectResponse } from '../../../common/util/expectUtil';
-import { createUserRepository, USER_TABLE_NAME, AuthUserRepository } from '../../../../src/auth/user/authUserRepository';
+import { AuthUserRepository, createUserRepository, USER_TABLE_NAME } from '../../../../src/auth/user/authUserRepository';
 import { authUserBuilder } from '../../../common/builder/authUserBuilder';
 import { UserStatus } from '../../../../src/auth/user/authUser';
 import bcrypt from 'bcryptjs';
 import { DbConnection } from '../../../../src/core/db/dbConnection';
 import { AuthUserFactoryImpl } from '../../../../src/auth/user/authUserFactory';
-import { createAccessTokenFactoryMock, createHashServiceMock } from '../../../common/mock/mocks';
+import { createAccessTokenFactoryMock } from '../../../common/mock/mocks';
 
 describe('signup component test', () => {
   const { startEnv, stopEnv } = initFullEnv();
@@ -18,7 +18,6 @@ describe('signup component test', () => {
   beforeAll(async () => {
     const { request: innRequest, dbConnection: dbConnectionInn } = await startEnv();
     const userFactory = new AuthUserFactoryImpl({
-      hashService: createHashServiceMock(),
       accessTokenFactory: createAccessTokenFactoryMock()
     });
     request = innRequest;

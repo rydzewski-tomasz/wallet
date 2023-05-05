@@ -3,6 +3,7 @@ import { authUserBuilder } from '../../../common/builder/authUserBuilder';
 import { expectEntity, expectResult } from '../../../common/util/expectUtil';
 import { OK } from '../../../../src/core/result';
 import { AccessToken } from '../../../../src/auth/user/authToken';
+import { hashService } from '../../../../src/auth/user/hashService';
 
 describe('AuthUser unit tests', () => {
   it('GIVEN valid user WHEN remove THEN change user status to Deleted', async () => {
@@ -21,16 +22,13 @@ describe('AuthUser unit tests', () => {
     // GIVEN
     const username = 'userLogin';
     const password = 'test';
-    const user = authUserBuilder()
-      .withStatus(UserStatus.New)
-      .useGenerateHash(async () => 'testHash')
-      .valueOf();
+    const user = authUserBuilder().withStatus(UserStatus.New).valueOf();
 
     // WHEN
     await user.signup({ username, password });
 
     // THEN
-    const expected = authUserBuilder().withUsername(username).withStatus(UserStatus.Unverified).withPasswordHash('testHash').valueOf();
+    const expected = authUserBuilder().withUsername(username).withStatus(UserStatus.Unverified).withPasswordHash(expect.any(String)).valueOf();
     expectEntity(user).toHaveEqualValue(expected);
   });
 
@@ -74,13 +72,14 @@ describe('AuthUser unit tests', () => {
   it('GIVEN valid password WHEN login THEN return success result', async () => {
     // GIVEN
     const password = 'test';
+    const passwordHash = await hashService.generateHash(password);
     const user = authUserBuilder()
-      .useCheckHash(async () => true)
       // @ts-ignore
       .useCreateAccessToken(async () => {
         return {} as AccessToken;
       })
       .withStatus(UserStatus.Active)
+      .withPasswordHash(passwordHash)
       .valueOf();
 
     // WHEN

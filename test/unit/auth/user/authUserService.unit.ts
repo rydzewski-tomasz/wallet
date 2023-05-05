@@ -5,7 +5,7 @@ import { AuthUser, UserStatus } from '../../../../src/auth/user/authUser';
 import { AuthUserFactory } from '../../../../src/auth/user/authUserFactory';
 import { expectResultEntity } from '../../../common/util/expectUtil';
 import { authUserBuilder } from '../../../common/builder/authUserBuilder';
-import { HashService, HashServiceImpl } from '../../../../src/auth/user/hashService';
+import { hashService } from '../../../../src/auth/user/hashService';
 
 describe('AuthUserService.signup unit test', () => {
   let authUserService: AuthUserService;
@@ -57,11 +57,9 @@ describe('AuthUserService.login unit test', () => {
   let authUserService: AuthUserService;
   let authUserRepository: AuthUserRepository;
   let authUser: AuthUser;
-  let hashService: HashService;
 
   beforeEach(() => {
     authUserRepository = createUserRepositoryMock();
-    hashService = new HashServiceImpl();
     authUser = authUserBuilder().withStatus(UserStatus.Active).valueOf();
     authUserService = new UserServiceImpl({ userRepository: authUserRepository, userFactory: createUserFactoryMock() });
 

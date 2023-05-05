@@ -6,7 +6,6 @@ import { expectResponse } from '../../../common/util/expectUtil';
 import { authUserBuilder } from '../../../common/builder/authUserBuilder';
 import { UserStatus } from '../../../../src/auth/user/authUser';
 import { AuthUserFactoryImpl } from '../../../../src/auth/user/authUserFactory';
-import { HashServiceImpl } from '../../../../src/auth/user/hashService';
 import { AccessTokenFactoryImpl } from '../../../../src/auth/user/accessTokenFactory';
 import testConfig from '../../../common/config/testConfig';
 
@@ -21,7 +20,6 @@ describe('login component test', () => {
     request = innRequest;
     dbConnection = dbConnectionInn;
     const userFactory = new AuthUserFactoryImpl({
-      hashService: new HashServiceImpl(),
       accessTokenFactory: new AccessTokenFactoryImpl({ config: testConfig.getAppConfig() })
     });
     userRepository = createUserRepository({ dbConnection, userFactory });

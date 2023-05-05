@@ -1,5 +1,4 @@
 import { AuthUser, AuthUserActions, AuthUserProps, UserStatus, UserType } from './authUser';
-import { HashService } from './hashService';
 import { AccessTokenFactory } from './accessTokenFactory';
 import { uuidGenerator } from '../../core/uuidGenerator';
 
@@ -10,11 +9,9 @@ export interface AuthUserFactory {
 }
 
 export class AuthUserFactoryImpl implements AuthUserFactory {
-  private readonly hashService: HashService;
   private readonly accessTokenFactory: AccessTokenFactory;
 
-  constructor({ accessTokenFactory, hashService }: { hashService: HashService; accessTokenFactory: AccessTokenFactory }) {
-    this.hashService = hashService;
+  constructor({ accessTokenFactory }: { accessTokenFactory: AccessTokenFactory }) {
     this.accessTokenFactory = accessTokenFactory;
   }
 
@@ -31,8 +28,6 @@ export class AuthUserFactoryImpl implements AuthUserFactory {
 
   createActions(): AuthUserActions {
     return {
-      checkHash: this.hashService.checkHash.bind(this),
-      generateHash: this.hashService.generateHash.bind(this.hashService),
       createAccessToken: this.accessTokenFactory.create.bind(this.accessTokenFactory)
     };
   }

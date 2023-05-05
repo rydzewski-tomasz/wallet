@@ -1,7 +1,6 @@
 import { AuthUserRepository } from '../../../src/auth/user/authUserRepository';
 import { AuthUserFactory } from '../../../src/auth/user/authUserFactory';
 import { AuthUserService } from '../../../src/auth/user/authUserService';
-import { HashService } from '../../../src/auth/user/hashService';
 import { AccessTokenFactory } from '../../../src/auth/user/accessTokenFactory';
 
 export function createUserFactoryMock(): AuthUserFactory {
@@ -10,10 +9,6 @@ export function createUserFactoryMock(): AuthUserFactory {
 
 export function createUserRepositoryMock(): AuthUserRepository {
   return { save: jest.fn(), findByUuid: jest.fn(), findByUsername: jest.fn() };
-}
-
-export function createHashServiceMock(): HashService {
-  return { generateHash: jest.fn(), checkHash: jest.fn() };
 }
 
 export function createAccessTokenFactoryMock(): AccessTokenFactory {

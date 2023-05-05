@@ -1,6 +1,7 @@
 import { Entity } from '../../core/entity';
 import { createErrorResult, createSuccessResult, OK, Result } from '../../core/result';
 import { AccessToken, RefreshToken } from './authToken';
+import { hashService } from './hashService';
 
 export enum UserStatus {
   New = 'New',
@@ -25,9 +26,7 @@ export interface AuthUserProps {
 }
 
 export interface AuthUserActions {
-  generateHash: (input: string) => Promise<string>;
   createAccessToken: (input: Record<string, string>) => AccessToken;
-  checkHash: (password: string, hash: string) => Promise<boolean>;
 }
 
 export enum AuthUserErrorType {
@@ -36,16 +35,12 @@ export enum AuthUserErrorType {
 }
 
 export class AuthUser extends Entity<AuthUserProps> {
-  private readonly generateHash: (input: string) => Promise<string>;
   private readonly createAccessToken: (input: Record<string, string>) => AccessToken;
-  private readonly checkHash: (password: string, hash: string) => Promise<boolean>;
 
-  constructor(props: AuthUserProps, { generateHash, checkHash, createAccessToken }: AuthUserActions) {
+  constructor(props: AuthUserProps, { createAccessToken }: AuthUserActions) {
     super(props);
 
-    this.generateHash = generateHash;
     this.createAccessToken = createAccessToken;
-    this.checkHash = checkHash;
   }
 
   async signup({ username, password }: { username: string; password: string }) {
@@ -54,7 +49,7 @@ export class AuthUser extends Entity<AuthUserProps> {
     }
 
     this.props.username = username;
-    this.props.passwordHash = await this.generateHash(password);
+    this.props.passwordHash = await hashService.generateHash(password);
     this.props.status = UserStatus.Unverified;
     this.props.type = UserType.User;
   }
@@ -64,7 +59,7 @@ export class AuthUser extends Entity<AuthUserProps> {
       throw new Error(AuthUserErrorType.InvalidStatus);
     }
 
-    const isValidPassword = await this.checkHash(password, this.props.passwordHash);
+    const isValidPassword = await hashService.checkHash(password, this.props.passwordHash);
 
     if (isValidPassword) {
       this.props.accessToken = await this.createAccessToken({ uuid: this.props.uuid, type: this.props.type });
