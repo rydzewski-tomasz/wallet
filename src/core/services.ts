@@ -17,13 +17,13 @@ export interface Services {
   expenditureCategoryService: ExpenditureCategoryService;
 }
 
-export interface Utils {
+export interface Factories {
   userFactory: AuthUserFactory;
   dbConnection: DbConnection;
 }
 
 export function createServices(appParams: AppParams): Services {
-  const { userFactory } = createUtils(appParams);
+  const { userFactory } = createFactories(appParams);
   const { userRepository, expenditureCategoryRepository } = createRepositories({ dbConnection: appParams.dbConnection, userFactory });
 
   return {
@@ -32,7 +32,7 @@ export function createServices(appParams: AppParams): Services {
   };
 }
 
-function createUtils({ dbConnection, config }: AppParams): Utils {
+function createFactories({ dbConnection, config }: AppParams): Factories {
   const accessTokenFactory = new AccessTokenFactoryImpl({ config });
   const userFactory = new AuthUserFactoryImpl({ accessTokenFactory });
 
