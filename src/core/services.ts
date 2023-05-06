@@ -1,7 +1,7 @@
 import { AuthUserRepository, UserRepositoryImpl } from '../auth/user/authUserRepository';
 import { ExpenditureCategoryRepository, ExpenditureCategoryRepositoryImpl } from '../budget/expenditure/category/expenditureCategoryRepository';
 import { ExpenditureCategoryService, ExpenditureCategoryServiceImpl } from '../budget/expenditure/category/expenditureCategoryService';
-import { AuthUserService, UserServiceImpl } from '../auth/user/authUserService';
+import { AuthUserService, AuthUserServiceImpl } from '../auth/user/authUserService';
 import { AuthUserFactory, AuthUserFactoryImpl } from '../auth/user/authUserFactory';
 import { AppParams } from '../app';
 import { DbConnection } from './db/dbConnection';
@@ -27,7 +27,7 @@ export function createServices(appParams: AppParams): Services {
   const { userRepository, expenditureCategoryRepository } = createRepositories({ dbConnection: appParams.dbConnection, userFactory });
 
   return {
-    userService: new UserServiceImpl({ userRepository, userFactory }),
+    userService: new AuthUserServiceImpl({ userRepository, userFactory }),
     expenditureCategoryService: new ExpenditureCategoryServiceImpl({ categoryRepository: expenditureCategoryRepository })
   };
 }

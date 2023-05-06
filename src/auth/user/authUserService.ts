@@ -17,7 +17,7 @@ export interface AuthUserService {
   login: (input: { username: string; password: string }) => Promise<Result<AuthUser, LoginErrorType>>;
 }
 
-export class UserServiceImpl implements AuthUserService {
+export class AuthUserServiceImpl implements AuthUserService {
   private userRepository: AuthUserRepository;
   private userFactory: AuthUserFactory;
 

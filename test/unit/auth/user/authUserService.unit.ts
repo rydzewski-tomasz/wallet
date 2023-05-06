@@ -1,4 +1,4 @@
-import { AuthUserService, LoginErrorType, SignupErrorType, UserServiceImpl } from '../../../../src/auth/user/authUserService';
+import { AuthUserService, LoginErrorType, SignupErrorType, AuthUserServiceImpl } from '../../../../src/auth/user/authUserService';
 import { createUserFactoryMock, createUserRepositoryMock } from '../../../common/mock/mocks';
 import { AuthUserRepository } from '../../../../src/auth/user/authUserRepository';
 import { AuthUser, UserStatus } from '../../../../src/auth/user/authUser';
@@ -16,7 +16,7 @@ describe('AuthUserService.signup unit test', () => {
   beforeEach(() => {
     authUserRepository = createUserRepositoryMock();
     authUserFactory = createUserFactoryMock();
-    authUserService = new UserServiceImpl({ userRepository: authUserRepository, userFactory: authUserFactory });
+    authUserService = new AuthUserServiceImpl({ userRepository: authUserRepository, userFactory: authUserFactory });
     authUser = authUserBuilder().withStatus(UserStatus.New).valueOf();
 
     jest.spyOn(authUserFactory, 'create').mockReturnValue(authUser);
@@ -61,7 +61,7 @@ describe('AuthUserService.login unit test', () => {
   beforeEach(() => {
     authUserRepository = createUserRepositoryMock();
     authUser = authUserBuilder().withStatus(UserStatus.Active).valueOf();
-    authUserService = new UserServiceImpl({ userRepository: authUserRepository, userFactory: createUserFactoryMock() });
+    authUserService = new AuthUserServiceImpl({ userRepository: authUserRepository, userFactory: createUserFactoryMock() });
 
     jest.spyOn(authUserRepository, 'findByUsername').mockResolvedValue(authUser);
   });
