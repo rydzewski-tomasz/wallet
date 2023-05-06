@@ -9,7 +9,7 @@ import { initDbEnv } from '../../common/setup/initDbEnv';
 import clock from '../../../src/core/clock';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
-import { expenditureMainCategoryBuilder, expenditureSubcategoryBuilder } from '../../common/builder/expenditureSubcategoryBuilder';
+import { expenditureCategoryBuilder, expenditureSubcategoryBuilder } from '../../common/builder/expenditureSubcategoryBuilder';
 
 dayjs.extend(utc);
 
@@ -35,7 +35,7 @@ describe('addExpenditureCategoryRepository integration test', () => {
 
   it('GIVEN valid not existing expenditure category WHEN save THEN insert new main category into db', async () => {
     // GIVEN
-    const category = expenditureMainCategoryBuilder().withUuid('testUuid').withName('testName').valueOf();
+    const category = expenditureCategoryBuilder().withUuid('testUuid').withName('testName').valueOf();
 
     // WHEN
     await expenditureCategoryRepository.save(category);
@@ -47,7 +47,7 @@ describe('addExpenditureCategoryRepository integration test', () => {
 
   it('GIVEN valid not existing expenditure category WHEN save THEN insert new subcategories into db', async () => {
     // GIVEN
-    const category = expenditureMainCategoryBuilder()
+    const category = expenditureCategoryBuilder()
       .withSubcategories([
         expenditureSubcategoryBuilder().withUuid('uid123').withName('abc name').valueOf(),
         expenditureSubcategoryBuilder().withUuid('uid456').withName('def name').valueOf()
@@ -71,7 +71,7 @@ describe('addExpenditureCategoryRepository integration test', () => {
 
   it('GIVEN valid existing expenditure category WHEN save THEN update existing main category on db', async () => {
     // GIVEN
-    let existingCategory = expenditureMainCategoryBuilder()
+    let existingCategory = expenditureCategoryBuilder()
       .withUuid('mainUid')
       .withSubcategories([
         expenditureSubcategoryBuilder().withUuid('uid123').withName('abc name').valueOf(),
@@ -79,7 +79,7 @@ describe('addExpenditureCategoryRepository integration test', () => {
       ])
       .valueOf();
     await expenditureCategoryRepository.save(existingCategory);
-    existingCategory = expenditureMainCategoryBuilder()
+    existingCategory = expenditureCategoryBuilder()
       .withUuid('mainUid')
       .withSubcategories([expenditureSubcategoryBuilder().withUuid('uid987').withName('xyz name').valueOf()])
       .valueOf();
@@ -98,7 +98,7 @@ describe('addExpenditureCategoryRepository integration test', () => {
 
   it('GIVEN valid existing expenditure category WHEN save THEN update existing subcategories on db', async () => {
     // GIVEN
-    const existingCategory = expenditureMainCategoryBuilder().withUuid('testUuid').withName('oldName').valueOf();
+    const existingCategory = expenditureCategoryBuilder().withUuid('testUuid').withName('oldName').valueOf();
     await expenditureCategoryRepository.save(existingCategory);
     existingCategory.changeName('updatedName');
 
@@ -118,7 +118,7 @@ describe('addExpenditureCategoryRepository integration test', () => {
       expenditureSubcategoryBuilder().withUuid('abc123').withName('abc').valueOf(),
       expenditureSubcategoryBuilder().withUuid('def456').withName('def').valueOf()
     ];
-    const mainCategory = expenditureMainCategoryBuilder().withUuid('testUuid').withName('testName').withSubcategories(subcategories).valueOf();
+    const mainCategory = expenditureCategoryBuilder().withUuid('testUuid').withName('testName').withSubcategories(subcategories).valueOf();
 
     // WHEN
     await expenditureCategoryRepository.save(mainCategory);
@@ -132,7 +132,7 @@ describe('addExpenditureCategoryRepository integration test', () => {
     // GIVEN
     const created = dayjs.utc('2022-01-10 10:00:00');
     const updated = dayjs.utc('2022-01-20 10:00:00');
-    const existingCategory = expenditureMainCategoryBuilder().withUuid('testUuid').withName('oldName').valueOf();
+    const existingCategory = expenditureCategoryBuilder().withUuid('testUuid').withName('oldName').valueOf();
     jest.spyOn(clock, 'now').mockReturnValue(created);
     await expenditureCategoryRepository.save(existingCategory);
     jest.spyOn(clock, 'now').mockReturnValue(updated);

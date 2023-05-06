@@ -1,4 +1,4 @@
-import { ExpenditureSubcategory } from '../category/subcategories/expenditureSubcategory';
+import { ExpenditureSubcategory } from '../category/expenditureSubcategory';
 import dayjs from 'dayjs';
 import { Entity } from '../../../core/entity';
 

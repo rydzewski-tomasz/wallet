@@ -1,14 +1,14 @@
-import { ExpenditureSubcategory } from '../subcategories/expenditureSubcategory';
-import { Entity } from '../../../../core/entity';
+import { ExpenditureSubcategory } from './expenditureSubcategory';
+import { Entity } from '../../../core/entity';
 
-export interface ExpenditureMainCategoryProps {
+export interface ExpenditureCategoryProps {
   uuid: string;
   name: string;
   subcategories: ExpenditureSubcategory[];
 }
 
-export class ExpenditureMainCategory extends Entity<ExpenditureMainCategoryProps> {
-  constructor(props: ExpenditureMainCategoryProps) {
+export class ExpenditureCategory extends Entity<ExpenditureCategoryProps> {
+  constructor(props: ExpenditureCategoryProps) {
     super(props);
   }
 

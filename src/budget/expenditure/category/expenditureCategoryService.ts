@@ -1,9 +1,9 @@
 import { ExpenditureCategoryRepository } from './expenditureCategoryRepository';
-import { ExpenditureMainCategory } from './main/expenditureMainCategory';
+import { ExpenditureCategory } from './expenditureCategory';
 import { uuidGenerator } from '../../../core/uuidGenerator';
 
 export interface ExpenditureCategoryService {
-  addMainCategory: (categoryName: string) => Promise<ExpenditureMainCategory>;
+  addMainCategory: (categoryName: string) => Promise<ExpenditureCategory>;
 }
 
 export class ExpenditureCategoryServiceImpl implements ExpenditureCategoryService {
@@ -13,8 +13,8 @@ export class ExpenditureCategoryServiceImpl implements ExpenditureCategoryServic
     this.categoryRepository = categoryRepository;
   }
 
-  async addMainCategory(categoryName: string): Promise<ExpenditureMainCategory> {
-    const category = new ExpenditureMainCategory({
+  async addMainCategory(categoryName: string): Promise<ExpenditureCategory> {
+    const category = new ExpenditureCategory({
       uuid: uuidGenerator.generate(),
       name: categoryName,
       subcategories: []

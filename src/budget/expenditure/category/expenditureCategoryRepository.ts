@@ -1,13 +1,13 @@
 import { DbConnection } from '../../../core/db/dbConnection';
 import { Knex } from 'knex';
 import dbTimeLog from '../../../core/db/dbTimeLog';
-import { ExpenditureMainCategory } from './main/expenditureMainCategory';
+import { ExpenditureCategory } from './expenditureCategory';
 
 export const EXPENDITURE_MAIN_CATEGORY_TABLE_NAME = 'expenditure_main_category';
 export const EXPENDITURE_SUBCATEGORY_TABLE_NAME = 'expenditure_subcategory';
 
 export interface ExpenditureCategoryRepository {
-  save: (input: ExpenditureMainCategory) => Promise<ExpenditureMainCategory>;
+  save: (input: ExpenditureCategory) => Promise<ExpenditureCategory>;
 }
 
 export class ExpenditureCategoryRepositoryImpl implements ExpenditureCategoryRepository {
@@ -17,7 +17,7 @@ export class ExpenditureCategoryRepositoryImpl implements ExpenditureCategoryRep
     this.db = db;
   }
 
-  async save(input: ExpenditureMainCategory): Promise<ExpenditureMainCategory> {
+  async save(input: ExpenditureCategory): Promise<ExpenditureCategory> {
     const { uuid: mainUuid, name, subcategories } = input.toSnapshot();
     await this.db.transaction(async trx => {
       await trx(EXPENDITURE_MAIN_CATEGORY_TABLE_NAME)
