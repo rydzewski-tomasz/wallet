@@ -2,6 +2,7 @@ import { AuthUserActions, AuthUserProps, UserStatus, UserType } from '../../../s
 import { AuthUserFactoryImpl } from '../../../src/auth/user/authUserFactory';
 import { AccessTokenFactoryImpl } from '../../../src/auth/user/accessTokenFactory';
 import testConfig from '../config/testConfig';
+import { Uuid } from '../../../src/core/uuid';
 
 const authUserFactory = new AuthUserFactoryImpl({
   accessTokenFactory: new AccessTokenFactoryImpl({ config: testConfig.getAppConfig() })
@@ -9,7 +10,7 @@ const authUserFactory = new AuthUserFactoryImpl({
 
 export function sampleUserProps(): AuthUserProps {
   return {
-    uuid: 'testUuid',
+    uuid: Uuid.create('testUuid'),
     username: 'testLogin',
     passwordHash: 'aaaabbbbcccc',
     status: UserStatus.Active,

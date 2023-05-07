@@ -1,5 +1,6 @@
 import { Entity } from '../../core/entity';
 import { ValueObject } from '../../core/valueObject';
+import { Uuid } from '../../core/uuid';
 
 export interface AccessTokenProps {
   token: string;
@@ -25,7 +26,7 @@ export class AccessToken extends ValueObject<AccessTokenProps> {
 }
 
 export interface RefreshTokenProps {
-  uuid: string;
+  uuid: Uuid;
   token: string;
 }
 

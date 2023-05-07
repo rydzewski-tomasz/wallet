@@ -15,7 +15,7 @@ export function createUserRouter(userService: AuthUserService): Router {
       const result = await userService.signup({ username, password });
 
       if (result.isSuccess) {
-        httpResponse(ctx).createSuccessResponse(200, { uuid: result.value.getUuid() });
+        httpResponse(ctx).createSuccessResponse(200, { uuid: result.value.getUuid().value });
       } else {
         if (result.error === SignupErrorType.UsernameAlreadyExists) {
           httpResponse(ctx).createErrorResponse(400, SignupErrorType.UsernameAlreadyExists);

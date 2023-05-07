@@ -3,9 +3,10 @@ import dayjs from 'dayjs';
 import { Entity } from '../../../core/entity';
 import { Payee } from '../payee/payee';
 import { Money } from '../../../core/money';
+import { Uuid } from '../../../core/uuid';
 
 export interface ExpenseProps {
-  uuid: string;
+  uuid: Uuid;
   date: dayjs.Dayjs;
   category: ExpenditureSubcategory;
   amount: Money;

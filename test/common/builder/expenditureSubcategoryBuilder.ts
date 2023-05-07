@@ -1,10 +1,11 @@
 import { ExpenditureSubcategory, ExpenditureSubcategoryProps } from '../../../src/budget/expenditure/category/expenditureSubcategory';
 import { ExpenditureCategoryProps, ExpenditureCategory } from '../../../src/budget/expenditure/category/expenditureCategory';
+import { Uuid } from '../../../src/core/uuid';
 
 export function sampleExpenditureCategoryProps(): ExpenditureCategoryProps {
   return {
     name: 'test expenditure category',
-    uuid: 'mainCategoryUuid',
+    uuid: Uuid.create('categoryUuid'),
     subcategories: [expenditureSubcategoryBuilder().valueOf()]
   };
 }
@@ -21,7 +22,7 @@ export const expenditureCategoryBuilder = (props: ExpenditureCategoryProps = sam
 export function sampleExpenditureSubcategoryProps(): ExpenditureSubcategoryProps {
   return {
     name: 'test expenditure category',
-    uuid: 'mainCategoryUuid'
+    uuid: Uuid.create('subcategoryUuid')
   };
 }
 

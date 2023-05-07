@@ -5,6 +5,7 @@ import { expectEntity } from '../../../common/util/expectUtil';
 import { authUserBuilder } from '../../../common/builder/authUserBuilder';
 import { AccessTokenFactory } from '../../../../src/auth/user/accessTokenFactory';
 import { uuidGenerator } from '../../../../src/core/uuidGenerator';
+import { Uuid } from '../../../../src/core/uuid';
 
 describe('AuthUserFactory unit test', () => {
   let userFactory: AuthUserFactory;
@@ -18,13 +19,13 @@ describe('AuthUserFactory unit test', () => {
 
   it('GIVEN uuid WHEN newUser THEN return user with uuid', async () => {
     // GIVEN
-    jest.spyOn(uuidGenerator, 'generate').mockReturnValue('testUuid');
+    jest.spyOn(uuidGenerator, 'generate').mockReturnValue(Uuid.create('testUuid'));
 
     // WHEN
     const user = userFactory.create();
 
     // THEN
-    const expected = authUserBuilder().withUuid('testUuid').withUsername('').withPasswordHash('').withStatus(UserStatus.New).valueOf();
+    const expected = authUserBuilder().withUuid(Uuid.create('testUuid')).withUsername('').withPasswordHash('').withStatus(UserStatus.New).valueOf();
     expectEntity(user).toHaveEqualValue(expected);
   });
 });

@@ -3,26 +3,27 @@ import { Knex } from 'knex';
 import { DbConnection } from '../../core/db/dbConnection';
 import dbTimeLog from '../../core/db/dbTimeLog';
 import { AuthUserFactory } from './authUserFactory';
+import { Uuid } from '../../core/uuid';
 
 export const USER_TABLE_NAME = 'user';
 
 export interface AuthUserRepository {
   findByUsername: (login: string) => Promise<AuthUser | null>;
-  findByUuid: (uuid: string) => Promise<AuthUser | null>;
+  findByUuid: (uuid: Uuid) => Promise<AuthUser | null>;
   save: (input: AuthUser) => Promise<AuthUser>;
 }
 
-export function createUserRepository({ dbConnection, userFactory }: { dbConnection: DbConnection; userFactory: AuthUserFactory }): AuthUserRepository {
-  return new UserRepositoryImpl({ dbConnection, userFactory });
+export function createAuthUserRepository({ dbConnection, userFactory }: { dbConnection: DbConnection; userFactory: AuthUserFactory }): AuthUserRepository {
+  return new AuthUserRepositoryImpl({ dbConnection, userFactory });
 }
 
-export class UserRepositoryImpl implements AuthUserRepository {
-  private readonly userFactory: AuthUserFactory;
+export class AuthUserRepositoryImpl implements AuthUserRepository {
+  private readonly authUserFactory: AuthUserFactory;
   private db: Knex;
 
   constructor({ dbConnection, userFactory }: { dbConnection: DbConnection; userFactory: AuthUserFactory }) {
     this.db = dbConnection.db;
-    this.userFactory = userFactory;
+    this.authUserFactory = userFactory;
   }
 
   async findByUsername(username: string): Promise<AuthUser | null> {
@@ -30,8 +31,8 @@ export class UserRepositoryImpl implements AuthUserRepository {
     return result ? this.toUser(result) : null;
   }
 
-  async findByUuid(uuid: string): Promise<AuthUser | null> {
-    const result = await this.db(USER_TABLE_NAME).where('uuid', uuid).first();
+  async findByUuid(uuid: Uuid): Promise<AuthUser | null> {
+    const result = await this.db(USER_TABLE_NAME).where('uuid', uuid.value).first();
     return result ? this.toUser(result) : null;
   }
 
@@ -39,7 +40,7 @@ export class UserRepositoryImpl implements AuthUserRepository {
     const { uuid, username, passwordHash: password, status, type } = input.toSnapshot();
 
     await this.db(USER_TABLE_NAME)
-      .insert({ ...dbTimeLog.createTimeLog(), uuid, username, status, password, type })
+      .insert({ ...dbTimeLog.createTimeLog(), uuid: uuid.value, username, status, password, type })
       .onConflict('uuid')
       .merge({ ...dbTimeLog.updateTimeLog(), username, status, password, type });
     return input;
@@ -47,12 +48,12 @@ export class UserRepositoryImpl implements AuthUserRepository {
 
   private toUser(input: any): AuthUser {
     const props: AuthUserProps = {
-      uuid: input.uuid,
+      uuid: Uuid.create(input.uuid),
       username: input.username,
       passwordHash: input.password,
       status: input.status,
       type: input.type
     };
-    return this.userFactory.create({ props });
+    return this.authUserFactory.create({ props });
   }
 }

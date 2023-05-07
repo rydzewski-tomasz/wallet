@@ -2,6 +2,7 @@ import { Entity } from '../../core/entity';
 import { createErrorResult, createSuccessResult, OK, Result } from '../../core/result';
 import { AccessToken, RefreshToken } from './authToken';
 import { hashService } from './hashService';
+import { Uuid } from '../../core/uuid';
 
 export enum UserStatus {
   New = 'New',
@@ -16,7 +17,7 @@ export enum UserType {
 }
 
 export interface AuthUserProps {
-  uuid: string;
+  uuid: Uuid;
   username: string;
   passwordHash: string;
   status: UserStatus;
@@ -62,7 +63,7 @@ export class AuthUser extends Entity<AuthUserProps> {
     const isValidPassword = await hashService.checkHash(password, this.props.passwordHash);
 
     if (isValidPassword) {
-      this.props.accessToken = await this.createAccessToken({ uuid: this.props.uuid, type: this.props.type });
+      this.props.accessToken = await this.createAccessToken({ uuid: this.props.uuid.value, type: this.props.type });
       return createSuccessResult(OK);
     } else {
       return createErrorResult(AuthUserErrorType.InvalidPassword);

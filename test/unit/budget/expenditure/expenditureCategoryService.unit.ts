@@ -2,14 +2,15 @@ import { ExpenditureCategoryService, ExpenditureCategoryServiceImpl } from '../.
 import { ExpenditureCategoryRepository } from '../../../../src/budget/expenditure/category/expenditureCategoryRepository';
 import { uuidGenerator } from '../../../../src/core/uuidGenerator';
 import { expenditureCategoryBuilder } from '../../../common/builder/expenditureSubcategoryBuilder';
+import { Uuid } from '../../../../src/core/uuid';
 
 describe('ExpenditureCategoryService unit test', () => {
-  let uuid: string;
+  let uuid: Uuid;
   let expenditureCategoryRepository: ExpenditureCategoryRepository;
   let addExpenditureCategory: ExpenditureCategoryService;
 
   beforeEach(() => {
-    uuid = 'testUuid';
+    uuid = Uuid.create('testUuid');
     jest.spyOn(uuidGenerator, 'generate').mockReturnValue(uuid);
     expenditureCategoryRepository = { save: jest.fn() };
     addExpenditureCategory = new ExpenditureCategoryServiceImpl({ categoryRepository: expenditureCategoryRepository });

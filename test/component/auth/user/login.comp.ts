@@ -1,13 +1,14 @@
 import { initFullEnv } from '../../../common/setup/initFullEnv';
 import { Request } from '../../../common/setup/request';
 import { DbConnection } from '../../../../src/core/db/dbConnection';
-import { AuthUserRepository, createUserRepository, USER_TABLE_NAME } from '../../../../src/auth/user/authUserRepository';
+import { AuthUserRepository, createAuthUserRepository, USER_TABLE_NAME } from '../../../../src/auth/user/authUserRepository';
 import { expectResponse } from '../../../common/util/expectUtil';
 import { authUserBuilder } from '../../../common/builder/authUserBuilder';
 import { UserStatus } from '../../../../src/auth/user/authUser';
 import { AuthUserFactoryImpl } from '../../../../src/auth/user/authUserFactory';
 import { AccessTokenFactoryImpl } from '../../../../src/auth/user/accessTokenFactory';
 import testConfig from '../../../common/config/testConfig';
+import { Uuid } from '../../../../src/core/uuid';
 
 describe('login component test', () => {
   const { startEnv, stopEnv } = initFullEnv();
@@ -22,7 +23,7 @@ describe('login component test', () => {
     const userFactory = new AuthUserFactoryImpl({
       accessTokenFactory: new AccessTokenFactoryImpl({ config: testConfig.getAppConfig() })
     });
-    userRepository = createUserRepository({ dbConnection, userFactory });
+    userRepository = createAuthUserRepository({ dbConnection, userFactory });
   });
 
   afterEach(async () => {
@@ -37,7 +38,7 @@ describe('login component test', () => {
     // GIVEN
     const requestBody = { username: 'test', password: 'testPassword' };
     const user = authUserBuilder()
-      .withUuid('testUuid')
+      .withUuid(Uuid.create('testUuid'))
       .withStatus(UserStatus.Active)
       .withUsername('test')
       .withPasswordHash('$2a$10$Hu/UkfhRr1P7pgVwRwAAc.snob8zlcr3lK7.258Q6Oi/5JZVdcFpS')

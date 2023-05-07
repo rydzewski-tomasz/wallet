@@ -1,7 +1,8 @@
 import { Entity } from '../../../core/entity';
+import { Uuid } from '../../../core/uuid';
 
 export interface ExpenditureSubcategoryProps {
-  uuid: string;
+  uuid: Uuid;
   name: string;
 }
 

@@ -1,11 +1,12 @@
 import { initDbEnv } from '../../../common/setup/initDbEnv';
 import { DbConnection } from '../../../../src/core/db/dbConnection';
-import { USER_TABLE_NAME, AuthUserRepository, UserRepositoryImpl } from '../../../../src/auth/user/authUserRepository';
+import { USER_TABLE_NAME, AuthUserRepository, AuthUserRepositoryImpl } from '../../../../src/auth/user/authUserRepository';
 import { UserStatus, UserType } from '../../../../src/auth/user/authUser';
 import { authUserBuilder } from '../../../common/builder/authUserBuilder';
 import { expectEntity } from '../../../common/util/expectUtil';
 import { AuthUserFactory, AuthUserFactoryImpl } from '../../../../src/auth/user/authUserFactory';
 import { createAccessTokenFactoryMock } from '../../../common/mock/mocks';
+import { Uuid } from '../../../../src/core/uuid';
 
 describe('userRepository integration test', () => {
   const { createConnection, closeConnection } = initDbEnv();
@@ -17,7 +18,7 @@ describe('userRepository integration test', () => {
       accessTokenFactory: createAccessTokenFactoryMock()
     });
     dbConnection = await createConnection();
-    userRepository = new UserRepositoryImpl({ dbConnection, userFactory });
+    userRepository = new AuthUserRepositoryImpl({ dbConnection, userFactory });
   });
 
   afterEach(async () => {
@@ -34,7 +35,7 @@ describe('userRepository integration test', () => {
     const notExistingUuid = 'notExisting';
 
     // WHEN
-    const result = await userRepository.findByUuid(notExistingUuid);
+    const result = await userRepository.findByUuid(Uuid.create(notExistingUuid));
 
     // THEN
     expect(result).toBeNull();
@@ -54,17 +55,17 @@ describe('userRepository integration test', () => {
     await dbConnection.db(USER_TABLE_NAME).insert(userOnDb);
 
     // WHEN
-    const result = await userRepository.findByUuid('testUuid');
+    const result = await userRepository.findByUuid(Uuid.create('testUuid'));
 
     // THEN
-    const expected = authUserBuilder().withUuid('testUuid').withUsername('test_login').withPasswordHash('xxxxyyyyzzzz').withStatus(UserStatus.Active).valueOf();
+    const expected = authUserBuilder().withUuid(Uuid.create('testUuid')).withUsername('test_login').withPasswordHash('xxxxyyyyzzzz').withStatus(UserStatus.Active).valueOf();
     expectEntity(result).toHaveEqualValue(expected);
   });
 
   it('GIVEN valid not existing user WHEN save THEN insert new user into db', async () => {
     // GIVEN
     const user = authUserBuilder()
-      .withUuid('testUuid')
+      .withUuid(Uuid.create('testUuid'))
       .withUsername('test_login')
       .withPasswordHash('$2a$10$Pjwx7nJKXjPrbikNIqXEXOZ9ngz/bQtvvC7rE.3GGvZEyjD8I.XLy')
       .withStatus(UserStatus.Active)
@@ -74,13 +75,13 @@ describe('userRepository integration test', () => {
     await userRepository.save(user);
 
     // THEN
-    const onDb = await userRepository.findByUuid('testUuid');
+    const onDb = await userRepository.findByUuid(Uuid.create('testUuid'));
     expectEntity(onDb).toHaveEqualValue(user);
   });
 
   it('GIVEN valid existing user WHEN save THEN update user on db', async () => {
     // GIVEN
-    const user = authUserBuilder().withUuid('testUuid').withUsername('test_name').withPasswordHash('aaaa-aaaa').withStatus(UserStatus.Active).valueOf();
+    const user = authUserBuilder().withUuid(Uuid.create('testUuid')).withUsername('test_name').withPasswordHash('aaaa-aaaa').withStatus(UserStatus.Active).valueOf();
     await userRepository.save(user);
     user.remove();
 
@@ -88,8 +89,8 @@ describe('userRepository integration test', () => {
     await userRepository.save(user);
 
     // THEN
-    const onDb = await userRepository.findByUuid('testUuid');
-    const expected = authUserBuilder().withUuid('testUuid').withUsername('test_name').withPasswordHash('aaaa-aaaa').withStatus(UserStatus.Deleted).valueOf();
+    const onDb = await userRepository.findByUuid(Uuid.create('testUuid'));
+    const expected = authUserBuilder().withUuid(Uuid.create('testUuid')).withUsername('test_name').withPasswordHash('aaaa-aaaa').withStatus(UserStatus.Deleted).valueOf();
     expectEntity(onDb).toHaveEqualValue(expected);
   });
 

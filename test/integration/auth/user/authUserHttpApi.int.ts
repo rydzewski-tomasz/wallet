@@ -8,6 +8,7 @@ import { authUserBuilder } from '../../../common/builder/authUserBuilder';
 import { initHttpEnv } from '../../../common/setup/initHttpEnv';
 import { createAuthUserServiceMock } from '../../../common/mock/mocks';
 import { accessTokenBuilder } from '../../../common/builder/authTokensBuilder';
+import { Uuid } from '../../../../src/core/uuid';
 
 describe('userHttpApi integration test', () => {
   const { startServer, stopServer } = initHttpEnv();
@@ -54,7 +55,7 @@ describe('userHttpApi integration test', () => {
   it('GIVEN success result from service WHEN signup THEN return 200 status', async () => {
     // GIVEN
     const requestBody = { username: 'test', password: 'pass' };
-    const user = authUserBuilder().withUuid('testUuid').valueOf();
+    const user = authUserBuilder().withUuid(Uuid.create('testUuid')).valueOf();
     jest.spyOn(authUserService, 'signup').mockResolvedValueOnce(createSuccessResult(user));
 
     // WHEN

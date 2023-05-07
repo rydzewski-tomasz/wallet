@@ -1,13 +1,14 @@
 import { initFullEnv } from '../../../common/setup/initFullEnv';
 import { Request } from '../../../common/setup/request';
 import { expectResponse } from '../../../common/util/expectUtil';
-import { AuthUserRepository, createUserRepository, USER_TABLE_NAME } from '../../../../src/auth/user/authUserRepository';
+import { AuthUserRepository, createAuthUserRepository, USER_TABLE_NAME } from '../../../../src/auth/user/authUserRepository';
 import { authUserBuilder } from '../../../common/builder/authUserBuilder';
 import { UserStatus } from '../../../../src/auth/user/authUser';
 import bcrypt from 'bcryptjs';
 import { DbConnection } from '../../../../src/core/db/dbConnection';
 import { AuthUserFactoryImpl } from '../../../../src/auth/user/authUserFactory';
 import { createAccessTokenFactoryMock } from '../../../common/mock/mocks';
+import { Uuid } from '../../../../src/core/uuid';
 
 describe('signup component test', () => {
   const { startEnv, stopEnv } = initFullEnv();
@@ -22,7 +23,7 @@ describe('signup component test', () => {
     });
     request = innRequest;
     dbConnection = dbConnectionInn;
-    userRepository = createUserRepository({ dbConnection, userFactory });
+    userRepository = createAuthUserRepository({ dbConnection, userFactory });
   });
 
   afterEach(async () => {
@@ -53,8 +54,8 @@ describe('signup component test', () => {
 
     // THEN
     const { uuid } = response.body;
-    const onDb = (await userRepository.findByUuid(uuid))?.toSnapshot();
-    const expected = authUserBuilder().withUuid(uuid).withStatus(UserStatus.Unverified).withUsername('test').valueOf();
+    const onDb = (await userRepository.findByUuid(Uuid.create(uuid)))?.toSnapshot();
+    const expected = authUserBuilder().withUuid(Uuid.create(uuid)).withStatus(UserStatus.Unverified).withUsername('test').valueOf();
     expect({ ...onDb, isValidPassword: await bcrypt.compare('pass', onDb?.passwordHash || '') }).toStrictEqual({
       ...expected.toSnapshot(),
       passwordHash: expect.any(String),

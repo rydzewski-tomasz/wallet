@@ -1,7 +1,8 @@
 import { Entity, WithUuid } from '../../../src/core/entity';
+import { Uuid } from '../../../src/core/uuid';
 
 class TestEntity extends Entity<WithUuid> {
-  constructor(input: { uuid: string }) {
+  constructor(input: { uuid: Uuid }) {
     super(input);
   }
 }
@@ -9,8 +10,8 @@ class TestEntity extends Entity<WithUuid> {
 describe('Entity unit test', () => {
   it('GIVEN different uids WHEN equals THEN return false', async () => {
     // GIVEN
-    const firstEntity = new TestEntity({ uuid: 'firstUuid' });
-    const secondEntity = new TestEntity({ uuid: 'secondUuid' });
+    const firstEntity = new TestEntity({ uuid: Uuid.create('firstUuid') });
+    const secondEntity = new TestEntity({ uuid: Uuid.create('secondUuid') });
 
     // WHEN
     const result = firstEntity.equals(secondEntity);
@@ -21,8 +22,8 @@ describe('Entity unit test', () => {
 
   it('GIVEN same uids WHEN equals THEN return false', async () => {
     // GIVEN
-    const firstEntity = new TestEntity({ uuid: 'testUuid' });
-    const secondEntity = new TestEntity({ uuid: 'testUuid' });
+    const firstEntity = new TestEntity({ uuid: Uuid.create('testUuid') });
+    const secondEntity = new TestEntity({ uuid: Uuid.create('testUuid') });
 
     // WHEN
     const result = firstEntity.equals(secondEntity);

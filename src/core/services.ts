@@ -1,4 +1,4 @@
-import { AuthUserRepository, UserRepositoryImpl } from '../auth/user/authUserRepository';
+import { AuthUserRepository, AuthUserRepositoryImpl } from '../auth/user/authUserRepository';
 import { ExpenditureCategoryRepository, ExpenditureCategoryRepositoryImpl } from '../budget/expenditure/category/expenditureCategoryRepository';
 import { ExpenditureCategoryService, ExpenditureCategoryServiceImpl } from '../budget/expenditure/category/expenditureCategoryService';
 import { AuthUserService, AuthUserServiceImpl } from '../auth/user/authUserService';
@@ -44,7 +44,7 @@ function createFactories({ dbConnection, config }: AppParams): Factories {
 
 function createRepositories({ dbConnection, userFactory }: { dbConnection: DbConnection; userFactory: AuthUserFactory }): Repositories {
   return {
-    userRepository: new UserRepositoryImpl({ dbConnection, userFactory }),
+    userRepository: new AuthUserRepositoryImpl({ dbConnection, userFactory }),
     expenditureCategoryRepository: new ExpenditureCategoryRepositoryImpl(dbConnection)
   };
 }

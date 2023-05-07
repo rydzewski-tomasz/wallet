@@ -1,7 +1,9 @@
-export type WithUuid = { uuid: string };
+import { Uuid } from './uuid';
+
+export type WithUuid = { uuid: Uuid };
 
 export abstract class Entity<Props extends WithUuid> {
-  protected readonly uuid: string;
+  protected readonly uuid: Uuid;
   protected readonly props: Props;
 
   protected constructor(props: Props) {
@@ -9,12 +11,12 @@ export abstract class Entity<Props extends WithUuid> {
     this.props = props;
   }
 
-  getUuid(): string {
+  getUuid(): Uuid {
     return this.uuid;
   }
 
   equals(object: Entity<Props>): boolean {
-    return this.uuid === object.uuid;
+    return this.uuid.equals(object.uuid);
   }
 
   toSnapshot(): Props {
