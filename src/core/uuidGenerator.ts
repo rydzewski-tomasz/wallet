@@ -1,8 +1,11 @@
 import * as uuid from 'uuid';
-import { Uuid } from './uuid';
+import { validate as uuidValidate } from 'uuid';
 
 export const uuidGenerator = {
-  generate(): Uuid {
-    return Uuid.create(uuid.v4());
+  generate(): string {
+    return uuid.v4();
+  },
+  validate(uuid: string): boolean {
+    return uuidValidate(uuid);
   }
 };

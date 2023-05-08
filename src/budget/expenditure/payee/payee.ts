@@ -1,8 +1,8 @@
 import { Entity } from '../../../core/entity';
-import { Uuid } from '../../../core/uuid';
+import { Guid } from '../../../core/guid';
 
 export interface PayeeProps {
-  uuid: Uuid;
+  uuid: Guid;
   name: string;
 }
 

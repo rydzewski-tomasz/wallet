@@ -10,7 +10,7 @@ import clock from '../../../src/core/clock';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import { expenditureCategoryBuilder, expenditureSubcategoryBuilder } from '../../common/builder/expenditureSubcategoryBuilder';
-import { Uuid } from '../../../src/core/uuid';
+import { Guid } from '../../../src/core/guid';
 
 dayjs.extend(utc);
 
@@ -36,22 +36,22 @@ describe('addExpenditureCategoryRepository integration test', () => {
 
   it('GIVEN valid not existing expenditure category WHEN save THEN insert new main category into db', async () => {
     // GIVEN
-    const category = expenditureCategoryBuilder().withUuid(Uuid.create('testUuid')).withName('testName').valueOf();
+    const category = expenditureCategoryBuilder().withId(Guid.fromUuid('63e116d2-e429-444f-bae2-461fb9a7ce47')).withName('testName').valueOf();
 
     // WHEN
     await expenditureCategoryRepository.save(category);
 
     // THEN
-    const onDb = await dbConnection.db(EXPENDITURE_MAIN_CATEGORY_TABLE_NAME).where('uuid', 'testUuid').first();
-    expect({ uuid: onDb.uuid, name: onDb.name }).toStrictEqual({ uuid: 'testUuid', name: 'testName' });
+    const onDb = await dbConnection.db(EXPENDITURE_MAIN_CATEGORY_TABLE_NAME).where('id', '63e116d2-e429-444f-bae2-461fb9a7ce47').first();
+    expect({ id: onDb.id, name: onDb.name }).toStrictEqual({ id: '63e116d2-e429-444f-bae2-461fb9a7ce47', name: 'testName' });
   });
 
   it('GIVEN valid not existing expenditure category WHEN save THEN insert new subcategories into db', async () => {
     // GIVEN
     const category = expenditureCategoryBuilder()
       .withSubcategories([
-        expenditureSubcategoryBuilder().withUuid(Uuid.create('uid123')).withName('abc name').valueOf(),
-        expenditureSubcategoryBuilder().withUuid(Uuid.create('uid456')).withName('def name').valueOf()
+        expenditureSubcategoryBuilder().withId(Guid.fromUuid('c868951a-bea5-4175-8a39-180f191b15fc')).withName('abc name').valueOf(),
+        expenditureSubcategoryBuilder().withId(Guid.fromUuid('562b10a8-0f84-4366-98d2-47ea47a1c504')).withName('def name').valueOf()
       ])
       .valueOf();
 
@@ -59,47 +59,48 @@ describe('addExpenditureCategoryRepository integration test', () => {
     await expenditureCategoryRepository.save(category);
 
     // THEN
-    const firstOnDb = await dbConnection.db(EXPENDITURE_SUBCATEGORY_TABLE_NAME).where('uuid', 'uid123').first();
-    const secondOnDb = await dbConnection.db(EXPENDITURE_SUBCATEGORY_TABLE_NAME).where('uuid', 'uid456').first();
+    const firstOnDb = await dbConnection.db(EXPENDITURE_SUBCATEGORY_TABLE_NAME).where('id', 'c868951a-bea5-4175-8a39-180f191b15fc').first();
+    const secondOnDb = await dbConnection.db(EXPENDITURE_SUBCATEGORY_TABLE_NAME).where('id', '562b10a8-0f84-4366-98d2-47ea47a1c504').first();
     expect([
-      { uuid: firstOnDb?.uuid, name: firstOnDb?.name },
-      { uuid: secondOnDb?.uuid, name: secondOnDb?.name }
+      { id: firstOnDb?.id, name: firstOnDb?.name },
+      { id: secondOnDb?.id, name: secondOnDb?.name }
     ]).toStrictEqual([
-      { uuid: 'uid123', name: 'abc name' },
-      { uuid: 'uid456', name: 'def name' }
+      { id: 'c868951a-bea5-4175-8a39-180f191b15fc', name: 'abc name' },
+      { id: '562b10a8-0f84-4366-98d2-47ea47a1c504', name: 'def name' }
     ]);
   });
 
   it('GIVEN valid existing expenditure category WHEN save THEN update existing main category on db', async () => {
     // GIVEN
     let existingCategory = expenditureCategoryBuilder()
-      .withUuid(Uuid.create('mainUid'))
+      .withId(Guid.fromUuid('4b28af67-d1c8-41a7-bd81-b20f7eaed3e5'))
       .withSubcategories([
-        expenditureSubcategoryBuilder().withUuid(Uuid.create('uid123')).withName('abc name').valueOf(),
-        expenditureSubcategoryBuilder().withUuid(Uuid.create('uid456')).withName('def name').valueOf()
+        expenditureSubcategoryBuilder().withId(Guid.fromUuid('c868951a-bea5-4175-8a39-180f191b15fc')).withName('abc name').valueOf(),
+        expenditureSubcategoryBuilder().withId(Guid.fromUuid('562b10a8-0f84-4366-98d2-47ea47a1c504')).withName('def name').valueOf()
       ])
       .valueOf();
     await expenditureCategoryRepository.save(existingCategory);
     existingCategory = expenditureCategoryBuilder()
-      .withUuid(Uuid.create('mainUid'))
-      .withSubcategories([expenditureSubcategoryBuilder().withUuid(Uuid.create('uid987')).withName('xyz name').valueOf()])
+      .withId(Guid.fromUuid('4b28af67-d1c8-41a7-bd81-b20f7eaed3e5'))
+      .withSubcategories([expenditureSubcategoryBuilder().withId(Guid.fromUuid('957b794c-3840-42e4-b91a-e7b311cde8ba')).withName('xyz name').valueOf()])
       .valueOf();
 
     // WHEN
     await expenditureCategoryRepository.save(existingCategory);
 
     // THEN
-    const onDb = (await dbConnection.db(EXPENDITURE_SUBCATEGORY_TABLE_NAME).where('category_uuid', 'mainUid')).map(({ uuid, name, category_uuid }) => ({
-      uuid,
+    const onDb = (await dbConnection.db(EXPENDITURE_SUBCATEGORY_TABLE_NAME).where('category_id', '4b28af67-d1c8-41a7-bd81-b20f7eaed3e5')).map(({ id, name, category_id }) => ({
+      id,
       name,
-      category_uuid
+      category_id
     }));
-    expect(onDb).toStrictEqual([{ uuid: 'uid987', name: 'xyz name', category_uuid: 'mainUid' }]);
+    expect(onDb).toStrictEqual([{ id: '957b794c-3840-42e4-b91a-e7b311cde8ba', name: 'xyz name', category_id: '4b28af67-d1c8-41a7-bd81-b20f7eaed3e5' }]);
   });
 
   it('GIVEN valid existing expenditure category WHEN save THEN update existing subcategories on db', async () => {
     // GIVEN
-    const existingCategory = expenditureCategoryBuilder().withUuid(Uuid.create('testUuid')).withName('oldName').valueOf();
+    const categoryUuid = '7257fd31-ed76-494d-bfab-2ba3d48713b0';
+    const existingCategory = expenditureCategoryBuilder().withId(Guid.fromUuid(categoryUuid)).withName('oldName').valueOf();
     await expenditureCategoryRepository.save(existingCategory);
     existingCategory.changeName('updatedName');
 
@@ -107,33 +108,35 @@ describe('addExpenditureCategoryRepository integration test', () => {
     await expenditureCategoryRepository.save(existingCategory);
 
     // THEN
-    const onDb = await dbConnection.db(EXPENDITURE_MAIN_CATEGORY_TABLE_NAME).where('uuid', 'testUuid').first();
-    expect({ uuid: onDb.uuid, name: onDb.name }).toStrictEqual({ uuid: 'testUuid', name: 'updatedName' });
+    const onDb = await dbConnection.db(EXPENDITURE_MAIN_CATEGORY_TABLE_NAME).where('id', categoryUuid).first();
+    expect({ id: onDb.id, name: onDb.name }).toStrictEqual({ id: categoryUuid, name: 'updatedName' });
   });
 
   it('GIVEN valid not existing expenditure category WHEN save THEN insert new category with valid created and updated date', async () => {
     // GIVEN
+    const categoryUuid = '7257fd31-ed76-494d-bfab-2ba3d48713b0';
     const created = dayjs.utc('2022-01-10 10:00:00');
     jest.spyOn(clock, 'now').mockReturnValue(created);
     const subcategories = [
-      expenditureSubcategoryBuilder().withUuid(Uuid.create('abc123')).withName('abc').valueOf(),
-      expenditureSubcategoryBuilder().withUuid(Uuid.create('def456')).withName('def').valueOf()
+      expenditureSubcategoryBuilder().withId(Guid.fromUuid('957b794c-3840-42e4-b91a-e7b311cde8ba')).withName('abc').valueOf(),
+      expenditureSubcategoryBuilder().withId(Guid.fromUuid('4b28af67-d1c8-41a7-bd81-b20f7eaed3e5')).withName('def').valueOf()
     ];
-    const mainCategory = expenditureCategoryBuilder().withUuid(Uuid.create('testUuid')).withName('testName').withSubcategories(subcategories).valueOf();
+    const mainCategory = expenditureCategoryBuilder().withId(Guid.fromUuid(categoryUuid)).withName('testName').withSubcategories(subcategories).valueOf();
 
     // WHEN
     await expenditureCategoryRepository.save(mainCategory);
 
     // THEN
-    const onDb = await dbConnection.db(EXPENDITURE_MAIN_CATEGORY_TABLE_NAME).where('uuid', 'testUuid').first();
+    const onDb = await dbConnection.db(EXPENDITURE_MAIN_CATEGORY_TABLE_NAME).where('id', categoryUuid).first();
     expect({ created: clock.fromDb(onDb.created), updated: clock.fromDb(onDb.updated) }).toStrictEqual({ created, updated: created });
   });
 
   it('GIVEN valid existing expenditure category WHEN save THEN change updated date category on db', async () => {
     // GIVEN
+    const uuid = '0bf9b9be-0264-4663-8cf6-2c353c24715e';
     const created = dayjs.utc('2022-01-10 10:00:00');
     const updated = dayjs.utc('2022-01-20 10:00:00');
-    const existingCategory = expenditureCategoryBuilder().withUuid(Uuid.create('testUuid')).withName('oldName').valueOf();
+    const existingCategory = expenditureCategoryBuilder().withId(Guid.fromUuid(uuid)).withName('oldName').valueOf();
     jest.spyOn(clock, 'now').mockReturnValue(created);
     await expenditureCategoryRepository.save(existingCategory);
     jest.spyOn(clock, 'now').mockReturnValue(updated);
@@ -142,7 +145,7 @@ describe('addExpenditureCategoryRepository integration test', () => {
     await expenditureCategoryRepository.save(existingCategory);
 
     // THEN
-    const onDb = await dbConnection.db(EXPENDITURE_MAIN_CATEGORY_TABLE_NAME).where('uuid', 'testUuid').first();
+    const onDb = await dbConnection.db(EXPENDITURE_MAIN_CATEGORY_TABLE_NAME).where('id', uuid).first();
     expect({ created: clock.fromDb(onDb.created), updated: clock.fromDb(onDb.updated) }).toStrictEqual({ created, updated });
   });
 });

@@ -6,7 +6,7 @@ import { authUserBuilder } from '../../../common/builder/authUserBuilder';
 import { expectEntity } from '../../../common/util/expectUtil';
 import { AuthUserFactory, AuthUserFactoryImpl } from '../../../../src/auth/user/authUserFactory';
 import { createAccessTokenFactoryMock } from '../../../common/mock/mocks';
-import { Uuid } from '../../../../src/core/uuid';
+import { Guid } from '../../../../src/core/guid';
 
 describe('userRepository integration test', () => {
   const { createConnection, closeConnection } = initDbEnv();
@@ -32,10 +32,10 @@ describe('userRepository integration test', () => {
 
   it('GIVEN existing uuid WHEN findByUuid THEN return existing user', async () => {
     // GIVEN
-    const notExistingUuid = 'notExisting';
+    const notExistingUuid = 'e9a7baf1-4250-4a6b-940c-1e4385f11687';
 
     // WHEN
-    const result = await userRepository.findByUuid(Uuid.create(notExistingUuid));
+    const result = await userRepository.findByUuid(Guid.fromUuid(notExistingUuid));
 
     // THEN
     expect(result).toBeNull();
@@ -44,7 +44,7 @@ describe('userRepository integration test', () => {
   it('GIVEN existing uuid WHEN findByUuid THEN return existing user', async () => {
     // GIVEN
     const userOnDb = {
-      uuid: 'testUuid',
+      id: 'e9a7baf1-4250-4a6b-940c-1e4385f11687',
       username: 'test_login',
       password: 'xxxxyyyyzzzz',
       status: UserStatus.Active,
@@ -55,17 +55,22 @@ describe('userRepository integration test', () => {
     await dbConnection.db(USER_TABLE_NAME).insert(userOnDb);
 
     // WHEN
-    const result = await userRepository.findByUuid(Uuid.create('testUuid'));
+    const result = await userRepository.findByUuid(Guid.fromUuid('e9a7baf1-4250-4a6b-940c-1e4385f11687'));
 
     // THEN
-    const expected = authUserBuilder().withUuid(Uuid.create('testUuid')).withUsername('test_login').withPasswordHash('xxxxyyyyzzzz').withStatus(UserStatus.Active).valueOf();
+    const expected = authUserBuilder()
+      .withId(Guid.fromUuid('e9a7baf1-4250-4a6b-940c-1e4385f11687'))
+      .withUsername('test_login')
+      .withPasswordHash('xxxxyyyyzzzz')
+      .withStatus(UserStatus.Active)
+      .valueOf();
     expectEntity(result).toHaveEqualValue(expected);
   });
 
   it('GIVEN valid not existing user WHEN save THEN insert new user into db', async () => {
     // GIVEN
     const user = authUserBuilder()
-      .withUuid(Uuid.create('testUuid'))
+      .withId(Guid.fromUuid('2f869ac0-00a3-425e-a4c0-6aae5b485db4'))
       .withUsername('test_login')
       .withPasswordHash('$2a$10$Pjwx7nJKXjPrbikNIqXEXOZ9ngz/bQtvvC7rE.3GGvZEyjD8I.XLy')
       .withStatus(UserStatus.Active)
@@ -75,13 +80,18 @@ describe('userRepository integration test', () => {
     await userRepository.save(user);
 
     // THEN
-    const onDb = await userRepository.findByUuid(Uuid.create('testUuid'));
+    const onDb = await userRepository.findByUuid(Guid.fromUuid('2f869ac0-00a3-425e-a4c0-6aae5b485db4'));
     expectEntity(onDb).toHaveEqualValue(user);
   });
 
   it('GIVEN valid existing user WHEN save THEN update user on db', async () => {
     // GIVEN
-    const user = authUserBuilder().withUuid(Uuid.create('testUuid')).withUsername('test_name').withPasswordHash('aaaa-aaaa').withStatus(UserStatus.Active).valueOf();
+    const user = authUserBuilder()
+      .withId(Guid.fromUuid('82d6c2d8-b7ef-4200-a1e4-05af814004bc'))
+      .withUsername('test_name')
+      .withPasswordHash('aaaa-aaaa')
+      .withStatus(UserStatus.Active)
+      .valueOf();
     await userRepository.save(user);
     user.remove();
 
@@ -89,8 +99,13 @@ describe('userRepository integration test', () => {
     await userRepository.save(user);
 
     // THEN
-    const onDb = await userRepository.findByUuid(Uuid.create('testUuid'));
-    const expected = authUserBuilder().withUuid(Uuid.create('testUuid')).withUsername('test_name').withPasswordHash('aaaa-aaaa').withStatus(UserStatus.Deleted).valueOf();
+    const onDb = await userRepository.findByUuid(Guid.fromUuid('82d6c2d8-b7ef-4200-a1e4-05af814004bc'));
+    const expected = authUserBuilder()
+      .withId(Guid.fromUuid('82d6c2d8-b7ef-4200-a1e4-05af814004bc'))
+      .withUsername('test_name')
+      .withPasswordHash('aaaa-aaaa')
+      .withStatus(UserStatus.Deleted)
+      .valueOf();
     expectEntity(onDb).toHaveEqualValue(expected);
   });
 

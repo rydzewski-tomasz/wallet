@@ -8,7 +8,7 @@ import { authUserBuilder } from '../../../common/builder/authUserBuilder';
 import { initHttpEnv } from '../../../common/setup/initHttpEnv';
 import { createAuthUserServiceMock } from '../../../common/mock/mocks';
 import { accessTokenBuilder } from '../../../common/builder/authTokensBuilder';
-import { Uuid } from '../../../../src/core/uuid';
+import { Guid } from '../../../../src/core/guid';
 
 describe('userHttpApi integration test', () => {
   const { startServer, stopServer } = initHttpEnv();
@@ -55,14 +55,14 @@ describe('userHttpApi integration test', () => {
   it('GIVEN success result from service WHEN signup THEN return 200 status', async () => {
     // GIVEN
     const requestBody = { username: 'test', password: 'pass' };
-    const user = authUserBuilder().withUuid(Uuid.create('testUuid')).valueOf();
+    const user = authUserBuilder().withId(Guid.fromUuid('46abb3ac-e640-4c35-8726-bcdcc1ba2b16')).valueOf();
     jest.spyOn(authUserService, 'signup').mockResolvedValueOnce(createSuccessResult(user));
 
     // WHEN
     const response = await request.post('/user/signup', requestBody);
 
     // THEN
-    expectResponse(response).toBeSuccess(200, { uuid: 'testUuid' });
+    expectResponse(response).toBeSuccess(200, { id: '46abb3ac-e640-4c35-8726-bcdcc1ba2b16' });
   });
 
   it('GIVEN invalid request body WHEN login THEN return 400 status', async () => {

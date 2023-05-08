@@ -1,6 +1,6 @@
 import { ErrorHttpStatus, SuccessHttpStatus } from '../../../src/core/http/httpResponse';
 import { Response } from 'superagent';
-import { Entity, WithUuid } from '../../../src/core/entity';
+import { Entity, WithId } from '../../../src/core/entity';
 import { Result } from '../../../src/core/result';
 import { expect } from 'expect';
 
@@ -58,7 +58,7 @@ export function expectResult<Value, Error>(
   };
 }
 
-export function expectResultEntity<Value extends Entity<WithUuid>, Error>(
+export function expectResultEntity<Value extends Entity<WithId>, Error>(
   result: Result<Value, Error>
 ): {
   toBeSuccess: (value: Value) => void;
@@ -68,10 +68,10 @@ export function expectResultEntity<Value extends Entity<WithUuid>, Error>(
     toBeSuccess: value => {
       expect({
         isSuccess: result.isSuccess,
-        uuid: result.isSuccess ? result.value.getUuid() : undefined
+        id: result.isSuccess ? result.value.getId() : undefined
       }).toStrictEqual({
         isSuccess: true,
-        uuid: value.getUuid()
+        id: value.getId()
       });
     },
     toBeError: error => {
@@ -86,7 +86,7 @@ export function expectResultEntity<Value extends Entity<WithUuid>, Error>(
   };
 }
 
-export function expectEntity<Props extends WithUuid>(
+export function expectEntity<Props extends WithId>(
   actual: Entity<Props> | undefined | null
 ): {
   toHaveEqualReference: (expected: Entity<Props>) => void;
@@ -94,7 +94,7 @@ export function expectEntity<Props extends WithUuid>(
 } {
   return {
     toHaveEqualReference: expected => {
-      expect({ uuid: actual?.getUuid() }).toStrictEqual({ uuid: expected.getUuid() });
+      expect({ id: actual?.getId() }).toStrictEqual({ id: expected.getId() });
     },
     toHaveEqualValue: expected => {
       expect(actual?.toSnapshot()).toStrictEqual(expected.toSnapshot());

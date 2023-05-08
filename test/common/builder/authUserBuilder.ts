@@ -2,7 +2,7 @@ import { AuthUserActions, AuthUserProps, UserStatus, UserType } from '../../../s
 import { AuthUserFactoryImpl } from '../../../src/auth/user/authUserFactory';
 import { AccessTokenFactoryImpl } from '../../../src/auth/user/accessTokenFactory';
 import testConfig from '../config/testConfig';
-import { Uuid } from '../../../src/core/uuid';
+import { Guid } from '../../../src/core/guid';
 
 const authUserFactory = new AuthUserFactoryImpl({
   accessTokenFactory: new AccessTokenFactoryImpl({ config: testConfig.getAppConfig() })
@@ -10,7 +10,7 @@ const authUserFactory = new AuthUserFactoryImpl({
 
 export function sampleUserProps(): AuthUserProps {
   return {
-    uuid: Uuid.create('testUuid'),
+    id: Guid.fromUuid('7989fab3-7402-482a-a393-84ca96977850'),
     username: 'testLogin',
     passwordHash: 'aaaabbbbcccc',
     status: UserStatus.Active,
@@ -27,7 +27,7 @@ export const authUserBuilder = (input?: { props?: AuthUserProps; actions?: AuthU
   const actions = input?.actions || sampleUserActions();
 
   return {
-    withUuid: (uuid: AuthUserProps['uuid']) => authUserBuilder({ props: { ...props, uuid }, actions }),
+    withId: (id: AuthUserProps['id']) => authUserBuilder({ props: { ...props, id }, actions }),
     withUsername: (username: AuthUserProps['username']) => authUserBuilder({ props: { ...props, username }, actions }),
     withAccessToken: (accessToken: AuthUserProps['accessToken']) => authUserBuilder({ props: { ...props, accessToken }, actions }),
     withPasswordHash: (passwordHash: AuthUserProps['passwordHash']) => authUserBuilder({ props: { ...props, passwordHash }, actions }),

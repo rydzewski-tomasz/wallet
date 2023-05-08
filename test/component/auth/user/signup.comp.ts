@@ -8,7 +8,7 @@ import bcrypt from 'bcryptjs';
 import { DbConnection } from '../../../../src/core/db/dbConnection';
 import { AuthUserFactoryImpl } from '../../../../src/auth/user/authUserFactory';
 import { createAccessTokenFactoryMock } from '../../../common/mock/mocks';
-import { Uuid } from '../../../../src/core/uuid';
+import { Guid } from '../../../../src/core/guid';
 
 describe('signup component test', () => {
   const { startEnv, stopEnv } = initFullEnv();
@@ -42,7 +42,7 @@ describe('signup component test', () => {
     const response = await request.post('/user/signup', requestBody);
 
     // THEN
-    expectResponse(response).toBeSuccess(200, { uuid: expect.any(String) });
+    expectResponse(response).toBeSuccess(200, { id: expect.any(String) });
   });
 
   it('GIVEN valid request WHEN signup THEN save user on db', async () => {
@@ -53,9 +53,9 @@ describe('signup component test', () => {
     const response = await request.post('/user/signup', requestBody);
 
     // THEN
-    const { uuid } = response.body;
-    const onDb = (await userRepository.findByUuid(Uuid.create(uuid)))?.toSnapshot();
-    const expected = authUserBuilder().withUuid(Uuid.create(uuid)).withStatus(UserStatus.Unverified).withUsername('test').valueOf();
+    const { id } = response.body;
+    const onDb = (await userRepository.findByUuid(Guid.fromUuid(id)))?.toSnapshot();
+    const expected = authUserBuilder().withId(Guid.fromUuid(id)).withStatus(UserStatus.Unverified).withUsername('test').valueOf();
     expect({ ...onDb, isValidPassword: await bcrypt.compare('pass', onDb?.passwordHash || '') }).toStrictEqual({
       ...expected.toSnapshot(),
       passwordHash: expect.any(String),

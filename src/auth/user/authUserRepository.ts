@@ -3,13 +3,13 @@ import { Knex } from 'knex';
 import { DbConnection } from '../../core/db/dbConnection';
 import dbTimeLog from '../../core/db/dbTimeLog';
 import { AuthUserFactory } from './authUserFactory';
-import { Uuid } from '../../core/uuid';
+import { Guid } from '../../core/guid';
 
 export const USER_TABLE_NAME = 'user';
 
 export interface AuthUserRepository {
   findByUsername: (login: string) => Promise<AuthUser | null>;
-  findByUuid: (uuid: Uuid) => Promise<AuthUser | null>;
+  findByUuid: (uuid: Guid) => Promise<AuthUser | null>;
   save: (input: AuthUser) => Promise<AuthUser>;
 }
 
@@ -31,24 +31,24 @@ export class AuthUserRepositoryImpl implements AuthUserRepository {
     return result ? this.toUser(result) : null;
   }
 
-  async findByUuid(uuid: Uuid): Promise<AuthUser | null> {
-    const result = await this.db(USER_TABLE_NAME).where('uuid', uuid.value).first();
+  async findByUuid(uuid: Guid): Promise<AuthUser | null> {
+    const result = await this.db(USER_TABLE_NAME).where('id', uuid.uuid).first();
     return result ? this.toUser(result) : null;
   }
 
   async save(input: AuthUser): Promise<AuthUser> {
-    const { uuid, username, passwordHash: password, status, type } = input.toSnapshot();
+    const { id, username, passwordHash: password, status, type } = input.toSnapshot();
 
     await this.db(USER_TABLE_NAME)
-      .insert({ ...dbTimeLog.createTimeLog(), uuid: uuid.value, username, status, password, type })
-      .onConflict('uuid')
+      .insert({ ...dbTimeLog.createTimeLog(), id: id.uuid, username, status, password, type })
+      .onConflict('id')
       .merge({ ...dbTimeLog.updateTimeLog(), username, status, password, type });
     return input;
   }
 
   private toUser(input: any): AuthUser {
     const props: AuthUserProps = {
-      uuid: Uuid.create(input.uuid),
+      id: Guid.fromUuid(input.id),
       username: input.username,
       passwordHash: input.password,
       status: input.status,

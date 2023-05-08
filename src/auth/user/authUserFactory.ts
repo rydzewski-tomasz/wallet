@@ -1,6 +1,6 @@
 import { AuthUser, AuthUserActions, AuthUserProps, UserStatus, UserType } from './authUser';
 import { AccessTokenFactory } from './accessTokenFactory';
-import { uuidGenerator } from '../../core/uuidGenerator';
+import { Guid } from '../../core/guid';
 
 export interface AuthUserFactory {
   create: (input?: { props?: AuthUserProps; actions?: AuthUserActions }) => AuthUser;
@@ -22,8 +22,8 @@ export class AuthUserFactoryImpl implements AuthUserFactory {
   }
 
   createProps(): AuthUserProps {
-    const uuid = uuidGenerator.generate();
-    return { uuid, username: '', passwordHash: '', status: UserStatus.New, type: UserType.User };
+    const id = Guid.create();
+    return { id, username: '', passwordHash: '', status: UserStatus.New, type: UserType.User };
   }
 
   createActions(): AuthUserActions {

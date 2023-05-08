@@ -8,7 +8,7 @@ import { UserStatus } from '../../../../src/auth/user/authUser';
 import { AuthUserFactoryImpl } from '../../../../src/auth/user/authUserFactory';
 import { AccessTokenFactoryImpl } from '../../../../src/auth/user/accessTokenFactory';
 import testConfig from '../../../common/config/testConfig';
-import { Uuid } from '../../../../src/core/uuid';
+import { Guid } from '../../../../src/core/guid';
 
 describe('login component test', () => {
   const { startEnv, stopEnv } = initFullEnv();
@@ -38,7 +38,7 @@ describe('login component test', () => {
     // GIVEN
     const requestBody = { username: 'test', password: 'testPassword' };
     const user = authUserBuilder()
-      .withUuid(Uuid.create('testUuid'))
+      .withId(Guid.fromUuid('7989fab3-7402-482a-a393-84ca96977850'))
       .withStatus(UserStatus.Active)
       .withUsername('test')
       .withPasswordHash('$2a$10$Hu/UkfhRr1P7pgVwRwAAc.snob8zlcr3lK7.258Q6Oi/5JZVdcFpS')

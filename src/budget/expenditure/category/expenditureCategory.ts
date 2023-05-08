@@ -1,9 +1,9 @@
 import { ExpenditureSubcategory } from './expenditureSubcategory';
 import { Entity } from '../../../core/entity';
-import { Uuid } from '../../../core/uuid';
+import { Guid } from '../../../core/guid';
 
 export interface ExpenditureCategoryProps {
-  uuid: Uuid;
+  id: Guid;
   name: string;
   subcategories: ExpenditureSubcategory[];
 }

@@ -1,6 +1,6 @@
-import { expenditureCategoryBuilder, expenditureSubcategoryBuilder } from '../../../common/builder/expenditureSubcategoryBuilder';
-import { expectEntity } from '../../../common/util/expectUtil';
-import { Uuid } from '../../../../src/core/uuid';
+import { expenditureCategoryBuilder, expenditureSubcategoryBuilder } from '../../../../common/builder/expenditureSubcategoryBuilder';
+import { expectEntity } from '../../../../common/util/expectUtil';
+import { Guid } from '../../../../../src/core/guid';
 
 describe('ExpenditureCategory unit test', () => {
   it('GIVEN expenditureCategory WHEN update name THEN update category name', async () => {
@@ -43,9 +43,9 @@ describe('ExpenditureCategory unit test', () => {
 
   it('GIVEN expenditureCategory WHEN add existing subcategory THEN not add subcategory', async () => {
     // GIVEN
-    const firstSubcategory = expenditureSubcategoryBuilder().withUuid(Uuid.create('1')).withName('1 subcategory').valueOf();
-    const secondSubcategory = expenditureSubcategoryBuilder().withUuid(Uuid.create('2')).withName('2 subcategory').valueOf();
-    const thirdSubcategory = expenditureSubcategoryBuilder().withUuid(Uuid.create('3')).withName('3 subcategory').valueOf();
+    const firstSubcategory = expenditureSubcategoryBuilder().withId(Guid.fromUuid('93d9e8f2-37e0-4bdf-8820-7da50a075341')).withName('1 subcategory').valueOf();
+    const secondSubcategory = expenditureSubcategoryBuilder().withId(Guid.fromUuid('eddc326b-ab0c-4227-8bf2-8f2456117288')).withName('2 subcategory').valueOf();
+    const thirdSubcategory = expenditureSubcategoryBuilder().withId(Guid.fromUuid('2168c683-0cb9-4751-aaa1-de8e335ae284')).withName('3 subcategory').valueOf();
     const expenditureCategory = expenditureCategoryBuilder().withSubcategories([firstSubcategory, secondSubcategory, thirdSubcategory]).valueOf();
 
     // WHEN

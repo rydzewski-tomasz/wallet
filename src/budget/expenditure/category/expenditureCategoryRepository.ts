@@ -18,18 +18,16 @@ export class ExpenditureCategoryRepositoryImpl implements ExpenditureCategoryRep
   }
 
   async save(input: ExpenditureCategory): Promise<ExpenditureCategory> {
-    const { uuid: categoryUuid, name, subcategories } = input.toSnapshot();
+    const { id: categoryId, name, subcategories } = input.toSnapshot();
     await this.db.transaction(async trx => {
       await trx(EXPENDITURE_MAIN_CATEGORY_TABLE_NAME)
-        .insert({ ...dbTimeLog.createTimeLog(), uuid: categoryUuid.value, name })
-        .onConflict('uuid')
+        .insert({ ...dbTimeLog.createTimeLog(), id: categoryId.uuid, name })
+        .onConflict('id')
         .merge({ ...dbTimeLog.updateTimeLog(), name });
 
-      await trx(EXPENDITURE_SUBCATEGORY_TABLE_NAME).where('category_uuid', categoryUuid.value).del();
+      await trx(EXPENDITURE_SUBCATEGORY_TABLE_NAME).where('category_id', categoryId.uuid).del();
 
-      const subcategoriesToDb = subcategories
-        .map(el => el.toSnapshot())
-        .map(({ name, uuid }) => ({ ...dbTimeLog.createTimeLog(), name, uuid: uuid.value, category_uuid: categoryUuid.value }));
+      const subcategoriesToDb = subcategories.map(el => el.toSnapshot()).map(({ name, id }) => ({ ...dbTimeLog.createTimeLog(), name, id: id.uuid, category_id: categoryId.uuid }));
       await trx(EXPENDITURE_SUBCATEGORY_TABLE_NAME).insert(subcategoriesToDb);
     });
 
