@@ -28,7 +28,7 @@ export class AuthUserFactoryImpl implements AuthUserFactory {
 
   createActions(): AuthUserActions {
     return {
-      createAccessToken: this.accessTokenFactory.create.bind(this.accessTokenFactory)
+      createAccessToken: payload => this.accessTokenFactory.create(payload)
     };
   }
 }

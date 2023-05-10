@@ -1,5 +1,5 @@
 import {
-  EXPENDITURE_MAIN_CATEGORY_TABLE_NAME,
+  EXPENDITURE_CATEGORY_TABLE_NAME,
   EXPENDITURE_SUBCATEGORY_TABLE_NAME,
   ExpenditureCategoryRepository,
   ExpenditureCategoryRepositoryImpl
@@ -11,6 +11,7 @@ import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import { expenditureCategoryBuilder, expenditureSubcategoryBuilder } from '../../common/builder/expenditureSubcategoryBuilder';
 import { Guid } from '../../../src/core/guid';
+import { expectEntity } from '../../common/util/expectUtil';
 
 dayjs.extend(utc);
 
@@ -26,7 +27,7 @@ describe('addExpenditureCategoryRepository integration test', () => {
 
   afterEach(async () => {
     await dbConnection.db(EXPENDITURE_SUBCATEGORY_TABLE_NAME).del();
-    await dbConnection.db(EXPENDITURE_MAIN_CATEGORY_TABLE_NAME).del();
+    await dbConnection.db(EXPENDITURE_CATEGORY_TABLE_NAME).del();
     jest.clearAllMocks();
   });
 
@@ -42,7 +43,7 @@ describe('addExpenditureCategoryRepository integration test', () => {
     await expenditureCategoryRepository.save(category);
 
     // THEN
-    const onDb = await dbConnection.db(EXPENDITURE_MAIN_CATEGORY_TABLE_NAME).where('id', '63e116d2-e429-444f-bae2-461fb9a7ce47').first();
+    const onDb = await dbConnection.db(EXPENDITURE_CATEGORY_TABLE_NAME).where('id', '63e116d2-e429-444f-bae2-461fb9a7ce47').first();
     expect({ id: onDb.id, name: onDb.name }).toStrictEqual({ id: '63e116d2-e429-444f-bae2-461fb9a7ce47', name: 'testName' });
   });
 
@@ -108,7 +109,7 @@ describe('addExpenditureCategoryRepository integration test', () => {
     await expenditureCategoryRepository.save(existingCategory);
 
     // THEN
-    const onDb = await dbConnection.db(EXPENDITURE_MAIN_CATEGORY_TABLE_NAME).where('id', categoryUuid).first();
+    const onDb = await dbConnection.db(EXPENDITURE_CATEGORY_TABLE_NAME).where('id', categoryUuid).first();
     expect({ id: onDb.id, name: onDb.name }).toStrictEqual({ id: categoryUuid, name: 'updatedName' });
   });
 
@@ -127,7 +128,7 @@ describe('addExpenditureCategoryRepository integration test', () => {
     await expenditureCategoryRepository.save(mainCategory);
 
     // THEN
-    const onDb = await dbConnection.db(EXPENDITURE_MAIN_CATEGORY_TABLE_NAME).where('id', categoryUuid).first();
+    const onDb = await dbConnection.db(EXPENDITURE_CATEGORY_TABLE_NAME).where('id', categoryUuid).first();
     expect({ created: clock.fromDb(onDb.created), updated: clock.fromDb(onDb.updated) }).toStrictEqual({ created, updated: created });
   });
 
@@ -145,7 +146,37 @@ describe('addExpenditureCategoryRepository integration test', () => {
     await expenditureCategoryRepository.save(existingCategory);
 
     // THEN
-    const onDb = await dbConnection.db(EXPENDITURE_MAIN_CATEGORY_TABLE_NAME).where('id', uuid).first();
+    const onDb = await dbConnection.db(EXPENDITURE_CATEGORY_TABLE_NAME).where('id', uuid).first();
     expect({ created: clock.fromDb(onDb.created), updated: clock.fromDb(onDb.updated) }).toStrictEqual({ created, updated });
+  });
+
+  it('GIVEN not existing category name WHEN findByName THEN return null', async () => {
+    // GIVEN
+    const nonExistingName = 'nonExistingName';
+
+    // WHEN
+    const result = await expenditureCategoryRepository.findByName(nonExistingName);
+
+    // THEN
+    expect(result).toBeNull();
+  });
+
+  it('GIVEN existing category name WHEN findByName THEN return null', async () => {
+    // GIVEN
+    const existingName = 'existingName';
+    const existingCategory = expenditureCategoryBuilder()
+      .withName(existingName)
+      .withSubcategories([
+        expenditureSubcategoryBuilder().withId(Guid.fromUuid('c868951a-bea5-4175-8a39-180f191b15fc')).withName('abc name').valueOf(),
+        expenditureSubcategoryBuilder().withId(Guid.fromUuid('562b10a8-0f84-4366-98d2-47ea47a1c504')).withName('def name').valueOf()
+      ])
+      .valueOf();
+    await expenditureCategoryRepository.save(existingCategory);
+
+    // WHEN
+    const result = await expenditureCategoryRepository.findByName(existingName);
+
+    // THEN
+    expectEntity(result).toHaveEqualValue(existingCategory);
   });
 });

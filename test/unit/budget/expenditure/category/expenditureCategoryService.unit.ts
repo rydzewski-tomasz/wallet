@@ -12,7 +12,7 @@ describe('ExpenditureCategoryService unit test', () => {
   beforeEach(() => {
     uuid = '7989fab3-7402-482a-a393-84ca96977850';
     jest.spyOn(uuidGenerator, 'generate').mockReturnValue(uuid);
-    expenditureCategoryRepository = { save: jest.fn() };
+    expenditureCategoryRepository = { findByName: jest.fn(), save: jest.fn() };
     addExpenditureCategory = new ExpenditureCategoryServiceImpl({ categoryRepository: expenditureCategoryRepository });
   });
 
@@ -41,4 +41,7 @@ describe('ExpenditureCategoryService unit test', () => {
     const expected = expenditureCategoryBuilder().withId(Guid.fromUuid(uuid)).withName('ExpenditureCategory Name').withSubcategories([]).valueOf();
     expect(result).toStrictEqual(expected);
   });
+
+  // same category name
+  // add subcategory
 });
