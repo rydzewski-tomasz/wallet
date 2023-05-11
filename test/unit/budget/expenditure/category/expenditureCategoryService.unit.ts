@@ -1,8 +1,13 @@
-import { ExpenditureCategoryService, ExpenditureCategoryServiceImpl } from '../../../../../src/budget/expenditure/category/expenditureCategoryService';
+import {
+  ExpenditureCategoryErrorType,
+  ExpenditureCategoryService,
+  ExpenditureCategoryServiceImpl
+} from '../../../../../src/budget/expenditure/category/expenditureCategoryService';
 import { ExpenditureCategoryRepository } from '../../../../../src/budget/expenditure/category/expenditureCategoryRepository';
 import { uuidGenerator } from '../../../../../src/core/uuidGenerator';
 import { expenditureCategoryBuilder } from '../../../../common/builder/expenditureSubcategoryBuilder';
 import { Guid } from '../../../../../src/core/guid';
+import { expectResultEntity } from '../../../../common/util/expectUtil';
 
 describe('ExpenditureCategoryService unit test', () => {
   let uuid: string;
@@ -14,6 +19,7 @@ describe('ExpenditureCategoryService unit test', () => {
     jest.spyOn(uuidGenerator, 'generate').mockReturnValue(uuid);
     expenditureCategoryRepository = { findByName: jest.fn(), save: jest.fn() };
     addExpenditureCategory = new ExpenditureCategoryServiceImpl({ categoryRepository: expenditureCategoryRepository });
+    jest.spyOn(expenditureCategoryRepository, 'findByName').mockResolvedValue(null);
   });
 
   afterEach(() => {
@@ -39,9 +45,20 @@ describe('ExpenditureCategoryService unit test', () => {
 
     // THEN
     const expected = expenditureCategoryBuilder().withId(Guid.fromUuid(uuid)).withName('ExpenditureCategory Name').withSubcategories([]).valueOf();
-    expect(result).toStrictEqual(expected);
+    expectResultEntity(result).toBeSuccess(expected);
   });
 
-  // same category name
+  it('GIVEN duplicated category name WHEN add THEN return error', async () => {
+    // GIVEN
+    const duplicatedCategoryName = 'duplicated name';
+    jest.spyOn(expenditureCategoryRepository, 'findByName').mockResolvedValue(expenditureCategoryBuilder().valueOf());
+
+    // WHEN
+    const result = await addExpenditureCategory.addCategory(duplicatedCategoryName);
+
+    // THEN
+    expectResultEntity(result).toBeError(ExpenditureCategoryErrorType.CATEGORY_ALREADY_EXISTS);
+  });
+
   // add subcategory
 });

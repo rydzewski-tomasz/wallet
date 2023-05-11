@@ -68,10 +68,10 @@ export function expectResultEntity<Value extends Entity<WithId>, Error>(
     toBeSuccess: value => {
       expect({
         isSuccess: result.isSuccess,
-        id: result.isSuccess ? result.value.getId() : undefined
+        props: result.isSuccess ? result.value.toSnapshot() : undefined
       }).toStrictEqual({
         isSuccess: true,
-        id: value.getId()
+        props: value.toSnapshot()
       });
     },
     toBeError: error => {

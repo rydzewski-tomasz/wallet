@@ -108,6 +108,6 @@ describe('AuthUserService.login unit test', () => {
     const result = await authUserService.login({ username, password });
 
     // THEN
-    expectResultEntity(result).toBeSuccess(authUser);
+    expectResultEntity(result).toBeSuccess(user);
   });
 });
