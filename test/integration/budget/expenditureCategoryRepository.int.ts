@@ -179,4 +179,27 @@ describe('addExpenditureCategoryRepository integration test', () => {
     // THEN
     expectEntity(result).toHaveEqualValue(existingCategory);
   });
+
+  it('GIVEN not existing guid WHEN findById THEN return null', async () => {
+    // GIVEN
+    const nonExistingGuid: Guid = Guid.fromUuid('562b10a8-0f84-4366-98d2-47ea47a1c504');
+
+    // WHEN
+    const result = await expenditureCategoryRepository.findById(nonExistingGuid);
+
+    // THEN
+    expect(result).toBeNull();
+  });
+
+  it('GIVEN existing guid WHEN findById THEN return category', async () => {
+    // GIVEN
+    const category = expenditureCategoryBuilder().withId(Guid.fromUuid('c868951a-bea5-4175-8a39-180f191b15fc')).valueOf();
+    await expenditureCategoryRepository.save(category);
+
+    // WHEN
+    const result = await expenditureCategoryRepository.findById(category.getId());
+
+    // THEN
+    expectEntity(result).toHaveEqualValue(category);
+  });
 });

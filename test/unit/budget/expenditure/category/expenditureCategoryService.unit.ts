@@ -17,7 +17,7 @@ describe('ExpenditureCategoryService unit test', () => {
   beforeEach(() => {
     uuid = '7989fab3-7402-482a-a393-84ca96977850';
     jest.spyOn(uuidGenerator, 'generate').mockReturnValue(uuid);
-    expenditureCategoryRepository = { findByName: jest.fn(), save: jest.fn() };
+    expenditureCategoryRepository = { findByName: jest.fn(), save: jest.fn(), findById: jest.fn() };
     addExpenditureCategory = new ExpenditureCategoryServiceImpl({ categoryRepository: expenditureCategoryRepository });
     jest.spyOn(expenditureCategoryRepository, 'findByName').mockResolvedValue(null);
   });
@@ -26,7 +26,7 @@ describe('ExpenditureCategoryService unit test', () => {
     jest.clearAllMocks();
   });
 
-  it('GIVEN valid input WHEN add THEN save new category on db', async () => {
+  it('GIVEN valid input WHEN addCategory THEN save new category on db', async () => {
     // GIVEN
 
     // WHEN
@@ -37,7 +37,7 @@ describe('ExpenditureCategoryService unit test', () => {
     expect(expenditureCategoryRepository.save).toBeCalledWith(expected);
   });
 
-  it('GIVEN valid input WHEN add THEN return new category', async () => {
+  it('GIVEN valid input WHEN addCategory THEN return new category', async () => {
     // GIVEN
 
     // WHEN
@@ -48,7 +48,7 @@ describe('ExpenditureCategoryService unit test', () => {
     expectResultEntity(result).toBeSuccess(expected);
   });
 
-  it('GIVEN duplicated category name WHEN add THEN return error', async () => {
+  it('GIVEN duplicated category name WHEN addCategory THEN return error', async () => {
     // GIVEN
     const duplicatedCategoryName = 'duplicated name';
     jest.spyOn(expenditureCategoryRepository, 'findByName').mockResolvedValue(expenditureCategoryBuilder().valueOf());
@@ -60,5 +60,9 @@ describe('ExpenditureCategoryService unit test', () => {
     expectResultEntity(result).toBeError(ExpenditureCategoryErrorType.CATEGORY_ALREADY_EXISTS);
   });
 
-  // add subcategory
+  it('GIVEN not existing category WHEN addSubcategory THEN return error', async () => {
+    // GIVEN
+    // WHEN
+    // THEN
+  });
 });

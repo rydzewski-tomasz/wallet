@@ -9,8 +9,9 @@ export const EXPENDITURE_CATEGORY_TABLE_NAME = 'expenditure_category';
 export const EXPENDITURE_SUBCATEGORY_TABLE_NAME = 'expenditure_subcategory';
 
 export interface ExpenditureCategoryRepository {
-  save: (input: ExpenditureCategory) => Promise<ExpenditureCategory>;
+  findById: (id: Guid) => Promise<ExpenditureCategory | null>;
   findByName: (name: string) => Promise<ExpenditureCategory | null>;
+  save: (input: ExpenditureCategory) => Promise<ExpenditureCategory>;
 }
 
 export class ExpenditureCategoryRepositoryImpl implements ExpenditureCategoryRepository {
@@ -20,17 +21,23 @@ export class ExpenditureCategoryRepositoryImpl implements ExpenditureCategoryRep
     this.db = db;
   }
 
-  async findByName(name: string): Promise<ExpenditureCategory | null> {
-    const result = await this.db({ category: EXPENDITURE_CATEGORY_TABLE_NAME })
-      .join({ subcategory: EXPENDITURE_SUBCATEGORY_TABLE_NAME }, 'category.id', 'subcategory.category_id')
-      .select({
-        category_id: 'category.id',
-        category_name: 'category.name',
-        subcategory_id: 'subcategory.id',
-        subcategory_name: 'subcategory.name'
-      })
-      .where('category.name', name);
+  async findById(id: Guid): Promise<ExpenditureCategory | null> {
+    const result = await this.getCategoryQuery().where('category.id', id.uuid);
     return result.length ? this.toExpenditureCategory(result) : null;
+  }
+
+  async findByName(name: string): Promise<ExpenditureCategory | null> {
+    const result = await this.getCategoryQuery().where('category.name', name);
+    return result.length ? this.toExpenditureCategory(result) : null;
+  }
+
+  private getCategoryQuery() {
+    return this.db({ category: EXPENDITURE_CATEGORY_TABLE_NAME }).join({ subcategory: EXPENDITURE_SUBCATEGORY_TABLE_NAME }, 'category.id', 'subcategory.category_id').select({
+      category_id: 'category.id',
+      category_name: 'category.name',
+      subcategory_id: 'subcategory.id',
+      subcategory_name: 'subcategory.name'
+    });
   }
 
   async save(input: ExpenditureCategory): Promise<ExpenditureCategory> {
