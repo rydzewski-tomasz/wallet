@@ -18,8 +18,10 @@ export class ExpenditureCategory extends Entity<ExpenditureCategoryProps> {
   }
 
   addSubcategory(subcategory: ExpenditureSubcategory) {
-    const exists = this.props.subcategories.find(singleSubcategory => singleSubcategory.equals(subcategory));
-    if (!exists) {
+    const exists = this.props.subcategories.find(singleSubcategory => singleSubcategory.name === subcategory.name);
+    if (exists) {
+      throw new Error('SubcategoryAlreadyExists');
+    } else {
       this.props.subcategories.push(subcategory);
     }
   }

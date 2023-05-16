@@ -7,6 +7,10 @@ export interface ExpenditureSubcategoryProps {
 }
 
 export class ExpenditureSubcategory extends Entity<ExpenditureSubcategoryProps> {
+  get name(): string {
+    return this.props.name;
+  }
+
   constructor(props: ExpenditureSubcategoryProps) {
     super(props);
   }

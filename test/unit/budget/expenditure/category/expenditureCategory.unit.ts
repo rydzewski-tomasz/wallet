@@ -34,11 +34,10 @@ describe('ExpenditureCategory unit test', () => {
     const expenditureCategory = expenditureCategoryBuilder().withSubcategories([existingSubcategory]).valueOf();
 
     // WHEN
-    expenditureCategory.addSubcategory(existingSubcategory);
+    const test = () => expenditureCategory.addSubcategory(existingSubcategory);
 
     // THEN
-    const expected = expenditureCategoryBuilder().withSubcategories([existingSubcategory]).valueOf();
-    expectEntity(expenditureCategory).toHaveEqualValue(expected);
+    expect(test).toThrowError('SubcategoryAlreadyExists');
   });
 
   it('GIVEN expenditureCategory WHEN add existing subcategory THEN not add subcategory', async () => {
